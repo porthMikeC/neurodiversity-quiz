@@ -3,847 +3,1039 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Neurodiversity Self-Assessment</title>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Special+Elite&display=swap" rel="stylesheet" />
+<title>Neurodivergent Self-Assessment</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
+  html { font-size: 18px; }
+
   :root {
-    --yellow: #FFE900;
-    --pink: #FF3CAC;
-    --cyan: #00F5FF;
-    --green: #39FF14;
-    --orange: #FF6B00;
-    --bg: #0D0D0D;
-    --card: #1A1A1A;
-    --border: #333;
-    --text: #F0EDE0;
-    --muted: #888;
+    --bg: #0f1117;
+    --surface: #181c27;
+    --surface2: #1f2436;
+    --border: #2a3050;
+    --text: #e8eaf2;
+    --text-dim: #b0b8d0;
+    --text-dimmer: #7a83a0;
+    --accent-a: #5b8ff9;
+    --accent-u: #7ec8a0;
+    --accent-o: #f0a070;
+    --accent-au: #8b7fd4;
+    --accent-uo: #6dbfb0;
+    --accent-ao: #d4916e;
+    --selected: #2a3a5c;
+    --selected-border: #7aaaff;
+    --radius: 10px;
   }
-  * { box-sizing: border-box; }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
   body {
     background: var(--bg);
-    margin: 0; padding: 0;
-    background-image:
-      repeating-linear-gradient(0deg, transparent, transparent 39px, #1a1a1a 39px, #1a1a1a 40px),
-      repeating-linear-gradient(90deg, transparent, transparent 39px, #1a1a1a 39px, #1a1a1a 40px);
-    background-size: 40px 40px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    padding: 0 0 80px 0;
   }
-  #nd-root {
-    font-family: 'Special Elite', cursive;
+
+  header {
+    padding: 48px 24px 32px;
     max-width: 760px;
     margin: 0 auto;
-    padding: 24px 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 40px;
+  }
+
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    font-weight: 400;
     color: var(--text);
-    line-height: 1.6;
-  }
-  .nd-header {
-    text-align: center;
-    margin-bottom: 32px;
-    padding: 32px 24px;
-    background: var(--card);
-    border: 3px solid var(--yellow);
-    box-shadow: 8px 8px 0 var(--yellow);
-    position: relative;
-  }
-  .nd-header::before {
-    content: '★ BRAIN SCAN INITIATED ★';
-    font-family: 'Press Start 2P', monospace;
-    font-size: 0.5rem;
-    color: var(--pink);
-    letter-spacing: 3px;
-    display: block;
-    margin-bottom: 16px;
-  }
-  .nd-header h1 {
-    font-family: 'Press Start 2P', monospace;
-    font-size: 1.3rem;
-    color: var(--yellow);
-    margin: 0 0 12px 0;
-    line-height: 1.6;
-    text-shadow: 3px 3px 0 var(--pink), 6px 6px 0 rgba(255,60,172,0.3);
-  }
-  .nd-header p {
-    color: #CCC;
-    font-family: 'VT323', monospace;
-    font-size: 1.2rem;
-    margin: 0;
-    letter-spacing: 1px;
-  }
-  .nd-disclaimer {
-    background: #1A1200;
-    border: 2px dashed var(--yellow);
-    padding: 14px 18px;
-    margin-bottom: 16px;
-    font-family: 'VT323', monospace;
-    font-size: 1.1rem;
-    color: #CCC;
-    position: relative;
-  }
-  .nd-disclaimer::before {
-    content: '⚠ NOTE ⚠';
-    font-family: 'Press Start 2P', monospace;
-    font-size: 0.5rem;
-    color: var(--yellow);
-    display: block;
-    margin-bottom: 8px;
-  }
-  .nd-disclaimer strong { color: var(--yellow); }
-  .nd-scale-key {
-    background: #0A0A0A;
-    border: 2px solid #333;
-    padding: 12px 18px;
-    margin-bottom: 28px;
-    font-family: 'VT323', monospace;
-    font-size: 1.05rem;
-    color: #AAA;
-    line-height: 1.7;
-  }
-  .nd-scale-key::before {
-    content: '▸ RESPONSE SCALE ◂';
-    font-family: 'Press Start 2P', monospace;
-    font-size: 0.45rem;
-    color: var(--cyan);
-    display: block;
-    margin-bottom: 8px;
-    letter-spacing: 2px;
-  }
-  .nd-progress-bar-wrap {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: var(--bg);
-    padding: 12px 0;
-    margin-bottom: 24px;
-    border-bottom: 2px solid var(--border);
-  }
-  .nd-progress-track {
-    width: 100%;
-    height: 14px;
-    background: #222;
-    border: 2px solid var(--green);
-  }
-  .nd-progress-fill {
-    height: 100%;
-    width: 0%;
-    background: repeating-linear-gradient(90deg, var(--green) 0px, var(--green) 8px, #00CC10 8px, #00CC10 10px);
-    transition: width 0.3s steps(10);
-  }
-  .nd-progress-text {
-    text-align: center;
-    font-family: 'Press Start 2P', monospace;
-    font-size: 0.5rem;
-    color: var(--green);
-    margin-top: 6px;
-    letter-spacing: 2px;
-  }
-  .nd-section { margin-bottom: 44px; }
-  .nd-section-title {
-    font-family: 'Press Start 2P', monospace;
-    font-size: 0.75rem;
-    color: var(--cyan);
-    margin: 0 0 6px 0;
-    padding: 12px 16px;
-    background: #001A1A;
-    border-left: 5px solid var(--cyan);
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    line-height: 1.8;
-  }
-  .nd-section-subtitle {
-    font-family: 'VT323', monospace;
-    font-size: 1.1rem;
-    color: var(--muted);
-    margin: 0 0 20px 8px;
-    letter-spacing: 1px;
-  }
-  .nd-question-card {
-    background: var(--card);
-    border: 2px solid var(--border);
-    padding: 18px;
-    margin-bottom: 12px;
-    transition: border-color 0.15s, box-shadow 0.15s;
-    position: relative;
-  }
-  .nd-question-card::before {
-    content: '';
-    position: absolute;
-    top: 3px; left: 3px; right: -3px; bottom: -3px;
-    background: var(--border);
-    z-index: -1;
-  }
-  .nd-question-card.nd-answered { border-color: var(--green); box-shadow: 4px 4px 0 var(--green); }
-  .nd-question-card.nd-answered::before { background: var(--green); }
-  .nd-question-text {
-    font-family: 'Special Elite', cursive;
-    font-size: 0.95rem;
-    color: var(--text);
-    margin: 0 0 14px 0;
-  }
-  .nd-question-num {
-    font-family: 'Press Start 2P', monospace;
-    font-size: 0.5rem;
-    color: var(--pink);
-    margin-right: 6px;
-  }
-  .nd-likert { display: flex; gap: 6px; flex-wrap: wrap; }
-  .nd-likert input[type="radio"] { display: none; }
-  .nd-likert label {
-    flex: 1;
-    min-width: 62px;
-    text-align: center;
-    padding: 8px 4px;
-    border: 2px solid #444;
-    cursor: pointer;
-    font-family: 'VT323', monospace;
-    font-size: 1rem;
-    color: var(--text);
-    transition: all 0.1s;
-    background: #111;
-    letter-spacing: 0.5px;
-  }
-  .nd-likert label:hover, .nd-likert label:focus-within {
-    border-color: var(--pink);
-    color: var(--pink);
-    background: #1A001A;
-    outline: none;
-  }
-  .nd-likert label.nd-selected {
-    background: #0A1A00;
-    color: var(--green) !important;
-    border-color: var(--green);
-    border-width: 2px;
-    font-weight: 700;
-    box-shadow: 3px 3px 0 var(--green);
-  }
-  .nd-submit-wrap { text-align: center; padding: 30px 0; }
-  .nd-btn-primary {
-    display: inline-block;
-    background: var(--yellow);
-    color: #000 !important;
-    border: 3px solid #000;
-    padding: 16px 40px;
-    font-family: 'Press Start 2P', monospace;
-    font-size: 0.65rem;
-    font-weight: 700;
-    cursor: pointer;
-    letter-spacing: 2px;
-    box-shadow: 5px 5px 0 #000;
-    transition: all 0.1s;
-    line-height: 1.8;
-  }
-  .nd-btn-primary:hover { transform: translate(2px,2px); box-shadow: 3px 3px 0 #000; }
-  .nd-btn-primary:active { transform: translate(5px,5px); box-shadow: none; }
-  .nd-btn-secondary {
-    display: inline-block;
-    background: transparent;
-    color: var(--cyan) !important;
-    border: 2px solid var(--cyan);
-    padding: 10px 24px;
-    font-family: 'Press Start 2P', monospace;
-    font-size: 0.5rem;
-    cursor: pointer;
-    letter-spacing: 1px;
-    margin: 6px;
-    box-shadow: 4px 4px 0 var(--cyan);
-    transition: all 0.1s;
-    line-height: 1.8;
-  }
-  .nd-btn-secondary:hover { transform: translate(2px,2px); box-shadow: 2px 2px 0 var(--cyan); }
-  .nd-error-msg {
-    color: var(--pink);
-    text-align: center;
-    margin-bottom: 16px;
-    font-family: 'Press Start 2P', monospace;
-    font-size: 0.55rem;
-    display: none;
-    padding: 12px;
-    background: #1A0010;
-    border: 2px solid var(--pink);
-    line-height: 1.8;
-  }
-  #nd-results-overlay {
-    display: none;
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.9);
-    z-index: 9999;
-    overflow-y: auto;
-    padding: 40px 20px;
-  }
-  #nd-results-overlay.nd-visible { display: block; }
-  .nd-results-panel {
-    background: var(--bg);
-    max-width: 660px;
-    margin: 0 auto;
-    border: 3px solid var(--yellow);
-    box-shadow: 10px 10px 0 var(--yellow);
-    padding: 36px 30px;
-    position: relative;
-  }
-  .nd-results-close {
-    position: absolute;
-    top: 12px; right: 16px;
-    background: var(--pink);
-    border: 2px solid #000;
-    font-family: 'Press Start 2P', monospace;
-    font-size: 0.6rem;
-    color: #000 !important;
-    cursor: pointer;
-    padding: 6px 10px;
-    box-shadow: 3px 3px 0 #000;
-    line-height: 1;
-  }
-  .nd-results-close:hover { transform: translate(1px,1px); box-shadow: 2px 2px 0 #000; }
-  .nd-results-title {
-    font-family: 'Press Start 2P', monospace;
-    font-size: 1rem;
-    text-align: center;
-    margin: 0 0 20px 0;
-    color: var(--yellow);
-    text-shadow: 3px 3px 0 var(--pink);
-    line-height: 1.7;
-  }
-  .nd-results-overall-label {
-    text-align: center;
-    font-family: 'VT323', monospace;
-    font-size: 1.1rem;
-    color: var(--muted);
-    margin: 0 0 4px 0;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-  }
-  .nd-results-overall-score {
-    text-align: center;
-    font-family: 'Press Start 2P', monospace;
-    font-size: 2.8rem;
-    color: var(--green);
-    margin: 0 0 4px 0;
-    text-shadow: 4px 4px 0 #006600;
     line-height: 1.2;
-  }
-  .nd-results-overall-note {
-    text-align: center;
-    font-family: 'VT323', monospace;
-    font-size: 1rem;
-    color: var(--muted);
-    margin: 0 0 28px 0;
-    letter-spacing: 1px;
-  }
-  .nd-dimension-block {
-    background: #111;
-    border: 2px solid #333;
-    padding: 18px;
     margin-bottom: 14px;
   }
-  .nd-dimension-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 10px;
-  }
-  .nd-dimension-name {
-    font-family: 'Press Start 2P', monospace;
-    font-size: 0.65rem;
+
+  header p {
+    color: var(--text-dim);
+    font-size: 0.95rem;
     line-height: 1.7;
+    max-width: 560px;
   }
-  .nd-dimension-sub {
-    font-family: 'VT323', monospace;
-    font-size: 1rem;
-    color: var(--muted);
-    letter-spacing: 1px;
+
+  .progress-wrap {
+    max-width: 760px;
+    margin: 0 auto 36px;
+    padding: 0 24px;
   }
-  .nd-dimension-pct {
-    font-family: 'Press Start 2P', monospace;
-    font-size: 1.2rem;
-    line-height: 1;
-  }
-  .nd-dimension-bar-track {
-    width: 100%;
-    height: 12px;
-    background: #222;
-    border: 2px solid #444;
-    margin-bottom: 10px;
+
+  .progress-bar-bg {
+    height: 3px;
+    background: var(--border);
+    border-radius: 3px;
     overflow: hidden;
   }
-  .nd-dimension-bar-fill { height: 100%; width: 0%; transition: width 0.6s steps(20); }
-  .nd-dimension-level {
-    font-family: 'Press Start 2P', monospace;
-    font-size: 0.45rem;
-    padding: 4px 10px;
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-a), var(--accent-u));
+    border-radius: 3px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  .progress-label {
+    font-size: 0.78rem;
+    color: var(--text-dimmer);
+    margin-top: 8px;
+    letter-spacing: 0.04em;
+  }
+
+  .section-heading {
+    max-width: 760px;
+    margin: 48px auto 20px;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-heading h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.05rem;
+    font-weight: 400;
+    color: var(--text-dim);
+    letter-spacing: 0.02em;
+  }
+
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .question-card {
+    max-width: 760px;
+    margin: 0 auto 16px;
+    padding: 0 24px;
+  }
+
+  .question-inner {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px 24px 20px;
+    transition: border-color 0.2s;
+  }
+
+  .question-inner.answered {
+    border-color: var(--border);
+    background: var(--surface2);
+  }
+
+  .question-text {
+    font-size: 0.97rem;
+    line-height: 1.65;
+    color: var(--text);
+    margin-bottom: 18px;
+    font-weight: 400;
+  }
+
+  .q-num {
+    color: var(--text-dimmer);
+    font-size: 0.78rem;
+    font-weight: 500;
+    display: block;
+    margin-bottom: 6px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .options {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .opt-btn {
+    flex: 1;
+    min-width: 80px;
+    padding: 9px 6px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text-dim);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 400;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .opt-btn:hover {
+    border-color: var(--text-dimmer);
+    color: var(--text);
+    background: var(--surface2);
+  }
+
+  .opt-btn.selected {
+    background: var(--selected);
+    border-color: var(--selected-border);
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .opt-btn.locked {
+    cursor: default;
+    opacity: 0.7;
+  }
+
+  .opt-btn.locked:hover {
+    border-color: var(--border);
+    color: var(--text-dim);
+    background: transparent;
+  }
+
+  .opt-btn.locked.selected {
+    opacity: 1;
+    cursor: default;
+  }
+
+  .opt-btn.locked.selected:hover {
+    background: var(--selected);
+    border-color: var(--selected-border);
+    color: var(--text);
+  }
+
+  #results {
+    display: none;
+    max-width: 760px;
+    margin: 48px auto 0;
+    padding: 0 24px;
+  }
+
+  #results.visible { display: block; }
+
+  .results-header {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin-bottom: 8px;
+  }
+
+  .results-sub {
+    color: var(--text-dim);
+    font-size: 0.88rem;
+    margin-bottom: 32px;
+    line-height: 1.6;
+  }
+
+  .score-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .score-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px 20px;
+    text-align: center;
+  }
+
+  .score-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dimmer);
+    margin-bottom: 6px;
+  }
+
+  .score-name {
+    font-size: 0.9rem;
+    color: var(--text-dim);
+    margin-bottom: 16px;
+  }
+
+  .score-value {
+    font-family: 'DM Serif Display', serif;
+    font-size: 3rem;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .score-card.adhd .score-value { color: var(--accent-a); }
+  .score-card.autism .score-value { color: var(--accent-u); }
+  .score-card.ocd .score-value { color: var(--accent-o); }
+
+  .score-band {
+    font-size: 0.78rem;
+    color: var(--text-dimmer);
+  }
+
+  .score-bar-wrap {
+    margin-top: 12px;
+    height: 4px;
+    background: var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .score-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 1s ease;
+    width: 0%;
+  }
+
+  .score-card.adhd .score-bar-fill { background: var(--accent-a); }
+  .score-card.autism .score-bar-fill { background: var(--accent-u); }
+  .score-card.ocd .score-bar-fill { background: var(--accent-o); }
+
+  .export-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+
+  .export-section h3 {
+    font-family: 'DM Serif Display', serif;
+    font-weight: 400;
+    font-size: 1.1rem;
+    margin-bottom: 6px;
+  }
+
+  .export-section p {
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+
+  .interp-body {
+    color: var(--text-dim);
+    font-size: 0.88rem;
+    line-height: 1.75;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.83rem;
+  }
+
+  th {
+    text-align: left;
+    padding: 8px 12px;
+    color: var(--text-dimmer);
+    font-weight: 500;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+  }
+
+  td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-dim);
+    vertical-align: top;
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  td.q-col { color: var(--text-dimmer); font-size: 0.75rem; width: 38px; }
+  td.raw-col { text-align: center; width: 60px; }
+  td.trans-col { text-align: center; width: 70px; color: var(--text); font-weight: 500; }
+  td.tag-col { width: 60px; }
+
+  .tag-pill {
     display: inline-block;
-    margin-bottom: 10px;
-    border: 2px solid currentColor;
-    letter-spacing: 2px;
+    padding: 2px 7px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
   }
-  .nd-dimension-desc {
-    font-family: 'VT323', monospace;
-    font-size: 1.1rem;
-    color: #BBB;
-    line-height: 1.5;
-    margin: 0;
-    letter-spacing: 0.5px;
+
+  .tag-a { background: rgba(91,143,249,0.15); color: var(--accent-a); }
+  .tag-u { background: rgba(126,200,160,0.15); color: var(--accent-u); }
+  .tag-o { background: rgba(240,160,112,0.15); color: var(--accent-o); }
+  .tag-au { background: rgba(139,127,212,0.15); color: var(--accent-au); }
+  .tag-uo { background: rgba(109,191,176,0.15); color: var(--accent-uo); }
+  .tag-ao { background: rgba(212,145,110,0.15); color: var(--accent-ao); }
+
+  .btn-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 8px;
   }
-  .nd-spark { border-color: var(--orange); }
-  .nd-spark .nd-dimension-name { color: var(--orange); }
-  .nd-spark .nd-dimension-pct  { color: var(--orange); text-shadow: 2px 2px 0 #662200; }
-  .nd-spark .nd-dimension-bar-fill { background: repeating-linear-gradient(90deg, var(--orange) 0px, var(--orange) 7px, #CC5500 7px, #CC5500 10px); }
-  .nd-spark .nd-dimension-level { color: var(--orange); background: #1A0A00; }
-  .nd-depth { border-color: var(--cyan); }
-  .nd-depth .nd-dimension-name { color: var(--cyan); }
-  .nd-depth .nd-dimension-pct  { color: var(--cyan); text-shadow: 2px 2px 0 #006666; }
-  .nd-depth .nd-dimension-bar-fill { background: repeating-linear-gradient(90deg, var(--cyan) 0px, var(--cyan) 7px, #00AAAA 7px, #00AAAA 10px); }
-  .nd-depth .nd-dimension-level { color: var(--cyan); background: #001A1A; }
-  .nd-sentinel { border-color: var(--pink); }
-  .nd-sentinel .nd-dimension-name { color: var(--pink); }
-  .nd-sentinel .nd-dimension-pct  { color: var(--pink); text-shadow: 2px 2px 0 #660044; }
-  .nd-sentinel .nd-dimension-bar-fill { background: repeating-linear-gradient(90deg, var(--pink) 0px, var(--pink) 7px, #CC0088 7px, #CC0088 10px); }
-  .nd-sentinel .nd-dimension-level { color: var(--pink); background: #1A0010; }
-  .nd-combo-section { margin-top: 24px; padding-top: 20px; border-top: 2px dashed #333; display: none; }
-  .nd-combo-section-title {
-    font-family: 'Press Start 2P', monospace;
-    font-size: 0.6rem;
-    color: var(--yellow);
-    margin: 0 0 14px 0;
-    letter-spacing: 2px;
-    line-height: 1.8;
+
+  .btn {
+    padding: 11px 22px;
+    border-radius: 7px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    border: none;
   }
-  .nd-combo-block { background: #0D0D00; border: 2px solid var(--yellow); padding: 14px; margin-bottom: 10px; }
-  .nd-combo-block-title {
-    font-family: 'Press Start 2P', monospace;
-    font-size: 0.55rem;
-    color: var(--yellow);
-    margin: 0 0 8px 0;
-    line-height: 1.8;
+
+  .btn-primary {
+    background: var(--accent-a);
+    color: #fff;
   }
-  .nd-combo-block-text { font-family: 'VT323', monospace; font-size: 1.1rem; color: #CCC; line-height: 1.5; margin: 0; }
-  .nd-results-disclaimer {
-    margin-top: 20px;
+
+  .btn-primary:hover { opacity: 0.85; }
+
+  .btn-secondary {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--text-dimmer);
+    color: var(--text);
+  }
+
+  .submit-bar {
+    max-width: 760px;
+    margin: 32px auto 0;
+    padding: 0 24px;
+  }
+
+  .submit-bar p {
+    font-size: 0.82rem;
+    color: var(--text-dimmer);
+    margin-top: 10px;
+  }
+
+  .warning {
+    background: rgba(240,160,112,0.1);
+    border: 1px solid rgba(240,160,112,0.3);
+    border-radius: 7px;
     padding: 12px 16px;
-    background: #0A1A00;
-    border: 2px dashed var(--green);
-    font-family: 'VT323', monospace;
-    font-size: 1.1rem;
-    color: #AAA;
-    line-height: 1.5;
+    font-size: 0.85rem;
+    color: var(--accent-o);
+    margin-top: 12px;
+    display: none;
   }
-  .nd-results-disclaimer strong { color: var(--green); }
-  .nd-results-buttons { text-align: center; margin-top: 24px; padding-top: 20px; border-top: 2px solid #333; }
-  @media (max-width: 600px) {
-    #nd-root { padding: 12px; }
-    .nd-header h1 { font-size: 0.9rem; }
-    .nd-likert label { min-width: 50px; font-size: 0.88rem; padding: 7px 2px; }
-    .nd-results-panel { padding: 20px 14px; }
-    .nd-results-overall-score { font-size: 2rem; }
-    .nd-btn-primary { font-size: 0.55rem; padding: 14px 20px; }
-    .nd-section-title { font-size: 0.6rem; }
+
+  .warning.visible { display: block; }
+
+  .question-inner.highlight {
+    border-color: var(--accent-o);
+    transition: border-color 0.3s;
+  }
+
+  @media (max-width: 500px) {
+    .score-grid { grid-template-columns: 1fr; }
+    .opt-btn { min-width: 60px; font-size: 0.82rem; padding: 8px 4px; }
   }
 </style>
 </head>
 <body>
-<div id="nd-root">
 
-  <div class="nd-header">
-    <h1>Neurodiversity<br>Self-Assessment</h1>
-    <p>58 questions &bull; no right or wrong answers &bull; rate each based on your typical experience</p>
+<header>
+  <h1>Neurodivergent Self-Assessment</h1>
+  <p>Answer each question honestly based on your general experience across your life, not just recently. There are no right or wrong answers. Your scores are calculated privately in your browser — nothing is sent anywhere.</p>
+  <p style="margin-top:10px;color:var(--text-dimmer);font-size:0.8rem;">This is an exploratory self-reflection tool, not a validated clinical instrument. It is designed to help you notice patterns and find language for your experience — not to provide a diagnosis. If you have developed strong strategies for managing or masking difficulties — something particularly common in women, people socialised as female, and anyone diagnosed late or not at all — your scores may underestimate the presence of underlying traits. A low score does not mean these patterns are absent from your experience. If completing this questionnaire brings up intense distress or feels overwhelming, please step away and speak to someone you trust or contact a mental health support line before continuing.</p>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-bar-bg">
+    <div class="progress-bar-fill" id="progressBar"></div>
   </div>
+  <div class="progress-label" id="progressLabel">0 of 62 answered</div>
+</div>
 
-  <div class="nd-disclaimer">
-    <strong>This is a self-reflection tool, not a clinical diagnosis.</strong>
-    High scores indicate traits worth exploring — they do not confirm any diagnosis. If your results feel significant, consider speaking with a qualified clinician who specialises in neurodevelopmental conditions.
-  </div>
+<div id="questionnaire"></div>
 
-  <div class="nd-scale-key">
-    All questions use the same five-point scale:<br>
-    <strong style="color:var(--text);">Never &nbsp;·&nbsp; Rarely &nbsp;·&nbsp; Sometimes &nbsp;·&nbsp; Often &nbsp;·&nbsp; Very often</strong><br>
-    Some questions are phrased positively — for those, selecting "Never" or "Rarely" is the high-trait signal.
-  </div>
+<div class="submit-bar">
+  <button class="btn btn-primary" id="submitBtn" onclick="submitAssessment()">Calculate my scores</button>
+  <div class="warning" id="warning">Please answer all questions before submitting. Unanswered questions are highlighted above.</div>
+</div>
 
-  <div class="nd-progress-bar-wrap" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Assessment progress">
-    <div class="nd-progress-track"><div class="nd-progress-fill" id="ndProgressFill"></div></div>
-    <div class="nd-progress-text" id="ndProgressText">0 OF 58 ANSWERED</div>
-  </div>
+<div id="results">
+  <div class="results-header">Your results</div>
+  <p class="results-sub">These scores reflect patterns across your responses. They are not a diagnosis — they are a map of where your experience clusters, and a starting point for understanding yourself more clearly. All three scores use the same 0–100 scale and can be compared directly. When interpreting these results, consider not just whether you recognise the patterns described, but whether they cause meaningful difficulty in your relationships, work, self-care, or daily functioning. Traits without impairment are part of normal human variation.</p>
 
-  <!-- SECTION 1: Attention & Focus (8 items) -->
-  <div class="nd-section">
-    <h2 class="nd-section-title">1. Attention &amp; Focus</h2>
-    <p class="nd-section-subtitle">How your mind directs and sustains attention</p>
-    <div class="nd-question-card" data-q="1" data-dim="A" data-rev="1"><p class="nd-question-text"><span class="nd-question-num">Q1.</span> When you finish a routine task, how often do you find it was completed without any errors?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq1" id="ndq1v1" value="1"/><label for="ndq1v1" tabindex="0">Never</label><input type="radio" name="ndq1" id="ndq1v2" value="2"/><label for="ndq1v2" tabindex="0">Rarely</label><input type="radio" name="ndq1" id="ndq1v3" value="3"/><label for="ndq1v3" tabindex="0">Sometimes</label><input type="radio" name="ndq1" id="ndq1v4" value="4"/><label for="ndq1v4" tabindex="0">Often</label><input type="radio" name="ndq1" id="ndq1v5" value="5"/><label for="ndq1v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="2" data-dim="A" data-rev="1"><p class="nd-question-text"><span class="nd-question-num">Q2.</span> How often do you work through a task from start to finish without losing your thread of concentration?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq2" id="ndq2v1" value="1"/><label for="ndq2v1" tabindex="0">Never</label><input type="radio" name="ndq2" id="ndq2v2" value="2"/><label for="ndq2v2" tabindex="0">Rarely</label><input type="radio" name="ndq2" id="ndq2v3" value="3"/><label for="ndq2v3" tabindex="0">Sometimes</label><input type="radio" name="ndq2" id="ndq2v4" value="4"/><label for="ndq2v4" tabindex="0">Often</label><input type="radio" name="ndq2" id="ndq2v5" value="5"/><label for="ndq2v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="3" data-dim="A" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q3.</span> When engaged with something you find genuinely interesting, how often do hours pass without you registering the time?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq3" id="ndq3v1" value="1"/><label for="ndq3v1" tabindex="0">Never</label><input type="radio" name="ndq3" id="ndq3v2" value="2"/><label for="ndq3v2" tabindex="0">Rarely</label><input type="radio" name="ndq3" id="ndq3v3" value="3"/><label for="ndq3v3" tabindex="0">Sometimes</label><input type="radio" name="ndq3" id="ndq3v4" value="4"/><label for="ndq3v4" tabindex="0">Often</label><input type="radio" name="ndq3" id="ndq3v5" value="5"/><label for="ndq3v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="4" data-dim="U" data-rev="1"><p class="nd-question-text"><span class="nd-question-num">Q4.</span> How often do you find yourself equally drawn to a wide range of topics rather than returning repeatedly to a few specific ones?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq4" id="ndq4v1" value="1"/><label for="ndq4v1" tabindex="0">Never</label><input type="radio" name="ndq4" id="ndq4v2" value="2"/><label for="ndq4v2" tabindex="0">Rarely</label><input type="radio" name="ndq4" id="ndq4v3" value="3"/><label for="ndq4v3" tabindex="0">Sometimes</label><input type="radio" name="ndq4" id="ndq4v4" value="4"/><label for="ndq4v4" tabindex="0">Often</label><input type="radio" name="ndq4" id="ndq4v5" value="5"/><label for="ndq4v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="5" data-dim="O" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q5.</span> How often do particular worries or concerns keep pulling at your attention even when you are trying to focus on something else?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq5" id="ndq5v1" value="1"/><label for="ndq5v1" tabindex="0">Never</label><input type="radio" name="ndq5" id="ndq5v2" value="2"/><label for="ndq5v2" tabindex="0">Rarely</label><input type="radio" name="ndq5" id="ndq5v3" value="3"/><label for="ndq5v3" tabindex="0">Sometimes</label><input type="radio" name="ndq5" id="ndq5v4" value="4"/><label for="ndq5v4" tabindex="0">Often</label><input type="radio" name="ndq5" id="ndq5v5" value="5"/><label for="ndq5v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="6" data-dim="A" data-rev="1"><p class="nd-question-text"><span class="nd-question-num">Q6.</span> When working somewhere with background noise or movement, how often does it fail to pull your attention away?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq6" id="ndq6v1" value="1"/><label for="ndq6v1" tabindex="0">Never</label><input type="radio" name="ndq6" id="ndq6v2" value="2"/><label for="ndq6v2" tabindex="0">Rarely</label><input type="radio" name="ndq6" id="ndq6v3" value="3"/><label for="ndq6v3" tabindex="0">Sometimes</label><input type="radio" name="ndq6" id="ndq6v4" value="4"/><label for="ndq6v4" tabindex="0">Often</label><input type="radio" name="ndq6" id="ndq6v5" value="5"/><label for="ndq6v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="7" data-dim="U" data-rev="1"><p class="nd-question-text"><span class="nd-question-num">Q7.</span> Once focused on something, how often does shifting to a completely different task feel easy and natural?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq7" id="ndq7v1" value="1"/><label for="ndq7v1" tabindex="0">Never</label><input type="radio" name="ndq7" id="ndq7v2" value="2"/><label for="ndq7v2" tabindex="0">Rarely</label><input type="radio" name="ndq7" id="ndq7v3" value="3"/><label for="ndq7v3" tabindex="0">Sometimes</label><input type="radio" name="ndq7" id="ndq7v4" value="4"/><label for="ndq7v4" tabindex="0">Often</label><input type="radio" name="ndq7" id="ndq7v5" value="5"/><label for="ndq7v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="8" data-dim="O" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q8.</span> How often do particular thoughts return to your mind repeatedly, even when you would rather move on from them?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq8" id="ndq8v1" value="1"/><label for="ndq8v1" tabindex="0">Never</label><input type="radio" name="ndq8" id="ndq8v2" value="2"/><label for="ndq8v2" tabindex="0">Rarely</label><input type="radio" name="ndq8" id="ndq8v3" value="3"/><label for="ndq8v3" tabindex="0">Sometimes</label><input type="radio" name="ndq8" id="ndq8v4" value="4"/><label for="ndq8v4" tabindex="0">Often</label><input type="radio" name="ndq8" id="ndq8v5" value="5"/><label for="ndq8v5" tabindex="0">Very often</label></div></div>
-  </div>
-
-  <!-- SECTION 2: Impulsivity & Control (5 items) -->
-  <div class="nd-section">
-    <h2 class="nd-section-title">2. Impulsivity &amp; Control</h2>
-    <p class="nd-section-subtitle">How you manage urges and behavioural impulses</p>
-    <div class="nd-question-card" data-q="9" data-dim="A" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q9.</span> How often do you commit to a course of action and only afterwards think through what the consequences might be?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq9" id="ndq9v1" value="1"/><label for="ndq9v1" tabindex="0">Never</label><input type="radio" name="ndq9" id="ndq9v2" value="2"/><label for="ndq9v2" tabindex="0">Rarely</label><input type="radio" name="ndq9" id="ndq9v3" value="3"/><label for="ndq9v3" tabindex="0">Sometimes</label><input type="radio" name="ndq9" id="ndq9v4" value="4"/><label for="ndq9v4" tabindex="0">Often</label><input type="radio" name="ndq9" id="ndq9v5" value="5"/><label for="ndq9v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="10" data-dim="A" data-rev="1"><p class="nd-question-text"><span class="nd-question-num">Q10.</span> Before committing to something, how often do you naturally pause to think it through first?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq10" id="ndq10v1" value="1"/><label for="ndq10v1" tabindex="0">Never</label><input type="radio" name="ndq10" id="ndq10v2" value="2"/><label for="ndq10v2" tabindex="0">Rarely</label><input type="radio" name="ndq10" id="ndq10v3" value="3"/><label for="ndq10v3" tabindex="0">Sometimes</label><input type="radio" name="ndq10" id="ndq10v4" value="4"/><label for="ndq10v4" tabindex="0">Often</label><input type="radio" name="ndq10" id="ndq10v5" value="5"/><label for="ndq10v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="11" data-dim="O" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q11.</span> How often do you feel you need to carry out a particular action before you can feel settled or calm?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq11" id="ndq11v1" value="1"/><label for="ndq11v1" tabindex="0">Never</label><input type="radio" name="ndq11" id="ndq11v2" value="2"/><label for="ndq11v2" tabindex="0">Rarely</label><input type="radio" name="ndq11" id="ndq11v3" value="3"/><label for="ndq11v3" tabindex="0">Sometimes</label><input type="radio" name="ndq11" id="ndq11v4" value="4"/><label for="ndq11v4" tabindex="0">Often</label><input type="radio" name="ndq11" id="ndq11v5" value="5"/><label for="ndq11v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="12" data-dim="O" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q12.</span> How often do you find yourself mentally replaying or reviewing something — counting, checking, going over it again — in order to feel reassured?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq12" id="ndq12v1" value="1"/><label for="ndq12v1" tabindex="0">Never</label><input type="radio" name="ndq12" id="ndq12v2" value="2"/><label for="ndq12v2" tabindex="0">Rarely</label><input type="radio" name="ndq12" id="ndq12v3" value="3"/><label for="ndq12v3" tabindex="0">Sometimes</label><input type="radio" name="ndq12" id="ndq12v4" value="4"/><label for="ndq12v4" tabindex="0">Often</label><input type="radio" name="ndq12" id="ndq12v5" value="5"/><label for="ndq12v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="13" data-dim="UO" data-rev="1"><p class="nd-question-text"><span class="nd-question-num">Q13.</span> Once you have started a habitual behaviour or sequence, how often does stopping partway through feel straightforward?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq13" id="ndq13v1" value="1"/><label for="ndq13v1" tabindex="0">Never</label><input type="radio" name="ndq13" id="ndq13v2" value="2"/><label for="ndq13v2" tabindex="0">Rarely</label><input type="radio" name="ndq13" id="ndq13v3" value="3"/><label for="ndq13v3" tabindex="0">Sometimes</label><input type="radio" name="ndq13" id="ndq13v4" value="4"/><label for="ndq13v4" tabindex="0">Often</label><input type="radio" name="ndq13" id="ndq13v5" value="5"/><label for="ndq13v5" tabindex="0">Very often</label></div></div>
-  </div>
-
-  <!-- SECTION 3: Activity & Energy Regulation (4 items) -->
-  <div class="nd-section">
-    <h2 class="nd-section-title">3. Activity &amp; Energy Regulation</h2>
-    <p class="nd-section-subtitle">How your body manages movement and energy</p>
-    <div class="nd-question-card" data-q="14" data-dim="A" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q14.</span> How often do you notice an urge to be moving or doing something, even in situations where sitting still is expected?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq14" id="ndq14v1" value="1"/><label for="ndq14v1" tabindex="0">Never</label><input type="radio" name="ndq14" id="ndq14v2" value="2"/><label for="ndq14v2" tabindex="0">Rarely</label><input type="radio" name="ndq14" id="ndq14v3" value="3"/><label for="ndq14v3" tabindex="0">Sometimes</label><input type="radio" name="ndq14" id="ndq14v4" value="4"/><label for="ndq14v4" tabindex="0">Often</label><input type="radio" name="ndq14" id="ndq14v5" value="5"/><label for="ndq14v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="15" data-dim="AO" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q15.</span> Even when sitting quietly, how often is there an underlying feeling of being internally switched on or agitated?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq15" id="ndq15v1" value="1"/><label for="ndq15v1" tabindex="0">Never</label><input type="radio" name="ndq15" id="ndq15v2" value="2"/><label for="ndq15v2" tabindex="0">Rarely</label><input type="radio" name="ndq15" id="ndq15v3" value="3"/><label for="ndq15v3" tabindex="0">Sometimes</label><input type="radio" name="ndq15" id="ndq15v4" value="4"/><label for="ndq15v4" tabindex="0">Often</label><input type="radio" name="ndq15" id="ndq15v5" value="5"/><label for="ndq15v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="16" data-dim="AU" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q16.</span> How often do you find yourself tapping, shifting, bouncing your leg, or fidgeting during sedentary activities?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq16" id="ndq16v1" value="1"/><label for="ndq16v1" tabindex="0">Never</label><input type="radio" name="ndq16" id="ndq16v2" value="2"/><label for="ndq16v2" tabindex="0">Rarely</label><input type="radio" name="ndq16" id="ndq16v3" value="3"/><label for="ndq16v3" tabindex="0">Sometimes</label><input type="radio" name="ndq16" id="ndq16v4" value="4"/><label for="ndq16v4" tabindex="0">Often</label><input type="radio" name="ndq16" id="ndq16v5" value="5"/><label for="ndq16v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="17" data-dim="U" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q17.</span> How often do you engage in rhythmic or repetitive physical movements — such as rocking or particular hand movements — especially when excited or under pressure?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq17" id="ndq17v1" value="1"/><label for="ndq17v1" tabindex="0">Never</label><input type="radio" name="ndq17" id="ndq17v2" value="2"/><label for="ndq17v2" tabindex="0">Rarely</label><input type="radio" name="ndq17" id="ndq17v3" value="3"/><label for="ndq17v3" tabindex="0">Sometimes</label><input type="radio" name="ndq17" id="ndq17v4" value="4"/><label for="ndq17v4" tabindex="0">Often</label><input type="radio" name="ndq17" id="ndq17v5" value="5"/><label for="ndq17v5" tabindex="0">Very often</label></div></div>
-  </div>
-
-  <!-- SECTION 4: Executive Function (6 items) -->
-  <div class="nd-section">
-    <h2 class="nd-section-title">4. Executive Function</h2>
-    <p class="nd-section-subtitle">How you plan, organise and manage tasks</p>
-    <div class="nd-question-card" data-q="18" data-dim="A" data-rev="1"><p class="nd-question-text"><span class="nd-question-num">Q18.</span> How often do you find it easy to begin a task promptly, even one you know is important but not enjoyable?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq18" id="ndq18v1" value="1"/><label for="ndq18v1" tabindex="0">Never</label><input type="radio" name="ndq18" id="ndq18v2" value="2"/><label for="ndq18v2" tabindex="0">Rarely</label><input type="radio" name="ndq18" id="ndq18v3" value="3"/><label for="ndq18v3" tabindex="0">Sometimes</label><input type="radio" name="ndq18" id="ndq18v4" value="4"/><label for="ndq18v4" tabindex="0">Often</label><input type="radio" name="ndq18" id="ndq18v5" value="5"/><label for="ndq18v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="19" data-dim="A" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q19.</span> How often do you look up and find that a lot more time has passed than you were expecting?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq19" id="ndq19v1" value="1"/><label for="ndq19v1" tabindex="0">Never</label><input type="radio" name="ndq19" id="ndq19v2" value="2"/><label for="ndq19v2" tabindex="0">Rarely</label><input type="radio" name="ndq19" id="ndq19v3" value="3"/><label for="ndq19v3" tabindex="0">Sometimes</label><input type="radio" name="ndq19" id="ndq19v4" value="4"/><label for="ndq19v4" tabindex="0">Often</label><input type="radio" name="ndq19" id="ndq19v5" value="5"/><label for="ndq19v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="20" data-dim="A" data-rev="1"><p class="nd-question-text"><span class="nd-question-num">Q20.</span> While completing a multi-step task, how often do you find it easy to hold the earlier steps in mind as you work through later ones?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq20" id="ndq20v1" value="1"/><label for="ndq20v1" tabindex="0">Never</label><input type="radio" name="ndq20" id="ndq20v2" value="2"/><label for="ndq20v2" tabindex="0">Rarely</label><input type="radio" name="ndq20" id="ndq20v3" value="3"/><label for="ndq20v3" tabindex="0">Sometimes</label><input type="radio" name="ndq20" id="ndq20v4" value="4"/><label for="ndq20v4" tabindex="0">Often</label><input type="radio" name="ndq20" id="ndq20v5" value="5"/><label for="ndq20v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="21" data-dim="UO" data-rev="1"><p class="nd-question-text"><span class="nd-question-num">Q21.</span> When a situation calls for a different approach than your usual one, how often does adapting feel comfortable?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq21" id="ndq21v1" value="1"/><label for="ndq21v1" tabindex="0">Never</label><input type="radio" name="ndq21" id="ndq21v2" value="2"/><label for="ndq21v2" tabindex="0">Rarely</label><input type="radio" name="ndq21" id="ndq21v3" value="3"/><label for="ndq21v3" tabindex="0">Sometimes</label><input type="radio" name="ndq21" id="ndq21v4" value="4"/><label for="ndq21v4" tabindex="0">Often</label><input type="radio" name="ndq21" id="ndq21v5" value="5"/><label for="ndq21v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="22" data-dim="UA" data-rev="1"><p class="nd-question-text"><span class="nd-question-num">Q22.</span> How often do you move between different tasks during a day without any noticeable friction or effort?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq22" id="ndq22v1" value="1"/><label for="ndq22v1" tabindex="0">Never</label><input type="radio" name="ndq22" id="ndq22v2" value="2"/><label for="ndq22v2" tabindex="0">Rarely</label><input type="radio" name="ndq22" id="ndq22v3" value="3"/><label for="ndq22v3" tabindex="0">Sometimes</label><input type="radio" name="ndq22" id="ndq22v4" value="4"/><label for="ndq22v4" tabindex="0">Often</label><input type="radio" name="ndq22" id="ndq22v5" value="5"/><label for="ndq22v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="23" data-dim="OU" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q23.</span> How often does wanting to get something exactly right prevent you from starting it, or from calling it finished?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq23" id="ndq23v1" value="1"/><label for="ndq23v1" tabindex="0">Never</label><input type="radio" name="ndq23" id="ndq23v2" value="2"/><label for="ndq23v2" tabindex="0">Rarely</label><input type="radio" name="ndq23" id="ndq23v3" value="3"/><label for="ndq23v3" tabindex="0">Sometimes</label><input type="radio" name="ndq23" id="ndq23v4" value="4"/><label for="ndq23v4" tabindex="0">Often</label><input type="radio" name="ndq23" id="ndq23v5" value="5"/><label for="ndq23v5" tabindex="0">Very often</label></div></div>
-  </div>
-
-  <!-- SECTION 5: Social Interaction (6 items) -->
-  <div class="nd-section">
-    <h2 class="nd-section-title">5. Social Interaction</h2>
-    <p class="nd-section-subtitle">How you navigate social situations and communication</p>
-    <div class="nd-question-card" data-q="24" data-dim="A" data-rev="1"><p class="nd-question-text"><span class="nd-question-num">Q24.</span> In conversation, how often do you find a natural moment to stop talking and give the other person extended space to respond?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq24" id="ndq24v1" value="1"/><label for="ndq24v1" tabindex="0">Never</label><input type="radio" name="ndq24" id="ndq24v2" value="2"/><label for="ndq24v2" tabindex="0">Rarely</label><input type="radio" name="ndq24" id="ndq24v3" value="3"/><label for="ndq24v3" tabindex="0">Sometimes</label><input type="radio" name="ndq24" id="ndq24v4" value="4"/><label for="ndq24v4" tabindex="0">Often</label><input type="radio" name="ndq24" id="ndq24v5" value="5"/><label for="ndq24v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="25" data-dim="U" data-rev="1"><p class="nd-question-text"><span class="nd-question-num">Q25.</span> How often do you pick up on unspoken signals — tone, posture, expression — without consciously having to think about it?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq25" id="ndq25v1" value="1"/><label for="ndq25v1" tabindex="0">Never</label><input type="radio" name="ndq25" id="ndq25v2" value="2"/><label for="ndq25v2" tabindex="0">Rarely</label><input type="radio" name="ndq25" id="ndq25v3" value="3"/><label for="ndq25v3" tabindex="0">Sometimes</label><input type="radio" name="ndq25" id="ndq25v4" value="4"/><label for="ndq25v4" tabindex="0">Often</label><input type="radio" name="ndq25" id="ndq25v5" value="5"/><label for="ndq25v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="26" data-dim="U" data-rev="1"><p class="nd-question-text"><span class="nd-question-num">Q26.</span> When someone is being indirect or ironic, how often does the intended meaning come to you immediately?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq26" id="ndq26v1" value="1"/><label for="ndq26v1" tabindex="0">Never</label><input type="radio" name="ndq26" id="ndq26v2" value="2"/><label for="ndq26v2" tabindex="0">Rarely</label><input type="radio" name="ndq26" id="ndq26v3" value="3"/><label for="ndq26v3" tabindex="0">Sometimes</label><input type="radio" name="ndq26" id="ndq26v4" value="4"/><label for="ndq26v4" tabindex="0">Often</label><input type="radio" name="ndq26" id="ndq26v5" value="5"/><label for="ndq26v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="27" data-dim="UO" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q27.</span> How often do social situations leave you feeling drained in a way that goes beyond ordinary tiredness?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq27" id="ndq27v1" value="1"/><label for="ndq27v1" tabindex="0">Never</label><input type="radio" name="ndq27" id="ndq27v2" value="2"/><label for="ndq27v2" tabindex="0">Rarely</label><input type="radio" name="ndq27" id="ndq27v3" value="3"/><label for="ndq27v3" tabindex="0">Sometimes</label><input type="radio" name="ndq27" id="ndq27v4" value="4"/><label for="ndq27v4" tabindex="0">Often</label><input type="radio" name="ndq27" id="ndq27v5" value="5"/><label for="ndq27v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="28" data-dim="U" data-rev="1"><p class="nd-question-text"><span class="nd-question-num">Q28.</span> When discussing something you find fascinating, how often do you notice the other person's interest beginning to drift and adjust accordingly?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq28" id="ndq28v1" value="1"/><label for="ndq28v1" tabindex="0">Never</label><input type="radio" name="ndq28" id="ndq28v2" value="2"/><label for="ndq28v2" tabindex="0">Rarely</label><input type="radio" name="ndq28" id="ndq28v3" value="3"/><label for="ndq28v3" tabindex="0">Sometimes</label><input type="radio" name="ndq28" id="ndq28v4" value="4"/><label for="ndq28v4" tabindex="0">Often</label><input type="radio" name="ndq28" id="ndq28v5" value="5"/><label for="ndq28v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="29" data-dim="A" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q29.</span> How often do you say something in conversation and only realise a moment later that it came across differently than you intended?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq29" id="ndq29v1" value="1"/><label for="ndq29v1" tabindex="0">Never</label><input type="radio" name="ndq29" id="ndq29v2" value="2"/><label for="ndq29v2" tabindex="0">Rarely</label><input type="radio" name="ndq29" id="ndq29v3" value="3"/><label for="ndq29v3" tabindex="0">Sometimes</label><input type="radio" name="ndq29" id="ndq29v4" value="4"/><label for="ndq29v4" tabindex="0">Often</label><input type="radio" name="ndq29" id="ndq29v5" value="5"/><label for="ndq29v5" tabindex="0">Very often</label></div></div>
-  </div>
-
-  <!-- SECTION 6: Emotional Regulation (5 items) -->
-  <div class="nd-section">
-    <h2 class="nd-section-title">6. Emotional Regulation</h2>
-    <p class="nd-section-subtitle">How you experience and manage your emotions</p>
-    <div class="nd-question-card" data-q="30" data-dim="A" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q30.</span> How often do your emotional responses escalate more quickly or intensely than the situation seems to call for?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq30" id="ndq30v1" value="1"/><label for="ndq30v1" tabindex="0">Never</label><input type="radio" name="ndq30" id="ndq30v2" value="2"/><label for="ndq30v2" tabindex="0">Rarely</label><input type="radio" name="ndq30" id="ndq30v3" value="3"/><label for="ndq30v3" tabindex="0">Sometimes</label><input type="radio" name="ndq30" id="ndq30v4" value="4"/><label for="ndq30v4" tabindex="0">Often</label><input type="radio" name="ndq30" id="ndq30v5" value="5"/><label for="ndq30v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="31" data-dim="A" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q31.</span> How often does a critical comment or perceived rejection leave a strong and lasting impression on you emotionally?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq31" id="ndq31v1" value="1"/><label for="ndq31v1" tabindex="0">Never</label><input type="radio" name="ndq31" id="ndq31v2" value="2"/><label for="ndq31v2" tabindex="0">Rarely</label><input type="radio" name="ndq31" id="ndq31v3" value="3"/><label for="ndq31v3" tabindex="0">Sometimes</label><input type="radio" name="ndq31" id="ndq31v4" value="4"/><label for="ndq31v4" tabindex="0">Often</label><input type="radio" name="ndq31" id="ndq31v5" value="5"/><label for="ndq31v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="32" data-dim="U" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q32.</span> How often does an accumulation of demands reach a point where you feel unable to continue and need to withdraw?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq32" id="ndq32v1" value="1"/><label for="ndq32v1" tabindex="0">Never</label><input type="radio" name="ndq32" id="ndq32v2" value="2"/><label for="ndq32v2" tabindex="0">Rarely</label><input type="radio" name="ndq32" id="ndq32v3" value="3"/><label for="ndq32v3" tabindex="0">Sometimes</label><input type="radio" name="ndq32" id="ndq32v4" value="4"/><label for="ndq32v4" tabindex="0">Often</label><input type="radio" name="ndq32" id="ndq32v5" value="5"/><label for="ndq32v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="33" data-dim="UO" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q33.</span> How often does an unexpected change to your plans or usual routine cause you noticeable distress?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq33" id="ndq33v1" value="1"/><label for="ndq33v1" tabindex="0">Never</label><input type="radio" name="ndq33" id="ndq33v2" value="2"/><label for="ndq33v2" tabindex="0">Rarely</label><input type="radio" name="ndq33" id="ndq33v3" value="3"/><label for="ndq33v3" tabindex="0">Sometimes</label><input type="radio" name="ndq33" id="ndq33v4" value="4"/><label for="ndq33v4" tabindex="0">Often</label><input type="radio" name="ndq33" id="ndq33v5" value="5"/><label for="ndq33v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="34" data-dim="A" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q34.</span> How often does your mood shift noticeably across the course of a single day in response to things happening around you?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq34" id="ndq34v1" value="1"/><label for="ndq34v1" tabindex="0">Never</label><input type="radio" name="ndq34" id="ndq34v2" value="2"/><label for="ndq34v2" tabindex="0">Rarely</label><input type="radio" name="ndq34" id="ndq34v3" value="3"/><label for="ndq34v3" tabindex="0">Sometimes</label><input type="radio" name="ndq34" id="ndq34v4" value="4"/><label for="ndq34v4" tabindex="0">Often</label><input type="radio" name="ndq34" id="ndq34v5" value="5"/><label for="ndq34v5" tabindex="0">Very often</label></div></div>
-  </div>
-
-  <!-- SECTION 7: Repetitive & Restricted Patterns (5 items) -->
-  <div class="nd-section">
-    <h2 class="nd-section-title">7. Repetitive &amp; Restricted Patterns</h2>
-    <p class="nd-section-subtitle">How repetition and routine feature in your life</p>
-    <div class="nd-question-card" data-q="35" data-dim="U" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q35.</span> How often do you find yourself returning to the same small set of topics or activities for the majority of your focused attention?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq35" id="ndq35v1" value="1"/><label for="ndq35v1" tabindex="0">Never</label><input type="radio" name="ndq35" id="ndq35v2" value="2"/><label for="ndq35v2" tabindex="0">Rarely</label><input type="radio" name="ndq35" id="ndq35v3" value="3"/><label for="ndq35v3" tabindex="0">Sometimes</label><input type="radio" name="ndq35" id="ndq35v4" value="4"/><label for="ndq35v4" tabindex="0">Often</label><input type="radio" name="ndq35" id="ndq35v5" value="5"/><label for="ndq35v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="36" data-dim="UO" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q36.</span> How often is having a predictable structure or routine to your day genuinely important to your sense of wellbeing?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq36" id="ndq36v1" value="1"/><label for="ndq36v1" tabindex="0">Never</label><input type="radio" name="ndq36" id="ndq36v2" value="2"/><label for="ndq36v2" tabindex="0">Rarely</label><input type="radio" name="ndq36" id="ndq36v3" value="3"/><label for="ndq36v3" tabindex="0">Sometimes</label><input type="radio" name="ndq36" id="ndq36v4" value="4"/><label for="ndq36v4" tabindex="0">Often</label><input type="radio" name="ndq36" id="ndq36v5" value="5"/><label for="ndq36v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="37" data-dim="O" data-rev="1"><p class="nd-question-text"><span class="nd-question-num">Q37.</span> How often can you discard or give away possessions without any particular worry about what might happen as a result?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq37" id="ndq37v1" value="1"/><label for="ndq37v1" tabindex="0">Never</label><input type="radio" name="ndq37" id="ndq37v2" value="2"/><label for="ndq37v2" tabindex="0">Rarely</label><input type="radio" name="ndq37" id="ndq37v3" value="3"/><label for="ndq37v3" tabindex="0">Sometimes</label><input type="radio" name="ndq37" id="ndq37v4" value="4"/><label for="ndq37v4" tabindex="0">Often</label><input type="radio" name="ndq37" id="ndq37v5" value="5"/><label for="ndq37v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="38" data-dim="O" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q38.</span> How often do you seek reassurance from others — asking "are you sure?" or similar — in order to settle a feeling of doubt?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq38" id="ndq38v1" value="1"/><label for="ndq38v1" tabindex="0">Never</label><input type="radio" name="ndq38" id="ndq38v2" value="2"/><label for="ndq38v2" tabindex="0">Rarely</label><input type="radio" name="ndq38" id="ndq38v3" value="3"/><label for="ndq38v3" tabindex="0">Sometimes</label><input type="radio" name="ndq38" id="ndq38v4" value="4"/><label for="ndq38v4" tabindex="0">Often</label><input type="radio" name="ndq38" id="ndq38v5" value="5"/><label for="ndq38v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="39" data-dim="UA" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q39.</span> How often do you return to familiar media — rewatching, rereading, replaying — specifically because knowing what will happen feels comforting?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq39" id="ndq39v1" value="1"/><label for="ndq39v1" tabindex="0">Never</label><input type="radio" name="ndq39" id="ndq39v2" value="2"/><label for="ndq39v2" tabindex="0">Rarely</label><input type="radio" name="ndq39" id="ndq39v3" value="3"/><label for="ndq39v3" tabindex="0">Sometimes</label><input type="radio" name="ndq39" id="ndq39v4" value="4"/><label for="ndq39v4" tabindex="0">Often</label><input type="radio" name="ndq39" id="ndq39v5" value="5"/><label for="ndq39v5" tabindex="0">Very often</label></div></div>
-  </div>
-
-  <!-- SECTION 8: Sensory Processing (4 items) -->
-  <div class="nd-section">
-    <h2 class="nd-section-title">8. Sensory Processing</h2>
-    <p class="nd-section-subtitle">How you experience sensory input from the world around you</p>
-    <div class="nd-question-card" data-q="40" data-dim="U" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q40.</span> How often do sensory experiences — sounds, light levels, textures, or smells — affect you more strongly than they appear to affect those around you?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq40" id="ndq40v1" value="1"/><label for="ndq40v1" tabindex="0">Never</label><input type="radio" name="ndq40" id="ndq40v2" value="2"/><label for="ndq40v2" tabindex="0">Rarely</label><input type="radio" name="ndq40" id="ndq40v3" value="3"/><label for="ndq40v3" tabindex="0">Sometimes</label><input type="radio" name="ndq40" id="ndq40v4" value="4"/><label for="ndq40v4" tabindex="0">Often</label><input type="radio" name="ndq40" id="ndq40v5" value="5"/><label for="ndq40v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="41" data-dim="AU" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q41.</span> How often do you actively seek out intense sensory input — pressure, movement, strong flavours — because you find it settling or satisfying?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq41" id="ndq41v1" value="1"/><label for="ndq41v1" tabindex="0">Never</label><input type="radio" name="ndq41" id="ndq41v2" value="2"/><label for="ndq41v2" tabindex="0">Rarely</label><input type="radio" name="ndq41" id="ndq41v3" value="3"/><label for="ndq41v3" tabindex="0">Sometimes</label><input type="radio" name="ndq41" id="ndq41v4" value="4"/><label for="ndq41v4" tabindex="0">Often</label><input type="radio" name="ndq41" id="ndq41v5" value="5"/><label for="ndq41v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="42" data-dim="U" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q42.</span> How often do specific textures, fabrics, or food consistencies produce a physical discomfort strong enough to influence your choices?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq42" id="ndq42v1" value="1"/><label for="ndq42v1" tabindex="0">Never</label><input type="radio" name="ndq42" id="ndq42v2" value="2"/><label for="ndq42v2" tabindex="0">Rarely</label><input type="radio" name="ndq42" id="ndq42v3" value="3"/><label for="ndq42v3" tabindex="0">Sometimes</label><input type="radio" name="ndq42" id="ndq42v4" value="4"/><label for="ndq42v4" tabindex="0">Often</label><input type="radio" name="ndq42" id="ndq42v5" value="5"/><label for="ndq42v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="43" data-dim="UO" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q43.</span> How often does a particular sensory experience reliably trigger a feeling of unease or heightened anxiety?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq43" id="ndq43v1" value="1"/><label for="ndq43v1" tabindex="0">Never</label><input type="radio" name="ndq43" id="ndq43v2" value="2"/><label for="ndq43v2" tabindex="0">Rarely</label><input type="radio" name="ndq43" id="ndq43v3" value="3"/><label for="ndq43v3" tabindex="0">Sometimes</label><input type="radio" name="ndq43" id="ndq43v4" value="4"/><label for="ndq43v4" tabindex="0">Often</label><input type="radio" name="ndq43" id="ndq43v5" value="5"/><label for="ndq43v5" tabindex="0">Very often</label></div></div>
-  </div>
-
-  <!-- SECTION 9: Cognitive Style (5 items) -->
-  <div class="nd-section">
-    <h2 class="nd-section-title">9. Cognitive Style</h2>
-    <p class="nd-section-subtitle">The characteristic patterns of how you think</p>
-    <div class="nd-question-card" data-q="44" data-dim="A" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q44.</span> How often does your thinking jump rapidly between different ideas or connections within a short space of time?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq44" id="ndq44v1" value="1"/><label for="ndq44v1" tabindex="0">Never</label><input type="radio" name="ndq44" id="ndq44v2" value="2"/><label for="ndq44v2" tabindex="0">Rarely</label><input type="radio" name="ndq44" id="ndq44v3" value="3"/><label for="ndq44v3" tabindex="0">Sometimes</label><input type="radio" name="ndq44" id="ndq44v4" value="4"/><label for="ndq44v4" tabindex="0">Often</label><input type="radio" name="ndq44" id="ndq44v5" value="5"/><label for="ndq44v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="45" data-dim="UO" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q45.</span> How often do you notice small inconsistencies or patterns in information that other people around you appear to have overlooked?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq45" id="ndq45v1" value="1"/><label for="ndq45v1" tabindex="0">Never</label><input type="radio" name="ndq45" id="ndq45v2" value="2"/><label for="ndq45v2" tabindex="0">Rarely</label><input type="radio" name="ndq45" id="ndq45v3" value="3"/><label for="ndq45v3" tabindex="0">Sometimes</label><input type="radio" name="ndq45" id="ndq45v4" value="4"/><label for="ndq45v4" tabindex="0">Often</label><input type="radio" name="ndq45" id="ndq45v5" value="5"/><label for="ndq45v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="46" data-dim="UO" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q46.</span> How often does your thinking settle into clear opposing categories — something either works or it doesn't — rather than feeling comfortable with ambiguity?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq46" id="ndq46v1" value="1"/><label for="ndq46v1" tabindex="0">Never</label><input type="radio" name="ndq46" id="ndq46v2" value="2"/><label for="ndq46v2" tabindex="0">Rarely</label><input type="radio" name="ndq46" id="ndq46v3" value="3"/><label for="ndq46v3" tabindex="0">Sometimes</label><input type="radio" name="ndq46" id="ndq46v4" value="4"/><label for="ndq46v4" tabindex="0">Often</label><input type="radio" name="ndq46" id="ndq46v5" value="5"/><label for="ndq46v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="47" data-dim="O" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q47.</span> How often, when considering a future situation, does your mind move towards imagining the worst likely outcome?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq47" id="ndq47v1" value="1"/><label for="ndq47v1" tabindex="0">Never</label><input type="radio" name="ndq47" id="ndq47v2" value="2"/><label for="ndq47v2" tabindex="0">Rarely</label><input type="radio" name="ndq47" id="ndq47v3" value="3"/><label for="ndq47v3" tabindex="0">Sometimes</label><input type="radio" name="ndq47" id="ndq47v4" value="4"/><label for="ndq47v4" tabindex="0">Often</label><input type="radio" name="ndq47" id="ndq47v5" value="5"/><label for="ndq47v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="48" data-dim="OA" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q48.</span> How often does your mind return to a past event or conversation, even when you would prefer to move on from it?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq48" id="ndq48v1" value="1"/><label for="ndq48v1" tabindex="0">Never</label><input type="radio" name="ndq48" id="ndq48v2" value="2"/><label for="ndq48v2" tabindex="0">Rarely</label><input type="radio" name="ndq48" id="ndq48v3" value="3"/><label for="ndq48v3" tabindex="0">Sometimes</label><input type="radio" name="ndq48" id="ndq48v4" value="4"/><label for="ndq48v4" tabindex="0">Often</label><input type="radio" name="ndq48" id="ndq48v5" value="5"/><label for="ndq48v5" tabindex="0">Very often</label></div></div>
-  </div>
-
-  <!-- SECTION 10: Anxiety & Fear (6 items) -->
-  <div class="nd-section">
-    <h2 class="nd-section-title">10. Anxiety &amp; Fear</h2>
-    <p class="nd-section-subtitle">The nature and triggers of your anxiety responses</p>
-    <div class="nd-question-card" data-q="49" data-dim="O" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q49.</span> How often do concerns about dirt, germs, or contamination influence your behaviour or cause you noticeable unease?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq49" id="ndq49v1" value="1"/><label for="ndq49v1" tabindex="0">Never</label><input type="radio" name="ndq49" id="ndq49v2" value="2"/><label for="ndq49v2" tabindex="0">Rarely</label><input type="radio" name="ndq49" id="ndq49v3" value="3"/><label for="ndq49v3" tabindex="0">Sometimes</label><input type="radio" name="ndq49" id="ndq49v4" value="4"/><label for="ndq49v4" tabindex="0">Often</label><input type="radio" name="ndq49" id="ndq49v5" value="5"/><label for="ndq49v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="50" data-dim="O" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q50.</span> How often do thoughts about accidentally causing harm to someone arise in a way that feels distressing?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq50" id="ndq50v1" value="1"/><label for="ndq50v1" tabindex="0">Never</label><input type="radio" name="ndq50" id="ndq50v2" value="2"/><label for="ndq50v2" tabindex="0">Rarely</label><input type="radio" name="ndq50" id="ndq50v3" value="3"/><label for="ndq50v3" tabindex="0">Sometimes</label><input type="radio" name="ndq50" id="ndq50v4" value="4"/><label for="ndq50v4" tabindex="0">Often</label><input type="radio" name="ndq50" id="ndq50v5" value="5"/><label for="ndq50v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="51" data-dim="O" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q51.</span> How often do you check something — a lock, a message, a piece of work — more than once because of a lingering feeling that something might be wrong?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq51" id="ndq51v1" value="1"/><label for="ndq51v1" tabindex="0">Never</label><input type="radio" name="ndq51" id="ndq51v2" value="2"/><label for="ndq51v2" tabindex="0">Rarely</label><input type="radio" name="ndq51" id="ndq51v3" value="3"/><label for="ndq51v3" tabindex="0">Sometimes</label><input type="radio" name="ndq51" id="ndq51v4" value="4"/><label for="ndq51v4" tabindex="0">Often</label><input type="radio" name="ndq51" id="ndq51v5" value="5"/><label for="ndq51v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="52" data-dim="O" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q52.</span> How often do thoughts that feel disturbing or out of character enter your mind without invitation?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq52" id="ndq52v1" value="1"/><label for="ndq52v1" tabindex="0">Never</label><input type="radio" name="ndq52" id="ndq52v2" value="2"/><label for="ndq52v2" tabindex="0">Rarely</label><input type="radio" name="ndq52" id="ndq52v3" value="3"/><label for="ndq52v3" tabindex="0">Sometimes</label><input type="radio" name="ndq52" id="ndq52v4" value="4"/><label for="ndq52v4" tabindex="0">Often</label><input type="radio" name="ndq52" id="ndq52v5" value="5"/><label for="ndq52v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="53" data-dim="A" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q53.</span> How often do difficulties with staying organised or following through produce a background sense of anxiety in your day-to-day life?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq53" id="ndq53v1" value="1"/><label for="ndq53v1" tabindex="0">Never</label><input type="radio" name="ndq53" id="ndq53v2" value="2"/><label for="ndq53v2" tabindex="0">Rarely</label><input type="radio" name="ndq53" id="ndq53v3" value="3"/><label for="ndq53v3" tabindex="0">Sometimes</label><input type="radio" name="ndq53" id="ndq53v4" value="4"/><label for="ndq53v4" tabindex="0">Often</label><input type="radio" name="ndq53" id="ndq53v5" value="5"/><label for="ndq53v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="54" data-dim="O" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q54.</span> How often does concern about your own moral conduct cause you noticeable distress or prompt you to examine your own behaviour?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq54" id="ndq54v1" value="1"/><label for="ndq54v1" tabindex="0">Never</label><input type="radio" name="ndq54" id="ndq54v2" value="2"/><label for="ndq54v2" tabindex="0">Rarely</label><input type="radio" name="ndq54" id="ndq54v3" value="3"/><label for="ndq54v3" tabindex="0">Sometimes</label><input type="radio" name="ndq54" id="ndq54v4" value="4"/><label for="ndq54v4" tabindex="0">Often</label><input type="radio" name="ndq54" id="ndq54v5" value="5"/><label for="ndq54v5" tabindex="0">Very often</label></div></div>
-  </div>
-
-  <!-- SECTION 11: Developmental Course (4 items) -->
-  <div class="nd-section">
-    <h2 class="nd-section-title">11. Developmental Course</h2>
-    <p class="nd-section-subtitle">How these patterns have shown up across your lifetime</p>
-    <div class="nd-question-card" data-q="55" data-dim="A" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q55.</span> Looking back at childhood, how often do you recall attention, energy level, or self-control being a noticeable issue before the age of twelve?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq55" id="ndq55v1" value="1"/><label for="ndq55v1" tabindex="0">Never</label><input type="radio" name="ndq55" id="ndq55v2" value="2"/><label for="ndq55v2" tabindex="0">Rarely</label><input type="radio" name="ndq55" id="ndq55v3" value="3"/><label for="ndq55v3" tabindex="0">Sometimes</label><input type="radio" name="ndq55" id="ndq55v4" value="4"/><label for="ndq55v4" tabindex="0">Often</label><input type="radio" name="ndq55" id="ndq55v5" value="5"/><label for="ndq55v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="56" data-dim="U" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q56.</span> Reflecting on early childhood, how often do you recall your communication or social connection with others feeling different from that of your peers?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq56" id="ndq56v1" value="1"/><label for="ndq56v1" tabindex="0">Never</label><input type="radio" name="ndq56" id="ndq56v2" value="2"/><label for="ndq56v2" tabindex="0">Rarely</label><input type="radio" name="ndq56" id="ndq56v3" value="3"/><label for="ndq56v3" tabindex="0">Sometimes</label><input type="radio" name="ndq56" id="ndq56v4" value="4"/><label for="ndq56v4" tabindex="0">Often</label><input type="radio" name="ndq56" id="ndq56v5" value="5"/><label for="ndq56v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="57" data-dim="AO" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q57.</span> How often do the difficulties you experience become noticeably more prominent during periods of high stress or demand?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq57" id="ndq57v1" value="1"/><label for="ndq57v1" tabindex="0">Never</label><input type="radio" name="ndq57" id="ndq57v2" value="2"/><label for="ndq57v2" tabindex="0">Rarely</label><input type="radio" name="ndq57" id="ndq57v3" value="3"/><label for="ndq57v3" tabindex="0">Sometimes</label><input type="radio" name="ndq57" id="ndq57v4" value="4"/><label for="ndq57v4" tabindex="0">Often</label><input type="radio" name="ndq57" id="ndq57v5" value="5"/><label for="ndq57v5" tabindex="0">Very often</label></div></div>
-    <div class="nd-question-card" data-q="58" data-dim="U" data-rev="1"><p class="nd-question-text"><span class="nd-question-num">Q58.</span> Looking across your life as a whole, how often do you notice significant variation in your social style or sensory sensitivities — as opposed to these feeling like stable, consistent features of who you are?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq58" id="ndq58v1" value="1"/><label for="ndq58v1" tabindex="0">Never</label><input type="radio" name="ndq58" id="ndq58v2" value="2"/><label for="ndq58v2" tabindex="0">Rarely</label><input type="radio" name="ndq58" id="ndq58v3" value="3"/><label for="ndq58v3" tabindex="0">Sometimes</label><input type="radio" name="ndq58" id="ndq58v4" value="4"/><label for="ndq58v4" tabindex="0">Often</label><input type="radio" name="ndq58" id="ndq58v5" value="5"/><label for="ndq58v5" tabindex="0">Very often</label></div></div>
-  </div>
-
-  <div class="nd-error-msg" id="ndErrorMsg" role="alert">!! ANSWER ALL 58 QUESTIONS BEFORE PROCEEDING !!</div>
-  <div class="nd-submit-wrap">
-    <button class="nd-btn-primary" id="ndSubmitBtn">▶ VIEW MY RESULTS ◀</button>
-  </div>
-
-</div><!-- /#nd-root -->
-
-<!-- RESULTS OVERLAY -->
-<div id="nd-results-overlay" role="dialog" aria-modal="true" aria-labelledby="ndResultsTitle">
-  <div class="nd-results-panel">
-    <button class="nd-results-close" id="ndCloseBtn" aria-label="Close results">✕ CLOSE</button>
-    <div class="nd-results-title" id="ndResultsTitle">YOUR BRAIN<br>PROFILE</div>
-    <div class="nd-results-overall-label">▸ OVERALL TRAIT SCORE ◂</div>
-    <div class="nd-results-overall-score" id="ndOverallScore">0%</div>
-    <div class="nd-results-overall-note">Average across all three dimensions</div>
-    <div id="ndDimensions"></div>
-    <div id="ndCombos" class="nd-combo-section"></div>
-    <div class="nd-results-disclaimer">
-      <strong>Remember:</strong> This is a self-reflection tool, not a clinical diagnosis. If your scores feel significant, consider speaking with a qualified professional.
+  <div class="score-grid">
+    <div class="score-card adhd">
+      <div class="score-label">A</div>
+      <div class="score-name">ADHD pattern</div>
+      <div class="score-value" id="scoreA">—</div>
+      <div class="score-band" id="bandA"></div>
+      <div class="score-bar-wrap"><div class="score-bar-fill" id="barA"></div></div>
     </div>
-    <div class="nd-results-buttons">
-      <button class="nd-btn-primary" id="ndCopyCSVBtn">▶ COPY RESULTS FOR SPREADSHEET</button><br /><br />
-      <button class="nd-btn-secondary" id="ndRetakeBtn">↺ RETAKE</button>
-      <button class="nd-btn-secondary" id="ndCloseBtn2">✕ CLOSE</button>
+    <div class="score-card autism">
+      <div class="score-label">U</div>
+      <div class="score-name">Autism pattern</div>
+      <div class="score-value" id="scoreU">—</div>
+      <div class="score-band" id="bandU"></div>
+      <div class="score-bar-wrap"><div class="score-bar-fill" id="barU"></div></div>
+    </div>
+    <div class="score-card ocd">
+      <div class="score-label">O</div>
+      <div class="score-name">OCD pattern</div>
+      <div class="score-value" id="scoreO">—</div>
+      <div class="score-band" id="bandO"></div>
+      <div class="score-bar-wrap"><div class="score-bar-fill" id="barO"></div></div>
+    </div>
+  </div>
+
+  <div class="export-section" id="interpretationBox" style="display:none;">
+    <h3>What this means</h3>
+    <div id="interpretationText" class="interp-body"></div>
+  </div>
+
+  <div class="export-section">
+    <h3>Detailed breakdown</h3>
+    <p>Every question, your raw answer, and its transformed score. All inversions and peak-transformations have already been applied. You can copy this table directly into a spreadsheet — the numbers are already normalised and comparable.</p>
+    <p style="font-size:0.8rem;margin-bottom:16px;margin-top:-8px;">
+      <span class="tag-pill tag-a">A</span> ADHD &nbsp;&nbsp;
+      <span class="tag-pill tag-u">U</span> Autism &nbsp;&nbsp;
+      <span class="tag-pill tag-o">O</span> OCD &nbsp;&nbsp;
+      <span style="color:var(--text-dimmer);font-size:0.78rem;">Dual tags mean the item contributes to both subscales.</span>
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>Q</th>
+          <th>Question (abbreviated)</th>
+          <th>Tag</th>
+          <th style="text-align:center">Raw</th>
+          <th style="text-align:center">Score</th>
+        </tr>
+      </thead>
+      <tbody id="detailTable"></tbody>
+    </table>
+  </div>
+
+  <div class="export-section">
+    <h3>Copy to spreadsheet</h3>
+    <p>This gives you a single row of tab-separated values. Paste it into your spreadsheet to build up a comparison across sessions or people. Each row is: Date, A score, U score, O score, then all 60 transformed item scores. You may also find it useful to ask someone who knows you well — a partner, close friend, or family member — to complete this questionnaire about you independently and compare the two rows. Research consistently shows that self-report and informant perspectives differ, and the gap between them is itself informative.</p>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="copyToClipboard()">Copy row to clipboard</button>
+      <button class="btn btn-secondary" onclick="resetAssessment()">Start again</button>
     </div>
   </div>
 </div>
 
 <script>
-(function () {
-  'use strict';
-  var TOTAL_QS = 58;
-  var answers = {};
+// ─────────────────────────────────────────────────────────────────
+// ITEM DEFINITIONS
+// tags: array of subscales this item contributes to
+// type: 'regular' (signal=high), 'reversed' (signal=low),
+//       'peak' (signal=middle, symmetrical),
+//       'peak_high' (signal=middle-to-high, asymmetric: high end scores more than low end)
+// short: abbreviated text for the results table
+// ─────────────────────────────────────────────────────────────────
 
-  /*
-   * SCORING
-   * Reversed items (data-rev="1"): scored = 6 - raw  (so Never=5, Very often=1)
-   * Forward items (data-rev="0"):  scored = raw       (so Never=1, Very often=5)
-   * Each dim letter in data-dim contributes scored value once; max per slot = 5.
-   * Dim%  = sum_scored / (slots × 5) × 100
-   * Overall = mean(Spark%, Depth%, Sentinel%)
-   */
+const SECTIONS = [
+  { title: "Attention & Focus", start: 0 },
+  { title: "Impulsivity & Control", start: 8 },
+  { title: "Activity & Energy Regulation", start: 13 },
+  { title: "Executive Function", start: 17 },
+  { title: "Social Interaction", start: 23 },
+  { title: "Emotional Regulation", start: 29 },
+  { title: "Repetitive & Restricted Patterns", start: 34 },
+  { title: "Sensory Processing", start: 39 },
+  { title: "Cognitive Style", start: 43 },
+  { title: "Anxiety & Fear", start: 50 },
+  { title: "Developmental Course & Coping", start: 56 },
+];
 
-  function updateProgress() {
-    var count = Object.keys(answers).length;
-    var pct = Math.round((count / TOTAL_QS) * 100);
-    document.getElementById('ndProgressFill').style.width = pct + '%';
-    document.getElementById('ndProgressText').textContent = count + ' OF ' + TOTAL_QS + ' ANSWERED';
-    var w = document.querySelector('.nd-progress-bar-wrap');
-    if (w) w.setAttribute('aria-valuenow', pct);
+function normalisedTagClass(tags) {
+  const order = ['A','U','O'];
+  const sorted = [...tags].sort((a,b) => order.indexOf(a) - order.indexOf(b));
+  return 'tag-' + sorted.join('').toLowerCase();
+}
+
+const ITEMS = [
+  // ── Attention & Focus (0-7) ──
+  { q: "When you finish a routine task, how often do you find it was completed without any errors?", tags:["A"], type:"reversed", short:"Routine task completed error-free" },
+  { q: "How often do you work through a task from start to finish without losing your thread of concentration?", tags:["A"], type:"reversed", short:"Task completed without losing concentration" },
+  { q: "When engaged with something you find genuinely interesting, how often do hours pass without you registering the time?", tags:["A","U"], type:"regular", short:"Hours pass unnoticed when interested" },
+  { q: "How often do you find yourself equally drawn to a wide range of topics rather than returning repeatedly to a few specific ones?", tags:["U"], type:"reversed", short:"Equally drawn to wide range of topics" },
+  { q: "How often do particular worries or concerns keep pulling at your attention even when you are trying to focus on something else?", tags:["O"], type:"regular", short:"Worries pulling attention from focus" },
+  { q: "When working somewhere with background noise or movement, how often does it fail to pull your attention away?", tags:["A"], type:"reversed", short:"Background noise doesn't pull attention" },
+  { q: "Once focused on something, how often does shifting to a completely different task feel easy and natural?", tags:["U"], type:"reversed", short:"Shifting tasks feels easy" },
+  { q: "How often do particular thoughts return to your mind repeatedly, even when you would rather move on from them?", tags:["O"], type:"regular", short:"Thoughts returning repeatedly" },
+
+  // ── Impulsivity & Control (8-12) ──
+  { q: "How often do you commit to a course of action and only afterwards think through what the consequences might be?", tags:["A"], type:"regular", short:"Acting before thinking through consequences" },
+  { q: "Before committing to something, how often do you naturally pause to think it through first?", tags:["A"], type:"reversed", short:"Naturally pausing before committing" },
+  { q: "How often do you feel you need to carry out a particular action before you can feel settled or calm?", tags:["O"], type:"regular", short:"Needing action to feel settled" },
+  // CHANGED: peak → peak_high. "Very often" mental replaying is high OCD signal, not low.
+  { q: "How often do you find yourself mentally replaying or reviewing something — counting, checking, going over it again — in order to feel reassured?", tags:["O"], type:"peak_high", short:"Mental replaying to feel reassured" },
+  { q: "Once you have started a habitual behaviour or sequence, how often does stopping partway through feel straightforward?", tags:["U","O"], type:"reversed", short:"Stopping habitual behaviour feels easy" },
+
+  // ── Activity & Energy Regulation (13-16) ──
+  { q: "How often do you notice an urge to be moving or doing something, even in situations where sitting still is expected?", tags:["A"], type:"regular", short:"Urge to move when sitting still expected" },
+  { q: "Even when sitting quietly, how often is there an underlying feeling of being internally switched on or agitated?", tags:["A","O"], type:"regular", short:"Internal agitation when sitting quietly" },
+  { q: "How often do you find yourself tapping, shifting, bouncing your leg, or fidgeting during sedentary activities?", tags:["A","U"], type:"regular", short:"Fidgeting during sedentary activities" },
+  { q: "How often do you engage in rhythmic or repetitive physical movements — such as rocking or particular hand movements — especially when excited or under pressure?", tags:["U"], type:"peak", short:"Rhythmic/repetitive movements when stressed or excited" },
+
+  // ── Executive Function (17-22) ──
+  { q: "How often do you find it easy to begin a task promptly, even one you know is important but not enjoyable?", tags:["A"], type:"reversed", short:"Easy to begin unenjoyable important tasks" },
+  { q: "How often do you look up and find that a lot more time has passed than you were expecting?", tags:["A"], type:"regular", short:"More time passed than expected" },
+  { q: "While completing a multi-step task, how often do you find it easy to hold the earlier steps in mind as you work through later ones?", tags:["A"], type:"reversed", short:"Holding earlier steps in mind easily" },
+  { q: "When a situation calls for a different approach than your usual one, how often does adapting feel comfortable?", tags:["U","O"], type:"reversed", short:"Adapting to different approach feels comfortable" },
+  { q: "How often do you move between different tasks during a day without any noticeable friction or effort?", tags:["U","A"], type:"reversed", short:"Moving between tasks without friction" },
+  { q: "How often does wanting to get something exactly right prevent you from starting it, or from calling it finished?", tags:["O","U"], type:"peak", short:"Perfectionism preventing starting or finishing" },
+
+  // ── Social Interaction (23-28) ──
+  { q: "In conversation, how often do you find a natural moment to stop talking and give the other person extended space to respond?", tags:["A"], type:"reversed", short:"Finding natural moment to stop talking" },
+  { q: "How often do you pick up on unspoken signals — tone, posture, expression — without consciously having to think about it?", tags:["U"], type:"reversed", short:"Picking up unspoken signals automatically" },
+  { q: "When someone is being indirect or ironic, how often does the intended meaning come to you immediately?", tags:["U"], type:"reversed", short:"Indirect/ironic meaning comes immediately" },
+  { q: "How often do social situations leave you feeling drained in a way that goes beyond ordinary tiredness?", tags:["U","O"], type:"peak", short:"Social situations leaving you drained" },
+  { q: "When discussing something you find fascinating, how often do you notice the other person's interest beginning to drift and adjust accordingly?", tags:["U"], type:"reversed", short:"Noticing and adjusting to others' drifting interest" },
+  { q: "How often do you say something in conversation and only realise a moment later that it came across differently than you intended?", tags:["A"], type:"peak", short:"Saying something that lands differently than intended" },
+
+  // ── Emotional Regulation (29-33) ──
+  { q: "How often do your emotional responses escalate more quickly or intensely than the situation seems to call for?", tags:["A"], type:"peak", short:"Emotions escalating beyond situation" },
+  { q: "How often does a critical comment or perceived rejection leave a strong and lasting impression on you emotionally?", tags:["A"], type:"regular", short:"Critical comment leaving strong impression" },
+  { q: "How often does an accumulation of demands reach a point where you feel unable to continue and need to withdraw?", tags:["U"], type:"peak", short:"Demands accumulating to point of withdrawal" },
+  { q: "How often does an unexpected change to your plans or usual routine cause you noticeable distress?", tags:["U","O"], type:"regular", short:"Unexpected change causing noticeable distress" },
+  { q: "How often does your mood shift noticeably across the course of a single day in response to things happening around you?", tags:["A"], type:"regular", short:"Mood shifting noticeably across the day" },
+
+  // ── Repetitive & Restricted Patterns (34-38) ──
+  { q: "How often do you find yourself returning to the same small set of topics or activities for the majority of your focused attention?", tags:["U"], type:"regular", short:"Returning to same small set of topics" },
+  { q: "How often is having a predictable structure or routine to your day genuinely important to your sense of wellbeing?", tags:["U","O"], type:"regular", short:"Predictable routine important to wellbeing" },
+  { q: "How often can you discard or give away possessions without any particular worry about what might happen as a result?", tags:["O"], type:"reversed", short:"Discarding possessions without worry" },
+  { q: "How often do you seek reassurance from others — asking 'are you sure?' or similar — in order to settle a feeling of doubt?", tags:["O"], type:"regular", short:"Seeking reassurance to settle doubt" },
+  { q: "How often do you return to familiar media — rewatching, rereading, replaying — specifically because knowing what will happen feels comforting?", tags:["U","A"], type:"regular", short:"Returning to familiar media for comfort" },
+
+  // ── Sensory Processing (39-42) ──
+  { q: "How often do sensory experiences — sounds, light levels, textures, or smells — affect you more strongly than they appear to affect those around you?", tags:["U"], type:"regular", short:"Sensory experiences affecting you more strongly" },
+  { q: "How often do you actively seek out intense sensory input — pressure, movement, strong flavours — because you find it settling or satisfying?", tags:["A","U"], type:"peak", short:"Seeking intense sensory input" },
+  { q: "How often do specific textures, fabrics, or food consistencies produce a physical discomfort strong enough to influence your choices?", tags:["U"], type:"regular", short:"Textures causing discomfort influencing choices" },
+  { q: "How often does a particular sensory experience reliably trigger a feeling of unease or heightened anxiety?", tags:["U","O"], type:"peak", short:"Sensory experience triggering unease" },
+
+  // ── Cognitive Style (43-49) ──
+  { q: "How often does your thinking jump rapidly between different ideas or connections within a short space of time?", tags:["A"], type:"regular", short:"Thinking jumping between ideas rapidly" },
+  { q: "How often do you notice small inconsistencies or patterns in information that other people around you appear to have overlooked?", tags:["U","O"], type:"regular", short:"Noticing inconsistencies others overlook" },
+  { q: "How often does your thinking settle into clear opposing categories — something either works or it doesn't — rather than feeling comfortable with ambiguity?", tags:["U","O"], type:"regular", short:"Thinking in clear opposing categories" },
+  { q: "How often, when considering a future situation, does your mind move towards imagining the worst likely outcome?", tags:["O"], type:"regular", short:"Mind moving to worst-case outcomes" },
+  { q: "How often does your mind return to a past event or conversation, even when you would prefer to move on from it?", tags:["O","A"], type:"regular", short:"Mind returning to past events" },
+  { q: "How often do you notice underlying structures, patterns, or connections in things that others around you don't appear to be seeing?", tags:["U"], type:"regular", short:"Noticing patterns others don't see" },
+  // CHANGED: peak → peak_high. Extreme moral distress is high OCD signal.
+  { q: "How often does concern about your own moral conduct cause you noticeable distress or prompt you to examine your own behaviour?", tags:["O"], type:"peak_high", short:"Moral concern causing distress" },
+
+  // ── Anxiety & Fear (50-55) ──
+  // CHANGED: peak → peak_high. Extreme contamination concern is high OCD signal.
+  { q: "How often do concerns about dirt, germs, or contamination influence your behaviour or cause you noticeable unease?", tags:["O"], type:"peak_high", short:"Contamination concerns influencing behaviour" },
+  // CHANGED: peak → peak_high. Frequent intrusive harm thoughts are high OCD signal.
+  { q: "How often do thoughts about accidentally causing harm to someone arise in a way that feels distressing?", tags:["O"], type:"peak_high", short:"Distressing thoughts about causing harm" },
+  { q: "How often do you check something — a lock, a message, a piece of work — more than once because of a lingering feeling that something might be wrong?", tags:["O"], type:"regular", short:"Checking things more than once" },
+  // CHANGED: peak → peak_high. Frequent ego-dystonic intrusive thoughts are high OCD signal.
+  { q: "How often do thoughts that feel disturbing or out of character enter your mind without invitation?", tags:["O"], type:"peak_high", short:"Disturbing thoughts entering uninvited" },
+  { q: "How often do difficulties with staying organised or following through produce a background sense of anxiety in your day-to-day life?", tags:["A"], type:"regular", short:"Organisation difficulties producing background anxiety" },
+  { q: "How often does unpredictability — a change of plan, an unclear expectation, a sudden event — reliably produce anxiety for you?", tags:["U","O"], type:"regular", short:"Unpredictability producing anxiety" },
+
+  // ── Developmental Course & Coping (56-59) ──
+  { q: "Looking back at childhood, how often do you recall attention, energy level, or self-control being a noticeable issue before the age of twelve?", tags:["A"], type:"regular", short:"Childhood attention/energy/self-control issues" },
+  { q: "Reflecting on early childhood, how often do you recall your communication or social connection with others feeling different from that of your peers?", tags:["U"], type:"peak", short:"Childhood social connection feeling different" },
+  { q: "How often do the difficulties you experience become noticeably more prominent during periods of high stress or demand?", tags:["A","O"], type:"regular", short:"Difficulties more prominent under stress" },
+  { q: "How often, after carrying out a repeated behaviour or ritual, do you feel temporary relief — even though the underlying feeling tends to return?", tags:["O"], type:"regular", short:"Temporary relief from repeated behaviour" },
+  // NEW ITEM: camouflaging/masking probe (addresses Lai & Mandy critique)
+  { q: "How often do you consciously monitor, rehearse, or adjust your behaviour in social situations in order to come across the way others seem to expect?", tags:["U","A"], type:"regular", short:"Consciously monitoring/adjusting social behaviour" },
+  // NEW ITEM: effort-outcome gap / functional impairment probe (addresses Barkley critique)
+  { q: "How often do you feel that the effort you put into managing everyday life is significantly greater than what others around you seem to need for similar results?", tags:["A","U"], type:"regular", short:"Effort for daily life exceeds what others seem to need" },
+  // REMOVED: "variation in social style / sensory sensitivities over life" (reversed U item).
+  // Replaced by two items above which address expert critiques more directly.
+];
+
+// CHANGED: anchor labels to reduce endpoint aversion (STAI-based approach)
+const LABELS = ["Almost never", "Rarely", "Sometimes", "Often", "Almost always"];
+const responses = new Array(ITEMS.length).fill(null);
+let isLocked = false; // Prevents answer changes after submission
+
+// ─────────────────────────────────────────────────────────────────
+// TRANSFORMATION ENGINE
+// ─────────────────────────────────────────────────────────────────
+// regular:   1→0, 2→1, 3→2, 4→3, 5→4  (high = signal)
+// reversed:  1→4, 2→3, 3→2, 4→1, 5→0  (low = signal)
+// peak:      3→4, 2/4→2, 1/5→0         (middle = signal, symmetric)
+// peak_high: 3→4, 4→3, 2→2, 5→1, 1→0  (middle-to-high = signal, asymmetric)
+//   This preserves the peak shape but treats high-end answers as more
+//   informative than low-end, fixing the OCD intrusive thought problem.
+
+function transform(raw, type) {
+  if (type === 'regular')    return raw - 1;
+  if (type === 'reversed')   return 5 - raw;
+  if (type === 'peak')       return 4 - 2 * Math.abs(raw - 3);
+  if (type === 'peak_high') {
+    // Asymmetric peak: centre=4, one-above=3, one-below=2, high-extreme=1, low-extreme=0
+    const map = [0, 0, 2, 4, 3, 1];
+    return map[raw];
   }
+  return 0;
+}
 
-  var root = document.getElementById('nd-root');
-
-  root.addEventListener('change', function (e) {
-    if (!e.target || e.target.type !== 'radio') return;
-    var name = e.target.name;
-    var num = parseInt(name.replace('ndq', ''), 10);
-    answers[num] = parseInt(e.target.value, 10);
-    var gl = document.querySelectorAll('label[for^="' + name + '"]');
-    for (var i = 0; i < gl.length; i++) gl[i].className = gl[i].className.replace(/\s*nd-selected/g, '').trim();
-    var cl = document.querySelector('label[for="' + e.target.id + '"]');
-    if (cl) cl.className += ' nd-selected';
-    var card = document.querySelector('.nd-question-card[data-q="' + num + '"]');
-    if (card) card.className = 'nd-question-card nd-answered';
-    updateProgress();
+// Pre-calculate fixed max per subscale.
+// peak_high items have max score of 4 (same as all other types).
+const MAX_SCORES = (() => {
+  const counts = { A: 0, U: 0, O: 0 };
+  ITEMS.forEach(item => {
+    item.tags.forEach(tag => counts[tag]++);
   });
-
-  root.addEventListener('keydown', function (e) {
-    if ((e.key === ' ' || e.key === 'Enter') && e.target.tagName === 'LABEL') {
-      e.preventDefault();
-      var r = document.getElementById(e.target.getAttribute('for'));
-      if (r) { r.checked = true; r.dispatchEvent(new Event('change', { bubbles: true })); }
-    }
-  });
-
-  function calcScores() {
-    var cards = document.querySelectorAll('.nd-question-card[data-q]');
-    var sT=0,sM=0, dT=0,dM=0, nT=0,nM=0;
-    for (var i = 0; i < cards.length; i++) {
-      var c = cards[i];
-      var qn = parseInt(c.getAttribute('data-q'), 10);
-      var dim = c.getAttribute('data-dim') || '';
-      var rev = c.getAttribute('data-rev') === '1';
-      var raw = answers[qn] || 0;
-      if (!raw) continue;
-      var sc = rev ? (6 - raw) : raw;
-      if (dim.indexOf('A') !== -1) { sT += sc; sM += 5; }
-      if (dim.indexOf('U') !== -1) { dT += sc; dM += 5; }
-      if (dim.indexOf('O') !== -1) { nT += sc; nM += 5; }
-    }
-    var sp = sM ? Math.round((sT/sM)*100) : 0;
-    var dp = dM ? Math.round((dT/dM)*100) : 0;
-    var np = nM ? Math.round((nT/nM)*100) : 0;
-    return {
-      spark:    { pct: sp },
-      depth:    { pct: dp },
-      sentinel: { pct: np },
-      overall:  { pct: Math.round((sp+dp+np)/3) }
-    };
-  }
-
-  function getLevel(p) {
-    if (p < 25) return 'MINIMAL';
-    if (p < 45) return 'MILD';
-    if (p < 65) return 'MODERATE';
-    if (p < 80) return 'STRONG';
-    return 'VERY STRONG';
-  }
-
-  function getDesc(name, p) {
-    var t = {
-      spark: [
-        'Your attention and impulse patterns are broadly typical. Staying on task and regulating energy doesn\'t require much deliberate effort from you.',
-        'You show some Spark traits. Focus, impulsivity, or restlessness may occasionally be an issue but don\'t tend to dominate your daily experience.',
-        'You have a moderate Spark profile. Attention regulation, time management, and impulse control are likely ongoing themes that take conscious effort.',
-        'Your Spark profile is strong. Rapid-fire ideation, time blindness, emotional intensity, and restlessness are probably very familiar — alongside the creative energy that comes with this wiring.',
-        'Your Spark profile is very strong. Your mind moves fast, generates connections constantly, and finds routine genuinely painful. Extraordinary creative and divergent thinking capacity comes with the territory.'
-      ],
-      depth: [
-        'Your social communication, sensory processing, and preference for routine are broadly typical.',
-        'You show some Depth traits — a few intense interests, some sensory sensitivities, or occasional difficulty reading implicit social cues.',
-        'You have a moderate Depth profile. Pattern recognition, deep focus on specific interests, sensory sensitivities, and a preference for predictability are noticeable themes.',
-        'Your Depth profile is strong. You probably experience the world with unusual intensity and detail. Deep interests, sensory preferences, and a need for predictable structure are central to how you function.',
-        'Your Depth profile is very strong. Your perceptual and cognitive processing is likely quite different from the typical population — bringing extraordinary analytical ability alongside a world that can be genuinely draining.'
-      ],
-      sentinel: [
-        'Your anxiety and compulsive patterns are broadly typical. Some worry and checking behaviour is normal, and yours falls comfortably within the expected range.',
-        'You show some Sentinel traits. Occasional intrusive thoughts, checking behaviours, or anxiety-driven rituals may be present but are probably manageable.',
-        'You have a moderate Sentinel profile. Recurring anxiety patterns, some compulsive behaviours, and intrusive thoughts are likely present and take real effort to manage.',
-        'Your Sentinel profile is strong. Anxiety-driven patterns, intrusive thoughts, and compulsive checking or rituals are probably significant features of your daily experience.',
-        'Your Sentinel profile is very strong. Intrusive thoughts and compulsive behaviours are probably consuming significant time and energy. A specialist in anxiety and compulsive patterns can make a substantial difference.'
-      ]
-    };
-    var idx = p < 25 ? 0 : p < 45 ? 1 : p < 65 ? 2 : p < 80 ? 3 : 4;
-    return (t[name] || [])[idx] || '';
-  }
-
-  function getCombos(scores) {
-    var combos = [], s = scores.spark.pct, d = scores.depth.pct, n = scores.sentinel.pct;
-    if (s >= 45 && d >= 45 && n >= 45) {
-      combos.push({ title: 'ALL THREE TOGETHER', text: 'Having significant scores across all three dimensions means your internal experience is rich, complex, and often contradictory. This triple wiring also gives you access to a remarkable range of perceptual, creative, and analytical capabilities. Understanding how these interact is key to working with your brain rather than against it.' });
-    } else {
-      if (s >= 45 && d >= 45) combos.push({ title: 'SPARK + DEPTH', text: 'Sometimes called AuDHD. You likely experience rapid-fire ideation alongside deep, focused interests. The tension between novelty-seeking and sameness-seeking can be confusing but also extraordinarily productive when channelled well.' });
-      if (s >= 45 && n >= 45) combos.push({ title: 'SPARK + SENTINEL', text: 'Impulsivity meets anxiety-driven caution. You might act on impulse and then ruminate intensely about whether you did the right thing. This push-pull is exhausting but can produce both creativity and thoroughness.' });
-      if (d >= 45 && n >= 45) combos.push({ title: 'DEPTH + SENTINEL', text: 'Deep pattern recognition combines with a threat-detection system that flags everything. You may notice details others miss and then worry intensely about what they mean. Learning which patterns serve you and which are anxiety-driven is key.' });
-    }
-    if (!combos.length && (s >= 45 || d >= 45 || n >= 45)) {
-      var dom = 'SPARK', dp = s;
-      if (d > dp) { dom = 'DEPTH'; dp = d; }
-      if (n > dp) dom = 'SENTINEL';
-      combos.push({ title: 'PREDOMINANTLY ' + dom, text: 'Your profile is primarily shaped by one dimension. Focus your energy on learning about it and building supports that address its particular challenges while leveraging its strengths.' });
-    }
-    return combos;
-  }
-
-  function showResults() {
-    var scores = calcScores();
-    document.getElementById('ndOverallScore').textContent = scores.overall.pct + '%';
-    var dc = document.getElementById('ndDimensions');
-    dc.innerHTML = '';
-    var dims = [
-      { key:'spark',    label:'THE SPARK',    sub:'ADHD-related traits',           cls:'nd-spark',    data:scores.spark    },
-      { key:'depth',    label:'THE DEPTH',    sub:'Autism-related traits',          cls:'nd-depth',    data:scores.depth    },
-      { key:'sentinel', label:'THE SENTINEL', sub:'Anxiety & compulsive patterns', cls:'nd-sentinel', data:scores.sentinel }
-    ];
-    for (var i = 0; i < dims.length; i++) {
-      var d = dims[i];
-      var bl = document.createElement('div'); bl.className = 'nd-dimension-block ' + d.cls;
-      var hd = document.createElement('div'); hd.className = 'nd-dimension-header';
-      hd.innerHTML = '<div><span class="nd-dimension-name">' + d.label + '</span><br/><span class="nd-dimension-sub">' + d.sub + '</span></div><span class="nd-dimension-pct">' + d.data.pct + '%</span>';
-      bl.appendChild(hd);
-      var bt = document.createElement('div'); bt.className = 'nd-dimension-bar-track';
-      var bf = document.createElement('div'); bf.className = 'nd-dimension-bar-fill'; bf.style.width = '0%';
-      bt.appendChild(bf); bl.appendChild(bt);
-      var lv = document.createElement('span'); lv.className = 'nd-dimension-level'; lv.textContent = getLevel(d.data.pct); bl.appendChild(lv);
-      var ds = document.createElement('p'); ds.className = 'nd-dimension-desc'; ds.textContent = getDesc(d.key, d.data.pct); bl.appendChild(ds);
-      dc.appendChild(bl);
-      (function(f,p){ setTimeout(function(){ f.style.width = p+'%'; }, 80); })(bf, d.data.pct);
-    }
-    var cc = document.getElementById('ndCombos'), combos = getCombos(scores);
-    if (combos.length) {
-      var ch = '<div class="nd-combo-section-title">▸ HOW YOUR DIMENSIONS INTERACT ◂</div>';
-      for (var c = 0; c < combos.length; c++) ch += '<div class="nd-combo-block"><div class="nd-combo-block-title">' + combos[c].title + '</div><p class="nd-combo-block-text">' + combos[c].text + '</p></div>';
-      cc.innerHTML = ch; cc.style.display = 'block';
-    } else { cc.style.display = 'none'; }
-    document.getElementById('nd-results-overlay').className = 'nd-visible';
-    document.body.style.overflow = 'hidden';
-    setTimeout(function(){ document.getElementById('ndCloseBtn').focus(); }, 100);
-  }
-
-  function buildCSV() {
-    var scores = calcScores();
-    var cards = document.querySelectorAll('.nd-question-card[data-q]');
-    var h=['Name'], dr=['Dimension'], sr=['Your Name Here'];
-    for (var i = 0; i < cards.length; i++) {
-      var qn = parseInt(cards[i].getAttribute('data-q'), 10);
-      var raw = cards[i].getAttribute('data-dim') || '';
-      var parts = [];
-      if (raw.indexOf('A')!==-1) parts.push('A');
-      if (raw.indexOf('U')!==-1) parts.push('U');
-      if (raw.indexOf('O')!==-1) parts.push('O');
-      h.push('Q'+qn); dr.push(parts.join('/')); sr.push(answers[qn]||0);
-    }
-    h.push('Spark%','Depth%','Sentinel%','Overall%');
-    dr.push('','','','');
-    sr.push(scores.spark.pct, scores.depth.pct, scores.sentinel.pct, scores.overall.pct);
-    return h.join(',')+'\n'+dr.join(',')+'\n'+sr.join(',');
-  }
-
-  function closeOverlay() {
-    document.getElementById('nd-results-overlay').className = '';
-    document.body.style.overflow = '';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  document.getElementById('ndSubmitBtn').addEventListener('click', function () {
-    if (Object.keys(answers).length < TOTAL_QS) {
-      var el = document.getElementById('ndErrorMsg'); el.style.display = 'block';
-      setTimeout(function(){ el.style.display='none'; }, 5000);
-      for (var i = 1; i <= TOTAL_QS; i++) {
-        if (!answers[i]) { var c = document.querySelector('.nd-question-card[data-q="'+i+'"]'); if (c) c.scrollIntoView({behavior:'smooth',block:'center'}); break; }
-      }
-      return;
-    }
-    showResults();
-  });
-
-  document.getElementById('ndCloseBtn').addEventListener('click', closeOverlay);
-  document.getElementById('ndCloseBtn2').addEventListener('click', closeOverlay);
-  document.getElementById('nd-results-overlay').addEventListener('keydown', function(e){ if(e.key==='Escape') closeOverlay(); });
-
-  document.getElementById('ndCopyCSVBtn').addEventListener('click', function () {
-    var csv = buildCSV(), btn = this, orig = btn.textContent;
-    function done(){ btn.textContent='✓ COPIED! PASTE INTO SPREADSHEET'; setTimeout(function(){ btn.textContent=orig; },3000); }
-    if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(csv).then(done).catch(function(){ fb(csv); done(); }); }
-    else { fb(csv); done(); }
-  });
-
-  function fb(text) {
-    var ta = document.createElement('textarea'); ta.value=text; ta.style.cssText='position:fixed;opacity:0;';
-    document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); }catch(e){}
-    document.body.removeChild(ta);
-  }
-
-  document.getElementById('ndRetakeBtn').addEventListener('click', function () {
-    closeOverlay(); answers = {};
-    var rs = document.querySelectorAll('#nd-root input[type="radio"]');
-    for (var r=0; r<rs.length; r++) rs[r].checked=false;
-    var ls = document.querySelectorAll('#nd-root .nd-likert label');
-    for (var l=0; l<ls.length; l++) ls[l].className=ls[l].className.replace(/\s*nd-selected/g,'').trim();
-    var cs = document.querySelectorAll('#nd-root .nd-question-card');
-    for (var q=0; q<cs.length; q++) cs[q].className='nd-question-card';
-    updateProgress();
-  });
-
+  return { A: counts.A * 4, U: counts.U * 4, O: counts.O * 4 };
 })();
+
+function calcScores() {
+  const sums = { A: 0, U: 0, O: 0 };
+
+  ITEMS.forEach((item, i) => {
+    const raw = responses[i];
+    if (raw === null) return;
+    const t = transform(raw, item.type);
+    item.tags.forEach(tag => {
+      sums[tag] += t;
+    });
+  });
+
+  const scores = {};
+  ['A','U','O'].forEach(tag => {
+    scores[tag] = Math.round((sums[tag] / MAX_SCORES[tag]) * 100);
+  });
+  return scores;
+}
+
+// CHANGED: Aligned band labels with interpretation thresholds.
+// Interpretation uses MODERATE=40, STRONG=65. Bands now match.
+function getBand(score) {
+  if (score < 25)  return "Not strongly present";
+  if (score < 40)  return "Mild or subclinical";
+  if (score < 65)  return "Moderate — worth exploring";
+  return "Strong signal";
+}
+
+// ─────────────────────────────────────────────────────────────────
+// RENDER
+// ─────────────────────────────────────────────────────────────────
+function renderSections() {
+  const container = document.getElementById('questionnaire');
+  container.innerHTML = '';
+
+  SECTIONS.forEach((section, si) => {
+    const nextStart = si < SECTIONS.length - 1 ? SECTIONS[si + 1].start : ITEMS.length;
+
+    const sh = document.createElement('div');
+    sh.className = 'section-heading';
+    sh.innerHTML = `<h2>${section.title}</h2><div class="section-line"></div>`;
+    container.appendChild(sh);
+
+    for (let i = section.start; i < nextStart; i++) {
+      const item = ITEMS[i];
+      const card = document.createElement('div');
+      card.className = 'question-card';
+      card.id = `qcard-${i}`;
+
+      const inner = document.createElement('div');
+      inner.className = 'question-inner' + (responses[i] !== null ? ' answered' : '');
+      inner.id = `qinner-${i}`;
+
+      const qnum = document.createElement('span');
+      qnum.className = 'q-num';
+      qnum.textContent = `Q${i + 1}`;
+
+      const qtext = document.createElement('div');
+      qtext.className = 'question-text';
+      qtext.textContent = item.q;
+
+      const opts = document.createElement('div');
+      opts.className = 'options';
+
+      LABELS.forEach((label, val) => {
+        const btn = document.createElement('button');
+        btn.className = 'opt-btn' + (responses[i] === val + 1 ? ' selected' : '');
+        if (isLocked) btn.classList.add('locked');
+        btn.textContent = label;
+        btn.onclick = () => { if (!isLocked) selectResponse(i, val + 1); };
+        opts.appendChild(btn);
+      });
+
+      inner.appendChild(qnum);
+      inner.appendChild(qtext);
+      inner.appendChild(opts);
+      card.appendChild(inner);
+      container.appendChild(card);
+    }
+  });
+
+  updateProgress();
+}
+
+function selectResponse(qIdx, val) {
+  if (isLocked) return;
+  responses[qIdx] = val;
+
+  const inner = document.getElementById(`qinner-${qIdx}`);
+  if (inner) {
+    inner.classList.add('answered');
+    inner.classList.remove('highlight');
+    const btns = inner.querySelectorAll('.opt-btn');
+    btns.forEach((btn, i) => {
+      btn.classList.toggle('selected', i === val - 1);
+    });
+  }
+
+  updateProgress();
+}
+
+function updateProgress() {
+  const answered = responses.filter(r => r !== null).length;
+  const total = ITEMS.length;
+  const pct = Math.round((answered / total) * 100);
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = `${answered} of ${total} answered`;
+}
+
+// ─────────────────────────────────────────────────────────────────
+// INTERPRETATION
+// ─────────────────────────────────────────────────────────────────
+function generateInterpretation(scores) {
+  const { A, U, O } = scores;
+  const STRONG = 65, MODERATE = 40;
+
+  const strongProfiles = [];
+  if (A >= STRONG) strongProfiles.push('ADHD');
+  if (U >= STRONG) strongProfiles.push('autism');
+  if (O >= STRONG) strongProfiles.push('OCD');
+
+  const moderateProfiles = [];
+  if (A >= MODERATE && A < STRONG) moderateProfiles.push('ADHD');
+  if (U >= MODERATE && U < STRONG) moderateProfiles.push('autism');
+  if (O >= MODERATE && O < STRONG) moderateProfiles.push('OCD');
+
+  let para1 = '';
+  let para2 = '';
+  let para3 = '';
+
+  // ── Opening: what the pattern looks like ──
+  if (strongProfiles.length === 0 && moderateProfiles.length === 0) {
+    para1 = 'Your responses do not show a pronounced pattern aligned with ADHD, autism, or OCD traits. This could mean these profiles are genuinely not a major feature of your experience, or that your traits are more evenly distributed or situational. It is also worth knowing that depression, anxiety, trauma, and chronic stress can produce experiences — difficulty concentrating, emotional dysregulation, social withdrawal, repetitive thinking — that closely resemble these profiles without being them. Equally, a low score does not rule out an underlying condition if you have developed strong compensatory or masking strategies over your lifetime. This is particularly common in women, people socialised as female, those diagnosed late, and anyone who has spent years adapting to environments that required them to appear typical. If something still feels persistently difficult or different, that is worth exploring with a professional, even if this questionnaire did not produce a strong signal.';
+  } else if (strongProfiles.length === 1 && moderateProfiles.length === 0) {
+    // CHANGED: Profile-specific language instead of generic "depending on which profile"
+    let profileDetail = '';
+    if (strongProfiles[0] === 'ADHD') {
+      profileDetail = 'The experiences described across the questionnaire — particularly around sustained attention, impulse regulation, task initiation, time perception, and emotional reactivity — cluster meaningfully in this direction.';
+    } else if (strongProfiles[0] === 'autism') {
+      profileDetail = 'The experiences described across the questionnaire — particularly around social processing, sensory sensitivity, preference for routine, and focused interests — cluster meaningfully in this direction.';
+    } else {
+      profileDetail = 'The experiences described across the questionnaire — particularly around intrusive thoughts, checking and reassurance-seeking, anxiety about uncertainty, and difficulty disengaging from mental loops — cluster meaningfully in this direction.';
+    }
+    para1 = `Your responses show a pronounced pattern of traits consistent with ${strongProfiles[0]}. ${profileDetail} This is not a diagnosis. Clinicians arrive at diagnoses by integrating self-report with developmental history, direct observation, and an assessment of how traits affect daily functioning — none of which a questionnaire can replicate. What this does give you is a coherent starting point.`;
+  } else if (strongProfiles.length >= 2) {
+    para1 = `Your responses show pronounced patterns consistent with more than one profile — specifically ${strongProfiles.join(' and ')}. This is more common than many people realise: ADHD and autism co-occur in roughly 50–70% of cases, and OCD overlaps significantly with both. Rather than meaning your results are unclear, this likely reflects that your experience is genuinely complex, and that a single-label explanation would be an oversimplification. As with any self-report tool, a formal assessment would integrate this picture with your history, observed behaviour, and functional impact before any conclusions are drawn.`;
+  } else {
+    const all = [...strongProfiles, ...moderateProfiles];
+    para1 = `Your responses show a moderate pattern across ${all.join(' and ')} traits. The signal is present but not pronounced — which can reflect genuine mild traits, a mixed picture, or simply high variability in how these traits express themselves day to day.`;
+  }
+
+  // ── Middle: the overlap explanation ──
+  const hasOverlap = (A >= MODERATE && O >= MODERATE) || (U >= MODERATE && O >= MODERATE) || (A >= MODERATE && U >= MODERATE);
+  if (hasOverlap) {
+    if (U >= MODERATE && O >= MODERATE) {
+      para2 = 'The overlap between your autism and OCD scores is worth noting specifically. Autistic people experience clinically significant OCD at roughly three to four times the rate of the general population, and the two can be difficult to distinguish because both involve repetitive behaviours, rigid thinking, and high anxiety. The difference in origin matters for treatment — OCD responds well to specific therapy approaches that are not always appropriate for autistic rigidity — so unpicking which is which, ideally with a clinician familiar with both, is genuinely useful.';
+    } else if (A >= MODERATE && U >= MODERATE) {
+      para2 = 'Your ADHD and autism scores are both elevated. This combination — sometimes called AuDHD — is now recognised as a distinct presentation rather than simply two separate conditions running in parallel. People with both often describe an internal experience that feels more contradictory and effortful than either label alone would suggest: the ADHD drive for novelty pulling against the autistic need for predictability, for instance, or the hyperactivity of ADHD masking the sensory sensitivities that are more obvious in autism. If this resonates, it is worth seeking assessment from someone specifically experienced with both.';
+    } else if (A >= MODERATE && O >= MODERATE) {
+      // CHANGED: Added softening qualifier about ego-syntonic/dystonic boundary
+      para2 = 'Your ADHD and OCD scores are both notable. These two co-occur more than expected by chance, and share features like intrusive thoughts and difficulty regulating attention — though the mechanisms differ. ADHD intrusive thoughts tend to be ego-syntonic (they feel like part of you), while OCD intrusive thoughts are typically ego-dystonic (they feel alien and distressing). This distinction is not always clean-cut, particularly when both conditions are present, but as a general pattern it can help you reflect on which dynamic feels more familiar to your own experience.';
+    }
+  }
+
+  // ── Close: what to do next ──
+  if (strongProfiles.length > 0 || moderateProfiles.length > 0) {
+    // CHANGED: Added base rate acknowledgement, functional impairment framing, and masking caveat
+    para3 = 'A note on context: people who seek out a tool like this are already a non-random group. You are likely here because something in your experience prompted the question. That context matters when interpreting these scores — they may mean something different for someone actively investigating a pattern than they would for a person completing the questionnaire out of idle curiosity. As a next step, this score profile can be a useful thing to bring to a GP or mental health professional as a starting point for a conversation — not as evidence of a diagnosis, but as a structured description of patterns you have noticed in yourself. If you are not ready for that, or if access is difficult, many people find it helpful to read first-person accounts by people with the profiles that resonated most, and to see whether those accounts reflect their own inner experience. Self-knowledge itself has value, independent of any formal label. If at any point reflecting on these results feels distressing or overwhelming, please reach out to a trusted person or a mental health support line rather than sitting with it alone.';
+  } else {
+    para3 = 'If you feel the questionnaire did not quite capture your experience, it is worth trying again at a different time, or looking at more specific tools for any area that feels relevant. The questions here are broad by design, and some people\'s traits only become visible in more targeted assessments. It may also be worth considering whether strong coping strategies have developed over time that reduce the visible frequency of these experiences without removing the underlying effort they require.';
+  }
+
+  return [para1, para2, para3].filter(Boolean).map(p => `<p style="margin-bottom:14px;">${p}</p>`).join('');
+}
+
+// ─────────────────────────────────────────────────────────────────
+// SUBMIT
+// ─────────────────────────────────────────────────────────────────
+function submitAssessment() {
+  const unanswered = responses.map((r, i) => r === null ? i : -1).filter(i => i >= 0);
+
+  if (unanswered.length > 0) {
+    document.getElementById('warning').classList.add('visible');
+    unanswered.forEach(i => {
+      const inner = document.getElementById(`qinner-${i}`);
+      if (inner) inner.classList.add('highlight');
+    });
+    const first = document.getElementById(`qcard-${unanswered[0]}`);
+    if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  document.getElementById('warning').classList.remove('visible');
+
+  // Lock answers after submission
+  isLocked = true;
+  document.querySelectorAll('.opt-btn').forEach(btn => {
+    btn.classList.add('locked');
+  });
+  document.getElementById('submitBtn').style.display = 'none';
+
+  const scores = calcScores();
+
+  ['A','U','O'].forEach(tag => {
+    document.getElementById(`score${tag}`).textContent = scores[tag];
+    document.getElementById(`band${tag}`).textContent = getBand(scores[tag]);
+    setTimeout(() => {
+      document.getElementById(`bar${tag}`).style.width = scores[tag] + '%';
+    }, 100);
+  });
+
+  const interpBox  = document.getElementById('interpretationBox');
+  const interpText = document.getElementById('interpretationText');
+  interpText.innerHTML = generateInterpretation(scores);
+  interpBox.style.display = 'block';
+
+  const tbody = document.getElementById('detailTable');
+  tbody.innerHTML = '';
+
+  ITEMS.forEach((item, i) => {
+    const raw = responses[i];
+    const t = transform(raw, item.type);
+    const row = document.createElement('tr');
+
+    const tagHTML = item.tags.map(tag => {
+      if (item.tags.length === 1) {
+        return `<span class="tag-pill tag-${tag.toLowerCase()}">${tag}</span>`;
+      }
+      return `<span class="tag-pill ${normalisedTagClass(item.tags)}">${tag}</span>`;
+    }).join(' ');
+
+    row.innerHTML = `
+      <td class="q-col">Q${i+1}</td>
+      <td>${item.short}</td>
+      <td class="tag-col">${tagHTML}</td>
+      <td class="raw-col">${LABELS[raw-1]}</td>
+      <td class="trans-col">${t}</td>
+    `;
+    tbody.appendChild(row);
+  });
+
+  const resultsEl = document.getElementById('results');
+  resultsEl.classList.add('visible');
+  setTimeout(() => {
+    resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+}
+
+// ─────────────────────────────────────────────────────────────────
+// EXPORT
+// ─────────────────────────────────────────────────────────────────
+function buildExportText() {
+  // Uses the locked responses, so scores always match what was displayed.
+  const scores = calcScores();
+  const date = new Date().toLocaleDateString('en-GB');
+  const transformedScores = ITEMS.map((item, i) => transform(responses[i], item.type));
+  const row  = [date, scores.A, scores.U, scores.O, ...transformedScores].join('\t');
+  const header = ['Date','A_score','U_score','O_score',
+    ...ITEMS.map((_,i) => `Q${i+1}`)].join('\t');
+  return header + '\n' + row;
+}
+
+function showFallbackBox(text) {
+  const existing = document.getElementById('fallbackBox');
+  if (existing) existing.remove();
+
+  const wrap = document.createElement('div');
+  wrap.id = 'fallbackBox';
+  wrap.style.cssText = 'margin-top:14px;';
+
+  const msg = document.createElement('p');
+  msg.textContent = 'Automatic copy is not available in this context. Select all the text below and copy it manually (Ctrl+A then Ctrl+C):';
+  msg.style.cssText = 'font-size:0.85rem;color:var(--accent-o);margin-bottom:8px;';
+
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.cssText = 'width:100%;height:80px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:10px;font-family:monospace;font-size:0.75rem;resize:vertical;';
+  ta.addEventListener('focus', () => ta.select());
+
+  wrap.appendChild(msg);
+  wrap.appendChild(ta);
+
+  const btn = document.querySelector('[onclick="copyToClipboard()"]');
+  btn.parentNode.insertBefore(wrap, btn.nextSibling);
+  ta.focus();
+}
+
+function copyToClipboard() {
+  const text = buildExportText();
+  const btn  = document.querySelector('[onclick="copyToClipboard()"]');
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => {
+      const orig = btn.textContent;
+      btn.textContent = '\u2713 Copied!';
+      btn.style.background = 'var(--accent-u)';
+      setTimeout(() => { btn.textContent = orig; btn.style.background = ''; }, 2500);
+    }).catch(() => {
+      if (!execCommandCopy(text)) showFallbackBox(text);
+    });
+    return;
+  }
+
+  if (!execCommandCopy(text)) showFallbackBox(text);
+}
+
+function execCommandCopy(text) {
+  try {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0;';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    const ok = document.execCommand('copy');
+    document.body.removeChild(ta);
+    if (ok) {
+      const btn = document.querySelector('[onclick="copyToClipboard()"]');
+      const orig = btn.textContent;
+      btn.textContent = '\u2713 Copied!';
+      btn.style.background = 'var(--accent-u)';
+      setTimeout(() => { btn.textContent = orig; btn.style.background = ''; }, 2500);
+    }
+    return ok;
+  } catch(e) {
+    return false;
+  }
+}
+
+function resetAssessment() {
+  responses.fill(null);
+  isLocked = false;
+  document.getElementById('results').classList.remove('visible');
+  document.getElementById('interpretationBox').style.display = 'none';
+  document.getElementById('interpretationText').innerHTML = '';
+  document.getElementById('submitBtn').style.display = '';
+  renderSections();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ─────────────────────────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────────────────────────
+renderSections();
 </script>
 </body>
 </html>
