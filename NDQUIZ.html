@@ -7,540 +7,192 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   html { font-size: 18px; }
-
   :root {
-    --bg: #0f1117;
-    --surface: #181c27;
-    --surface2: #1f2436;
-    --border: #2a3050;
-    --text: #e8eaf2;
-    --text-dim: #b0b8d0;
-    --text-dimmer: #7a83a0;
-    --accent-a: #5b8ff9;
-    --accent-u: #7ec8a0;
-    --accent-o: #f0a070;
-    --accent-au: #8b7fd4;
-    --accent-uo: #6dbfb0;
-    --accent-ao: #d4916e;
-    --selected: #2a3a5c;
-    --selected-border: #7aaaff;
-    --radius: 10px;
+    --bg: #0f1117; --surface: #181c27; --surface2: #1f2436;
+    --border: #2a3050; --text: #e8eaf2; --text-dim: #b0b8d0; --text-dimmer: #7a83a0;
+    --accent-a: #5b8ff9; --accent-u: #7ec8a0; --accent-o: #f0a070;
+    --accent-au: #8b7fd4; --accent-uo: #6dbfb0; --accent-ao: #d4916e;
+    --selected: #2a3a5c; --selected-border: #7aaaff; --radius: 10px;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 300;
-    min-height: 100vh;
-    padding: 0 0 80px 0;
-  }
-
-  header {
-    padding: 48px 24px 32px;
-    max-width: 760px;
-    margin: 0 auto;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 40px;
-  }
-
-  header h1 {
-    font-family: 'DM Serif Display', serif;
-    font-size: clamp(1.8rem, 4vw, 2.6rem);
-    font-weight: 400;
-    color: var(--text);
-    line-height: 1.2;
-    margin-bottom: 14px;
-  }
-
-  header p {
-    color: var(--text-dim);
-    font-size: 0.95rem;
-    line-height: 1.7;
-    max-width: 560px;
-  }
-
-  .progress-wrap {
-    max-width: 760px;
-    margin: 0 auto 36px;
-    padding: 0 24px;
-  }
-
-  .progress-bar-bg {
-    height: 3px;
-    background: var(--border);
-    border-radius: 3px;
-    overflow: hidden;
-  }
-
-  .progress-bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent-a), var(--accent-u));
-    border-radius: 3px;
-    transition: width 0.4s ease;
-    width: 0%;
-  }
-
-  .progress-label {
-    font-size: 0.78rem;
-    color: var(--text-dimmer);
-    margin-top: 8px;
-    letter-spacing: 0.04em;
-  }
-
-  .section-heading {
-    max-width: 760px;
-    margin: 48px auto 20px;
-    padding: 0 24px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .section-heading h2 {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.05rem;
-    font-weight: 400;
-    color: var(--text-dim);
-    letter-spacing: 0.02em;
-  }
-
-  .section-line {
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  .question-card {
-    max-width: 760px;
-    margin: 0 auto 16px;
-    padding: 0 24px;
-  }
-
-  .question-inner {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 24px 24px 20px;
-    transition: border-color 0.2s;
-  }
-
-  .question-inner.answered {
-    border-color: var(--border);
-    background: var(--surface2);
-  }
-
-  .question-text {
-    font-size: 0.97rem;
-    line-height: 1.65;
-    color: var(--text);
-    margin-bottom: 18px;
-    font-weight: 400;
-  }
-
-  .q-num {
-    color: var(--text-dimmer);
-    font-size: 0.78rem;
-    font-weight: 500;
-    display: block;
-    margin-bottom: 6px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-  }
-
-  .options {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-
-  .opt-btn {
-    flex: 1;
-    min-width: 80px;
-    padding: 9px 6px;
-    background: transparent;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    color: var(--text-dim);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.9rem;
-    font-weight: 400;
-    cursor: pointer;
-    transition: all 0.15s;
-    text-align: center;
-    white-space: nowrap;
-  }
-
-  .opt-btn:hover {
-    border-color: var(--text-dimmer);
-    color: var(--text);
-    background: var(--surface2);
-  }
-
-  .opt-btn.selected {
-    background: var(--selected);
-    border-color: var(--selected-border);
-    color: var(--text);
-    font-weight: 500;
-  }
-
-  .opt-btn.locked {
-    cursor: default;
-    opacity: 0.7;
-  }
-
-  .opt-btn.locked:hover {
-    border-color: var(--border);
-    color: var(--text-dim);
-    background: transparent;
-  }
-
-  .opt-btn.locked.selected {
-    opacity: 1;
-    cursor: default;
-  }
-
-  .opt-btn.locked.selected:hover {
-    background: var(--selected);
-    border-color: var(--selected-border);
-    color: var(--text);
-  }
-
-  #results {
-    display: none;
-    max-width: 760px;
-    margin: 48px auto 0;
-    padding: 0 24px;
-  }
-
-  #results.visible { display: block; }
-
-  .results-header {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.5rem;
-    font-weight: 400;
-    margin-bottom: 8px;
-  }
-
-  .results-sub {
-    color: var(--text-dim);
-    font-size: 0.88rem;
-    margin-bottom: 32px;
-    line-height: 1.6;
-  }
-
-  .score-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    margin-bottom: 32px;
-  }
-
-  .score-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 24px 20px;
-    text-align: center;
-  }
-
-  .score-label {
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-dimmer);
-    margin-bottom: 6px;
-  }
-
-  .score-name {
-    font-size: 0.9rem;
-    color: var(--text-dim);
-    margin-bottom: 16px;
-  }
-
-  .score-value {
-    font-family: 'DM Serif Display', serif;
-    font-size: 3rem;
-    line-height: 1;
-    margin-bottom: 4px;
-  }
-
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-weight: 300; min-height: 100vh; overflow-x: hidden; }
+  #introScreen { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 48px 28px; max-width: 680px; margin: 0 auto; }
+  #introScreen h1 { font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 5vw, 3rem); font-weight: 400; line-height: 1.15; margin-bottom: 28px; }
+  #introScreen p { color: var(--text-dim); font-size: 1rem; line-height: 1.75; margin-bottom: 16px; }
+  #introScreen .caveat { color: var(--text-dimmer); font-size: 0.85rem; line-height: 1.7; margin-bottom: 28px; }
+  .start-btn { display: inline-block; padding: 16px 40px; background: var(--accent-a); color: #fff; font-family: 'DM Sans', sans-serif; font-size: 1.05rem; font-weight: 500; border: none; border-radius: 8px; cursor: pointer; transition: opacity 0.15s; margin-top: 12px; align-self: flex-start; }
+  .start-btn:hover { opacity: 0.85; }
+  #questionScreen { display: none; min-height: 100vh; flex-direction: column; }
+  #questionScreen.active { display: flex; }
+  .top-bar { position: sticky; top: 0; z-index: 10; background: var(--bg); border-bottom: 1px solid var(--border); }
+  .progress-track { height: 4px; background: var(--border); width: 100%; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent-a), var(--accent-u)); transition: width 0.4s ease; width: 0%; }
+  .nav-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; max-width: 760px; margin: 0 auto; width: 100%; }
+  .nav-info { font-size: 0.82rem; color: var(--text-dimmer); letter-spacing: 0.03em; }
+  .nav-info .section-name { color: var(--text-dim); margin-left: 6px; }
+  .nav-buttons { display: flex; gap: 8px; align-items: center; }
+  .nav-btn { background: transparent; border: 1px solid var(--border); color: var(--text-dim); font-family: 'DM Sans', sans-serif; font-size: 0.82rem; font-weight: 500; padding: 7px 16px; border-radius: 6px; cursor: pointer; transition: all 0.15s; }
+  .nav-btn:hover { border-color: var(--text-dimmer); color: var(--text); }
+  .nav-btn:disabled { opacity: 0.3; cursor: default; }
+  .nav-btn:disabled:hover { border-color: var(--border); color: var(--text-dim); }
+  .skip-btn { background: transparent; border: none; color: var(--text-dimmer); font-family: 'DM Sans', sans-serif; font-size: 0.78rem; cursor: pointer; padding: 7px 10px; transition: color 0.15s; }
+  .skip-btn:hover { color: var(--text-dim); }
+  .question-area { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 48px 28px 60px; max-width: 680px; margin: 0 auto; width: 100%; min-height: calc(100vh - 60px); }
+  .section-card { display: none; text-align: center; }
+  .section-card.active { display: block; }
+  .section-card h2 { font-family: 'DM Serif Display', serif; font-size: clamp(1.4rem, 3.5vw, 2rem); font-weight: 400; color: var(--text); margin-bottom: 12px; }
+  .section-card .section-count { color: var(--text-dimmer); font-size: 0.88rem; margin-bottom: 32px; }
+  .section-continue-btn { padding: 14px 36px; background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 400; border-radius: 8px; cursor: pointer; transition: all 0.15s; }
+  .section-continue-btn:hover { border-color: var(--text-dimmer); background: var(--surface); }
+  .q-card { display: none; width: 100%; animation: fadeUp 0.25s ease; }
+  .q-card.active { display: block; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  .q-number { color: var(--text-dimmer); font-size: 0.82rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 16px; }
+  .q-text { font-size: clamp(1.15rem, 2.8vw, 1.45rem); line-height: 1.6; color: var(--text); font-weight: 400; margin-bottom: 40px; }
+  .q-options { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+  .q-opt-btn { width: 100%; padding: 16px 20px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; color: var(--text-dim); font-family: 'DM Sans', sans-serif; font-size: 1.05rem; font-weight: 400; cursor: pointer; transition: all 0.15s; text-align: left; }
+  .q-opt-btn:hover { border-color: var(--text-dimmer); color: var(--text); background: var(--surface2); }
+  .q-opt-btn.selected { background: var(--selected); border-color: var(--selected-border); color: var(--text); font-weight: 500; }
+  .key-hint { color: var(--text-dimmer); font-size: 0.78rem; margin-top: 32px; text-align: center; }
+  .key-hint kbd { display: inline-block; background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 2px 7px; font-family: 'DM Sans', sans-serif; font-size: 0.72rem; margin: 0 2px; }
+  #reviewScreen { display: none; min-height: 100vh; flex-direction: column; justify-content: center; padding: 48px 28px; max-width: 680px; margin: 0 auto; }
+  #reviewScreen.active { display: flex; }
+  #reviewScreen h2 { font-family: 'DM Serif Display', serif; font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 400; margin-bottom: 12px; }
+  .review-summary { color: var(--text-dim); font-size: 1rem; line-height: 1.7; margin-bottom: 28px; }
+  .review-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); gap: 6px; margin-bottom: 32px; }
+  .review-dot { aspect-ratio: 1; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 500; cursor: pointer; transition: all 0.15s; border: 1px solid transparent; }
+  .review-dot.answered { background: var(--surface2); color: var(--text-dim); border-color: var(--border); }
+  .review-dot.skipped { background: transparent; color: var(--text-dimmer); border-color: rgba(240,160,112,0.4); }
+  .review-dot:hover { border-color: var(--text-dimmer); color: var(--text); }
+  .review-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .review-btn { padding: 16px 36px; font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 500; border-radius: 8px; cursor: pointer; transition: all 0.15s; border: none; }
+  .review-btn.primary { background: var(--accent-a); color: #fff; }
+  .review-btn.primary:hover { opacity: 0.85; }
+  .review-btn.primary:disabled { opacity: 0.35; cursor: default; }
+  .review-btn.secondary { background: transparent; border: 1px solid var(--border); color: var(--text-dim); }
+  .review-btn.secondary:hover { border-color: var(--text-dimmer); color: var(--text); }
+  .review-warning { color: var(--accent-o); font-size: 0.88rem; margin-top: 16px; line-height: 1.6; display: none; }
+  .review-warning.visible { display: block; }
+  #resultsScreen { display: none; padding: 48px 24px 80px; }
+  #resultsScreen.active { display: block; }
+  .results-wrap { max-width: 760px; margin: 0 auto; }
+  .results-header { font-family: 'DM Serif Display', serif; font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 400; margin-bottom: 8px; }
+  .results-sub { color: var(--text-dim); font-size: 0.88rem; margin-bottom: 32px; line-height: 1.6; }
+  .score-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 32px; }
+  .score-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px 20px; text-align: center; }
+  .score-label { font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dimmer); margin-bottom: 6px; }
+  .score-name { font-size: 0.9rem; color: var(--text-dim); margin-bottom: 16px; }
+  .score-value { font-family: 'DM Serif Display', serif; font-size: 3rem; line-height: 1; margin-bottom: 4px; }
   .score-card.adhd .score-value { color: var(--accent-a); }
   .score-card.autism .score-value { color: var(--accent-u); }
   .score-card.ocd .score-value { color: var(--accent-o); }
-
-  .score-band {
-    font-size: 0.78rem;
-    color: var(--text-dimmer);
-  }
-
-  .score-bar-wrap {
-    margin-top: 12px;
-    height: 4px;
-    background: var(--border);
-    border-radius: 4px;
-    overflow: hidden;
-  }
-
-  .score-bar-fill {
-    height: 100%;
-    border-radius: 4px;
-    transition: width 1s ease;
-    width: 0%;
-  }
-
+  .score-band { font-size: 0.78rem; color: var(--text-dimmer); }
+  .score-bar-wrap { margin-top: 12px; height: 4px; background: var(--border); border-radius: 4px; overflow: hidden; }
+  .score-bar-fill { height: 100%; border-radius: 4px; transition: width 1s ease; width: 0%; }
   .score-card.adhd .score-bar-fill { background: var(--accent-a); }
   .score-card.autism .score-bar-fill { background: var(--accent-u); }
   .score-card.ocd .score-bar-fill { background: var(--accent-o); }
-
-  .export-section {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 24px;
-    margin-bottom: 20px;
-  }
-
-  .export-section h3 {
-    font-family: 'DM Serif Display', serif;
-    font-weight: 400;
-    font-size: 1.1rem;
-    margin-bottom: 6px;
-  }
-
-  .export-section p {
-    color: var(--text-dim);
-    font-size: 0.85rem;
-    margin-bottom: 20px;
-    line-height: 1.6;
-  }
-
-  .interp-body {
-    color: var(--text-dim);
-    font-size: 0.88rem;
-    line-height: 1.75;
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.83rem;
-  }
-
-  th {
-    text-align: left;
-    padding: 8px 12px;
-    color: var(--text-dimmer);
-    font-weight: 500;
-    font-size: 0.75rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    border-bottom: 1px solid var(--border);
-  }
-
-  td {
-    padding: 9px 12px;
-    border-bottom: 1px solid var(--border);
-    color: var(--text-dim);
-    vertical-align: top;
-  }
-
+  .export-section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 20px; }
+  .export-section h3 { font-family: 'DM Serif Display', serif; font-weight: 400; font-size: 1.1rem; margin-bottom: 6px; }
+  .export-section p { color: var(--text-dim); font-size: 0.85rem; margin-bottom: 20px; line-height: 1.6; }
+  .interp-body { color: var(--text-dim); font-size: 0.88rem; line-height: 1.75; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+  th { text-align: left; padding: 8px 12px; color: var(--text-dimmer); font-weight: 500; font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; border-bottom: 1px solid var(--border); }
+  td { padding: 9px 12px; border-bottom: 1px solid var(--border); color: var(--text-dim); vertical-align: top; }
   tr:last-child td { border-bottom: none; }
-
   td.q-col { color: var(--text-dimmer); font-size: 0.75rem; width: 38px; }
   td.raw-col { text-align: center; width: 60px; }
   td.trans-col { text-align: center; width: 70px; color: var(--text); font-weight: 500; }
   td.tag-col { width: 60px; }
-
-  .tag-pill {
-    display: inline-block;
-    padding: 2px 7px;
-    border-radius: 20px;
-    font-size: 0.72rem;
-    font-weight: 500;
-    letter-spacing: 0.04em;
-  }
-
+  .tag-pill { display: inline-block; padding: 2px 7px; border-radius: 20px; font-size: 0.72rem; font-weight: 500; letter-spacing: 0.04em; }
   .tag-a { background: rgba(91,143,249,0.15); color: var(--accent-a); }
   .tag-u { background: rgba(126,200,160,0.15); color: var(--accent-u); }
   .tag-o { background: rgba(240,160,112,0.15); color: var(--accent-o); }
   .tag-au { background: rgba(139,127,212,0.15); color: var(--accent-au); }
   .tag-uo { background: rgba(109,191,176,0.15); color: var(--accent-uo); }
   .tag-ao { background: rgba(212,145,110,0.15); color: var(--accent-ao); }
-
-  .btn-row {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    margin-top: 8px;
-  }
-
-  .btn {
-    padding: 11px 22px;
-    border-radius: 7px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.88rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.15s;
-    border: none;
-  }
-
-  .btn-primary {
-    background: var(--accent-a);
-    color: #fff;
-  }
-
+  .btn-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
+  .btn { padding: 11px 22px; border-radius: 7px; font-family: 'DM Sans', sans-serif; font-size: 0.88rem; font-weight: 500; cursor: pointer; transition: all 0.15s; border: none; }
+  .btn-primary { background: var(--accent-a); color: #fff; }
   .btn-primary:hover { opacity: 0.85; }
-
-  .btn-secondary {
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--text-dim);
-  }
-
-  .btn-secondary:hover {
-    border-color: var(--text-dimmer);
-    color: var(--text);
-  }
-
-  .submit-bar {
-    max-width: 760px;
-    margin: 32px auto 0;
-    padding: 0 24px;
-  }
-
-  .submit-bar p {
-    font-size: 0.82rem;
-    color: var(--text-dimmer);
-    margin-top: 10px;
-  }
-
-  .warning {
-    background: rgba(240,160,112,0.1);
-    border: 1px solid rgba(240,160,112,0.3);
-    border-radius: 7px;
-    padding: 12px 16px;
-    font-size: 0.85rem;
-    color: var(--accent-o);
-    margin-top: 12px;
-    display: none;
-  }
-
-  .warning.visible { display: block; }
-
-  .question-inner.highlight {
-    border-color: var(--accent-o);
-    transition: border-color 0.3s;
-  }
-
+  .btn-secondary { background: transparent; border: 1px solid var(--border); color: var(--text-dim); }
+  .btn-secondary:hover { border-color: var(--text-dimmer); color: var(--text); }
   @media (max-width: 500px) {
     .score-grid { grid-template-columns: 1fr; }
-    .opt-btn { min-width: 60px; font-size: 0.82rem; padding: 8px 4px; }
+    .q-text { font-size: 1.1rem; }
+    .q-opt-btn { font-size: 0.95rem; padding: 14px 16px; }
+    .nav-row { padding: 10px 16px; }
+    .question-area { padding: 32px 20px 48px; }
+    #introScreen { padding: 36px 20px; }
+    .review-grid { grid-template-columns: repeat(auto-fill, minmax(38px, 1fr)); }
   }
 </style>
 </head>
 <body>
-
-<header>
+<div id="introScreen">
   <h1>Neurodivergent Self-Assessment</h1>
-  <p>Answer each question honestly based on your general experience across your life, not just recently. Choose the response that reflects how you actually experience things, not how you have learned to appear — this is especially important if you tend to mask or compensate, whether consciously or not. There are no right or wrong answers. Your scores are calculated privately in your browser — nothing is sent anywhere.</p>
-  <p style="margin-top:10px;color:var(--text-dimmer);font-size:0.8rem;">This is an exploratory self-reflection tool, not a validated clinical instrument. It is designed to help you notice patterns and find language for your experience — not to provide a diagnosis. If you have developed strong strategies for managing or masking difficulties — something particularly common in women, people socialised as female, and anyone diagnosed late or not at all — your scores may underestimate the presence of underlying traits. A low score does not mean these patterns are absent from your experience. If completing this questionnaire brings up intense distress or feels overwhelming, please step away and speak to someone you trust or contact a mental health support line before continuing.</p>
-</header>
-
-<div class="progress-wrap">
-  <div class="progress-bar-bg">
-    <div class="progress-bar-fill" id="progressBar"></div>
-  </div>
-  <div class="progress-label" id="progressLabel">0 of 67 answered</div>
+  <p>Answer each question honestly based on your general experience across your life, not just recently. Choose the response that reflects how you actually experience things, not how you have learned to appear — this is especially important if you tend to mask or compensate, whether consciously or not. There are no right or wrong answers.</p>
+  <p>67 questions, presented one at a time. Your scores are calculated privately in your browser — nothing is sent anywhere.</p>
+  <p class="caveat">This is an exploratory self-reflection tool, not a validated clinical instrument. It is designed to help you notice patterns and find language for your experience — not to provide a diagnosis. If you have developed strong strategies for managing or masking difficulties — something particularly common in women, people socialised as female, and anyone diagnosed late or not at all — your scores may underestimate the presence of underlying traits. A low score does not mean these patterns are absent from your experience. If completing this questionnaire brings up intense distress or feels overwhelming, please step away and speak to someone you trust or contact a mental health support line before continuing.</p>
+  <button class="start-btn" onclick="startAssessment()">Begin</button>
 </div>
-
-<div id="questionnaire"></div>
-
-<div class="submit-bar">
-  <button class="btn btn-primary" id="submitBtn" onclick="submitAssessment()">Calculate my scores</button>
-  <div class="warning" id="warning"></div>
+<div id="questionScreen">
+  <div class="top-bar">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="nav-row">
+      <div class="nav-info"><span id="navCounter"></span><span class="section-name" id="navSection"></span></div>
+      <div class="nav-buttons">
+        <button class="nav-btn" id="prevBtn" onclick="goBack()">Back</button>
+        <button class="skip-btn" onclick="skipQuestion()">Skip</button>
+        <button class="nav-btn" id="nextBtn" onclick="goForward()">Next</button>
+      </div>
+    </div>
+  </div>
+  <div class="question-area" id="questionArea"></div>
 </div>
-
-<div id="results">
-  <div class="results-header">Your results</div>
-  <p class="results-sub">These scores reflect patterns across your responses. They are not a diagnosis — they are a map of where your experience clusters, and a starting point for understanding yourself more clearly. All three scores use the same 0–100 scale and can be compared directly. When interpreting these results, consider not just whether you recognise the patterns described, but whether they cause meaningful difficulty in your relationships, work, self-care, or daily functioning. Traits without impairment are part of normal human variation.</p>
-  <p class="results-sub" id="partialNote" style="display:none;color:var(--accent-o);"></p>
-
-  <div class="score-grid">
-    <div class="score-card adhd">
-      <div class="score-label">A</div>
-      <div class="score-name">ADHD pattern</div>
-      <div class="score-value" id="scoreA">—</div>
-      <div class="score-band" id="bandA"></div>
-      <div class="score-bar-wrap"><div class="score-bar-fill" id="barA"></div></div>
-    </div>
-    <div class="score-card autism">
-      <div class="score-label">U</div>
-      <div class="score-name">Autism pattern</div>
-      <div class="score-value" id="scoreU">—</div>
-      <div class="score-band" id="bandU"></div>
-      <div class="score-bar-wrap"><div class="score-bar-fill" id="barU"></div></div>
-    </div>
-    <div class="score-card ocd">
-      <div class="score-label">O</div>
-      <div class="score-name">OCD pattern</div>
-      <div class="score-value" id="scoreO">—</div>
-      <div class="score-band" id="bandO"></div>
-      <div class="score-bar-wrap"><div class="score-bar-fill" id="barO"></div></div>
-    </div>
+<div id="reviewScreen">
+  <h2>Review your answers</h2>
+  <p class="review-summary" id="reviewSummary"></p>
+  <div class="review-grid" id="reviewGrid"></div>
+  <div class="review-actions">
+    <button class="review-btn primary" id="calcBtn" onclick="submitFromReview()">Calculate my scores</button>
+    <button class="review-btn secondary" onclick="backToQuestions()">Go back</button>
   </div>
-
-  <div class="export-section" id="interpretationBox" style="display:none;">
-    <h3>What this means</h3>
-    <div id="interpretationText" class="interp-body"></div>
-  </div>
-
-  <div class="export-section">
-    <h3>Detailed breakdown</h3>
-    <p>Every question, your raw answer, and its transformed score. All inversions and peak-transformations have already been applied. You can copy this table directly into a spreadsheet — the numbers are already normalised and comparable.</p>
-    <p style="font-size:0.8rem;margin-bottom:16px;margin-top:-8px;">
-      <span class="tag-pill tag-a">A</span> ADHD &nbsp;&nbsp;
-      <span class="tag-pill tag-u">U</span> Autism &nbsp;&nbsp;
-      <span class="tag-pill tag-o">O</span> OCD &nbsp;&nbsp;
-      <span style="color:var(--text-dimmer);font-size:0.78rem;">Dual tags mean the item contributes to both subscales.</span>
-    </p>
-    <table>
-      <thead>
-        <tr>
-          <th>Q</th>
-          <th>Question (abbreviated)</th>
-          <th>Tag</th>
-          <th style="text-align:center">Raw</th>
-          <th style="text-align:center">Score</th>
-        </tr>
-      </thead>
-      <tbody id="detailTable"></tbody>
-    </table>
-  </div>
-
-  <div class="export-section">
-    <h3>Copy to spreadsheet</h3>
-    <p>This gives you a single row of tab-separated values. Paste it into your spreadsheet to build up a comparison across sessions or people. Each row is: Date, A score, U score, O score, then all 67 transformed item scores. You may also find it useful to ask someone who knows you well — a partner, close friend, or family member — to complete this questionnaire about you independently and compare the two rows. Research consistently shows that self-report and informant perspectives differ, and the gap between them is itself informative.</p>
-    <div class="btn-row">
-      <button class="btn btn-primary" onclick="copyToClipboard()">Copy row to clipboard</button>
-      <button class="btn btn-secondary" onclick="resetAssessment()">Start again</button>
+  <div class="review-warning" id="reviewWarning"></div>
+</div>
+<div id="resultsScreen">
+  <div class="results-wrap">
+    <div class="results-header">Your results</div>
+    <p class="results-sub">These scores reflect patterns across your responses. They are not a diagnosis — they are a map of where your experience clusters, and a starting point for understanding yourself more clearly. All three scores use the same 0–100 scale and can be compared directly. When interpreting these results, consider not just whether you recognise the patterns described, but whether they cause meaningful difficulty in your relationships, work, self-care, or daily functioning. Traits without impairment are part of normal human variation.</p>
+    <p class="results-sub" id="partialNote" style="display:none;color:var(--accent-o);"></p>
+    <div class="score-grid">
+      <div class="score-card adhd"><div class="score-label">A</div><div class="score-name">ADHD pattern</div><div class="score-value" id="scoreA">—</div><div class="score-band" id="bandA"></div><div class="score-bar-wrap"><div class="score-bar-fill" id="barA"></div></div></div>
+      <div class="score-card autism"><div class="score-label">U</div><div class="score-name">Autism pattern</div><div class="score-value" id="scoreU">—</div><div class="score-band" id="bandU"></div><div class="score-bar-wrap"><div class="score-bar-fill" id="barU"></div></div></div>
+      <div class="score-card ocd"><div class="score-label">O</div><div class="score-name">OCD pattern</div><div class="score-value" id="scoreO">—</div><div class="score-band" id="bandO"></div><div class="score-bar-wrap"><div class="score-bar-fill" id="barO"></div></div></div>
+    </div>
+    <div class="export-section" id="interpretationBox" style="display:none;"><h3>What this means</h3><div id="interpretationText" class="interp-body"></div></div>
+    <div class="export-section">
+      <h3>Detailed breakdown</h3>
+      <p>Every question, your raw answer, and its transformed score. All inversions and peak-transformations have already been applied.</p>
+      <p style="font-size:0.8rem;margin-bottom:16px;margin-top:-8px;">
+        <span class="tag-pill tag-a">A</span> ADHD &nbsp;&nbsp;
+        <span class="tag-pill tag-u">U</span> Autism &nbsp;&nbsp;
+        <span class="tag-pill tag-o">O</span> OCD &nbsp;&nbsp;
+        <span style="color:var(--text-dimmer);font-size:0.78rem;">Dual tags mean the item contributes to both subscales.</span>
+      </p>
+      <table><thead><tr><th>Q</th><th>Question (abbreviated)</th><th>Tag</th><th style="text-align:center">Raw</th><th style="text-align:center">Score</th></tr></thead><tbody id="detailTable"></tbody></table>
+    </div>
+    <div class="export-section">
+      <h3>Copy to spreadsheet</h3>
+      <p>This gives you a single row of tab-separated values. Paste it into your spreadsheet to build up a comparison across sessions or people. Each row is: Date, A score, U score, O score, then all 67 transformed item scores.</p>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="copyToClipboard()">Copy row to clipboard</button>
+        <button class="btn btn-secondary" onclick="resetAssessment()">Start again</button>
+      </div>
     </div>
   </div>
 </div>
-
 <script>
-// ─────────────────────────────────────────────────────────────────
-// ITEM DEFINITIONS
-// tags: array of subscales this item contributes to
-// type: 'regular' (signal=high), 'reversed' (signal=low),
-//       'peak' (signal=middle, symmetrical),
-//       'peak_high' (signal=middle-to-high, asymmetric: high end scores more than low end)
-// short: abbreviated text for the results table
-// ─────────────────────────────────────────────────────────────────
-
 const SECTIONS = [
   { title: "Attention & Focus", start: 0 },
   { title: "Impulsivity & Control", start: 9 },
@@ -562,7 +214,6 @@ function normalisedTagClass(tags) {
 }
 
 const ITEMS = [
-  // ── Attention & Focus (0-7) ──
   { q: "When you finish a routine task, how often do you find it was completed without any errors?", tags:["A"], type:"reversed", short:"Routine task completed error-free" },
   { q: "How often do you work through a task from start to finish without losing your thread of concentration?", tags:["A"], type:"reversed", short:"Task completed without losing concentration" },
   { q: "When engaged with something you find genuinely interesting, how often do hours pass without you registering the time?", tags:["A","U"], type:"regular", short:"Hours pass unnoticed when interested" },
@@ -571,497 +222,333 @@ const ITEMS = [
   { q: "When working somewhere with background noise or movement, how often does it fail to pull your attention away?", tags:["A"], type:"reversed", short:"Background noise doesn't pull attention" },
   { q: "Once focused on something, how often does shifting to a completely different task feel easy and natural?", tags:["U"], type:"reversed", short:"Shifting tasks feels easy" },
   { q: "How often do particular thoughts return to your mind repeatedly, even when you would rather move on from them?", tags:["O"], type:"regular", short:"Thoughts returning repeatedly" },
-  // NEW: Hyperfocus disengagement (ADHD-specific, distinguishes from autistic deep interest)
   { q: "When you are deeply absorbed in something, how often do you find it difficult to stop even when you are aware that something more important needs your attention?", tags:["A"], type:"regular", short:"Difficulty stopping absorption despite knowing priorities" },
   { q: "How often do you commit to a course of action and only afterwards think through what the consequences might be?", tags:["A"], type:"regular", short:"Acting before thinking through consequences" },
   { q: "Before committing to something, how often do you naturally pause to think it through first?", tags:["A"], type:"reversed", short:"Naturally pausing before committing" },
   { q: "How often do you feel you need to carry out a particular action before you can feel settled or calm?", tags:["O"], type:"regular", short:"Needing action to feel settled" },
-  // CHANGED: peak → peak_high. "Very often" mental replaying is high OCD signal, not low.
-  { q: "How often do you find yourself mentally replaying or reviewing something — counting, checking, going over it again — in order to feel reassured?", tags:["O"], type:"peak_high", short:"Mental replaying to feel reassured" },
+  { q: "How often do you find yourself mentally replaying or reviewing something \u2014 counting, checking, going over it again \u2014 in order to feel reassured?", tags:["O"], type:"peak_high", short:"Mental replaying to feel reassured" },
   { q: "Once you have started a habitual behaviour or sequence, how often does stopping partway through feel straightforward?", tags:["U","O"], type:"reversed", short:"Stopping habitual behaviour feels easy" },
-  // NEW: Reward sensitivity / delay aversion (Sonuga-Barke dual pathway, Barkley motivational deficit)
   { q: "How often do you find yourself choosing something immediately available over something better that would require waiting?", tags:["A"], type:"regular", short:"Choosing immediate reward over delayed better option" },
   { q: "How often do you notice an urge to be moving or doing something, even in situations where sitting still is expected?", tags:["A"], type:"regular", short:"Urge to move when sitting still expected" },
   { q: "Even when sitting quietly, how often is there an underlying feeling of being internally switched on or agitated?", tags:["A","O"], type:"regular", short:"Internal agitation when sitting quietly" },
   { q: "How often do you find yourself tapping, shifting, bouncing your leg, or fidgeting during sedentary activities?", tags:["A","U"], type:"regular", short:"Fidgeting during sedentary activities" },
-  { q: "How often do you engage in rhythmic or repetitive physical movements — such as rocking or particular hand movements — especially when excited or under pressure?", tags:["U"], type:"peak", short:"Rhythmic/repetitive movements when stressed or excited" },
-
-  // ── Executive Function (17-22) ──
+  { q: "How often do you engage in rhythmic or repetitive physical movements \u2014 such as rocking or particular hand movements \u2014 especially when excited or under pressure?", tags:["U"], type:"peak", short:"Rhythmic/repetitive movements when stressed or excited" },
   { q: "How often do you find it easy to begin a task promptly, even one you know is important but not enjoyable?", tags:["A"], type:"reversed", short:"Easy to begin unenjoyable important tasks" },
   { q: "How often do you look up and find that a lot more time has passed than you were expecting?", tags:["A"], type:"regular", short:"More time passed than expected" },
   { q: "While completing a multi-step task, how often do you find it easy to hold the earlier steps in mind as you work through later ones?", tags:["A"], type:"reversed", short:"Holding earlier steps in mind easily" },
   { q: "When a situation calls for a different approach than your usual one, how often does adapting feel comfortable?", tags:["U","O"], type:"reversed", short:"Adapting to different approach feels comfortable" },
   { q: "How often do you move between different tasks during a day without any noticeable friction or effort?", tags:["U","A"], type:"reversed", short:"Moving between tasks without friction" },
   { q: "How often does wanting to get something exactly right prevent you from starting it, or from calling it finished?", tags:["O","U"], type:"peak", short:"Perfectionism preventing starting or finishing" },
-  // NEW: Working memory impairment (explicit, beyond task-completion framing of Q20)
-  { q: "How often do you find that information you were holding in mind — a number, a name, what you went into a room to get — has simply vanished by the time you need it?", tags:["A"], type:"regular", short:"Information held in mind vanishing before use" },
+  { q: "How often do you find that information you were holding in mind \u2014 a number, a name, what you went into a room to get \u2014 has simply vanished by the time you need it?", tags:["A"], type:"regular", short:"Information held in mind vanishing before use" },
   { q: "In conversation, how often do you find a natural moment to stop talking and give the other person extended space to respond?", tags:["A"], type:"reversed", short:"Finding natural moment to stop talking" },
-  { q: "How often do you pick up on unspoken signals — tone, posture, expression — without consciously having to think about it?", tags:["U"], type:"reversed", short:"Picking up unspoken signals automatically" },
+  { q: "How often do you pick up on unspoken signals \u2014 tone, posture, expression \u2014 without consciously having to think about it?", tags:["U"], type:"reversed", short:"Picking up unspoken signals automatically" },
   { q: "When someone is being indirect or ironic, how often does the intended meaning come to you immediately?", tags:["U"], type:"reversed", short:"Indirect/ironic meaning comes immediately" },
   { q: "How often do social situations leave you feeling drained in a way that goes beyond ordinary tiredness?", tags:["U","O"], type:"peak", short:"Social situations leaving you drained" },
-  { q: "When discussing something you find fascinating, how often do you notice the other person's interest beginning to drift and adjust accordingly?", tags:["U"], type:"reversed", short:"Noticing and adjusting to others' drifting interest" },
+  { q: "When discussing something you find fascinating, how often do you notice the other person\u2019s interest beginning to drift and adjust accordingly?", tags:["U"], type:"reversed", short:"Noticing and adjusting to others' drifting interest" },
   { q: "How often do you say something in conversation and only realise a moment later that it came across differently than you intended?", tags:["A"], type:"peak", short:"Saying something that lands differently than intended" },
-
-  // ── Emotional Regulation (29-33) ──
   { q: "How often do your emotional responses escalate more quickly or intensely than the situation seems to call for?", tags:["A"], type:"peak", short:"Emotions escalating beyond situation" },
   { q: "How often does a critical comment or perceived rejection leave a strong and lasting impression on you emotionally?", tags:["A"], type:"regular", short:"Critical comment leaving strong impression" },
-  // NEW: RSD anticipatory avoidance
-  { q: "How often do you avoid putting yourself forward — for opportunities, in conversations, or in relationships — because the possibility of being turned down or judged feels too difficult to risk?", tags:["A"], type:"regular", short:"Avoiding opportunities due to fear of rejection" },
-  // NEW: RSD rejection misperception
-  { q: "How often do you interpret a neutral or ambiguous signal from someone — a delayed reply, a change of tone, a cancelled plan — as a sign that they are upset with you or have lost interest in you?", tags:["A"], type:"regular", short:"Interpreting neutral signals as rejection" },
+  { q: "How often do you avoid putting yourself forward \u2014 for opportunities, in conversations, or in relationships \u2014 because the possibility of being turned down or judged feels too difficult to risk?", tags:["A"], type:"regular", short:"Avoiding opportunities due to fear of rejection" },
+  { q: "How often do you interpret a neutral or ambiguous signal from someone \u2014 a delayed reply, a change of tone, a cancelled plan \u2014 as a sign that they are upset with you or have lost interest in you?", tags:["A"], type:"regular", short:"Interpreting neutral signals as rejection" },
   { q: "How often does an accumulation of demands reach a point where you feel unable to continue and need to withdraw?", tags:["U"], type:"peak", short:"Demands accumulating to point of withdrawal" },
   { q: "How often does an unexpected change to your plans or usual routine cause you noticeable distress?", tags:["U","O"], type:"regular", short:"Unexpected change causing noticeable distress" },
   { q: "How often does your mood shift noticeably across the course of a single day in response to things happening around you?", tags:["A"], type:"regular", short:"Mood shifting noticeably across the day" },
-
-  // ── Repetitive & Restricted Patterns (34-38) ──
   { q: "How often do you find yourself returning to the same small set of topics or activities for the majority of your focused attention?", tags:["U"], type:"regular", short:"Returning to same small set of topics" },
   { q: "How often is having a predictable structure or routine to your day genuinely important to your sense of wellbeing?", tags:["U","O"], type:"regular", short:"Predictable routine important to wellbeing" },
   { q: "How often can you discard or give away possessions without any particular worry about what might happen as a result?", tags:["O"], type:"reversed", short:"Discarding possessions without worry" },
-  { q: "How often do you seek reassurance from others — asking 'are you sure?' or similar — in order to settle a feeling of doubt?", tags:["O"], type:"regular", short:"Seeking reassurance to settle doubt" },
-  { q: "How often do you return to familiar media — rewatching, rereading, replaying — specifically because knowing what will happen feels comforting?", tags:["U","A"], type:"regular", short:"Returning to familiar media for comfort" },
-
-  // ── Sensory Processing (39-42) ──
-  { q: "How often do sensory experiences — sounds, light levels, textures, or smells — affect you more strongly than they appear to affect those around you?", tags:["U"], type:"regular", short:"Sensory experiences affecting you more strongly" },
-  { q: "How often do you actively seek out intense sensory input — pressure, movement, strong flavours — because you find it settling or satisfying?", tags:["A","U"], type:"peak", short:"Seeking intense sensory input" },
+  { q: "How often do you seek reassurance from others \u2014 asking \u2018are you sure?\u2019 or similar \u2014 in order to settle a feeling of doubt?", tags:["O"], type:"regular", short:"Seeking reassurance to settle doubt" },
+  { q: "How often do you return to familiar media \u2014 rewatching, rereading, replaying \u2014 specifically because knowing what will happen feels comforting?", tags:["U","A"], type:"regular", short:"Returning to familiar media for comfort" },
+  { q: "How often do sensory experiences \u2014 sounds, light levels, textures, or smells \u2014 affect you more strongly than they appear to affect those around you?", tags:["U"], type:"regular", short:"Sensory experiences affecting you more strongly" },
+  { q: "How often do you actively seek out intense sensory input \u2014 pressure, movement, strong flavours \u2014 because you find it settling or satisfying?", tags:["A","U"], type:"peak", short:"Seeking intense sensory input" },
   { q: "How often do specific textures, fabrics, or food consistencies produce a physical discomfort strong enough to influence your choices?", tags:["U"], type:"regular", short:"Textures causing discomfort influencing choices" },
   { q: "How often does a particular sensory experience reliably trigger a feeling of unease or heightened anxiety?", tags:["U","O"], type:"peak", short:"Sensory experience triggering unease" },
-
-  // ── Cognitive Style (43-49) ──
   { q: "How often does your thinking jump rapidly between different ideas or connections within a short space of time?", tags:["A"], type:"regular", short:"Thinking jumping between ideas rapidly" },
   { q: "How often do you notice small inconsistencies or patterns in information that other people around you appear to have overlooked?", tags:["U","O"], type:"regular", short:"Noticing inconsistencies others overlook" },
-  { q: "How often does your thinking settle into clear opposing categories — something either works or it doesn't — rather than feeling comfortable with ambiguity?", tags:["U","O"], type:"regular", short:"Thinking in clear opposing categories" },
+  { q: "How often does your thinking settle into clear opposing categories \u2014 something either works or it doesn\u2019t \u2014 rather than feeling comfortable with ambiguity?", tags:["U","O"], type:"regular", short:"Thinking in clear opposing categories" },
   { q: "How often, when considering a future situation, does your mind move towards imagining the worst likely outcome?", tags:["O"], type:"regular", short:"Mind moving to worst-case outcomes" },
   { q: "How often does your mind return to a past event or conversation, even when you would prefer to move on from it?", tags:["O","A"], type:"regular", short:"Mind returning to past events" },
-  { q: "How often do you notice underlying structures, patterns, or connections in things that others around you don't appear to be seeing?", tags:["U"], type:"regular", short:"Noticing patterns others don't see" },
-  // CHANGED: peak → peak_high. Extreme moral distress is high OCD signal.
+  { q: "How often do you notice underlying structures, patterns, or connections in things that others around you don\u2019t appear to be seeing?", tags:["U"], type:"regular", short:"Noticing patterns others don't see" },
   { q: "How often does concern about your own moral conduct cause you noticeable distress or prompt you to examine your own behaviour?", tags:["O"], type:"peak_high", short:"Moral concern causing distress" },
-
-  // ── Anxiety & Fear (50-55) ──
-  // CHANGED: peak → peak_high. Extreme contamination concern is high OCD signal.
   { q: "How often do concerns about dirt, germs, or contamination influence your behaviour or cause you noticeable unease?", tags:["O"], type:"peak_high", short:"Contamination concerns influencing behaviour" },
-  // CHANGED: peak → peak_high. Frequent intrusive harm thoughts are high OCD signal.
   { q: "How often do thoughts about accidentally causing harm to someone arise in a way that feels distressing?", tags:["O"], type:"peak_high", short:"Distressing thoughts about causing harm" },
-  { q: "How often do you check something — a lock, a message, a piece of work — more than once because of a lingering feeling that something might be wrong?", tags:["O"], type:"regular", short:"Checking things more than once" },
-  // CHANGED: peak → peak_high. Frequent ego-dystonic intrusive thoughts are high OCD signal.
+  { q: "How often do you check something \u2014 a lock, a message, a piece of work \u2014 more than once because of a lingering feeling that something might be wrong?", tags:["O"], type:"regular", short:"Checking things more than once" },
   { q: "How often do thoughts that feel disturbing or out of character enter your mind without invitation?", tags:["O"], type:"peak_high", short:"Disturbing thoughts entering uninvited" },
   { q: "How often do difficulties with staying organised or following through produce a background sense of anxiety in your day-to-day life?", tags:["A"], type:"regular", short:"Organisation difficulties producing background anxiety" },
-  { q: "How often does unpredictability — a change of plan, an unclear expectation, a sudden event — reliably produce anxiety for you?", tags:["U","O"], type:"regular", short:"Unpredictability producing anxiety" },
-
-  // ── Developmental Course & Coping (56-59) ──
+  { q: "How often does unpredictability \u2014 a change of plan, an unclear expectation, a sudden event \u2014 reliably produce anxiety for you?", tags:["U","O"], type:"regular", short:"Unpredictability producing anxiety" },
   { q: "Looking back at childhood, how often do you recall attention, energy level, or self-control being a noticeable issue before the age of twelve?", tags:["A"], type:"regular", short:"Childhood attention/energy/self-control issues" },
   { q: "Reflecting on early childhood, how often do you recall your communication or social connection with others feeling different from that of your peers?", tags:["U"], type:"peak", short:"Childhood social connection feeling different" },
   { q: "How often do the difficulties you experience become noticeably more prominent during periods of high stress or demand?", tags:["A","O"], type:"regular", short:"Difficulties more prominent under stress" },
-  { q: "How often, after carrying out a repeated behaviour or ritual, do you feel temporary relief — even though the underlying feeling tends to return?", tags:["O"], type:"regular", short:"Temporary relief from repeated behaviour" },
-  // NEW ITEM: camouflaging/masking probe (addresses Lai & Mandy critique)
+  { q: "How often, after carrying out a repeated behaviour or ritual, do you feel temporary relief \u2014 even though the underlying feeling tends to return?", tags:["O"], type:"regular", short:"Temporary relief from repeated behaviour" },
   { q: "How often do you consciously monitor, rehearse, or adjust your behaviour in social situations in order to come across the way others seem to expect?", tags:["U","A"], type:"regular", short:"Consciously monitoring/adjusting social behaviour" },
-  // NEW ITEM: effort-outcome gap / functional impairment probe (addresses Barkley critique)
   { q: "How often do you feel that the effort you put into managing everyday life is significantly greater than what others around you seem to need for similar results?", tags:["A","U"], type:"regular", short:"Effort for daily life exceeds what others seem to need" },
-  // REMOVED: "variation in social style / sensory sensitivities over life" (reversed U item).
-  // Replaced by two items above which address expert critiques more directly.
 ];
 
-// CHANGED: anchor labels to reduce endpoint aversion (STAI-based approach)
 const LABELS = ["Almost never", "Rarely", "Sometimes", "Often", "Almost always"];
 const responses = new Array(ITEMS.length).fill(null);
-let isLocked = false; // Prevents answer changes after submission
-
-// ─────────────────────────────────────────────────────────────────
-// TRANSFORMATION ENGINE
-// ─────────────────────────────────────────────────────────────────
-// regular:   1→0, 2→1, 3→2, 4→3, 5→4  (high = signal)
-// reversed:  1→4, 2→3, 3→2, 4→1, 5→0  (low = signal)
-// peak:      3→4, 2/4→2, 1/5→0         (middle = signal, symmetric)
-// peak_high: 3→4, 4→3, 2→2, 5→1, 1→0  (middle-to-high = signal, asymmetric)
-//   This preserves the peak shape but treats high-end answers as more
-//   informative than low-end, fixing the OCD intrusive thought problem.
+let currentIndex = 0;
 
 function transform(raw, type) {
-  if (type === 'regular')    return raw - 1;
-  if (type === 'reversed')   return 5 - raw;
-  if (type === 'peak')       return 4 - 2 * Math.abs(raw - 3);
-  if (type === 'peak_high') {
-    // Asymmetric peak: centre=4, one-above=3, one-below=2, high-extreme=1, low-extreme=0
-    const map = [0, 0, 2, 4, 3, 1];
-    return map[raw];
-  }
+  if (type === 'regular') return raw - 1;
+  if (type === 'reversed') return 5 - raw;
+  if (type === 'peak') return 4 - 2 * Math.abs(raw - 3);
+  if (type === 'peak_high') { return [0, 0, 2, 4, 3, 1][raw]; }
   return 0;
 }
 
-// Pre-calculate fixed max per subscale.
-// peak_high items have max score of 4 (same as all other types).
-const MAX_SCORES = (() => {
-  const counts = { A: 0, U: 0, O: 0 };
-  ITEMS.forEach(item => {
-    item.tags.forEach(tag => counts[tag]++);
-  });
-  return { A: counts.A * 4, U: counts.U * 4, O: counts.O * 4 };
-})();
-
 function calcScores() {
-  const sums = { A: 0, U: 0, O: 0 };
-  const answeredCounts = { A: 0, U: 0, O: 0 };
-
+  const sums = { A:0, U:0, O:0 }, ac = { A:0, U:0, O:0 };
   ITEMS.forEach((item, i) => {
-    const raw = responses[i];
-    if (raw === null) return;
-    const t = transform(raw, item.type);
-    item.tags.forEach(tag => {
-      sums[tag] += t;
-      answeredCounts[tag]++;
-    });
+    if (responses[i] === null) return;
+    const t = transform(responses[i], item.type);
+    item.tags.forEach(tag => { sums[tag] += t; ac[tag]++; });
   });
-
   const scores = {};
   ['A','U','O'].forEach(tag => {
-    const maxForAnswered = answeredCounts[tag] * 4;
-    scores[tag] = maxForAnswered > 0 ? Math.round((sums[tag] / maxForAnswered) * 100) : 0;
+    const m = ac[tag] * 4;
+    scores[tag] = m > 0 ? Math.round((sums[tag] / m) * 100) : 0;
   });
-  scores._answeredCounts = answeredCounts;
+  scores._answeredCounts = ac;
   return scores;
 }
 
-// CHANGED: Aligned band labels with interpretation thresholds.
-// Interpretation uses MODERATE=40, STRONG=65. Bands now match.
 function getBand(score) {
-  if (score < 25)  return "Not strongly present";
-  if (score < 40)  return "Mild or subclinical";
-  if (score < 65)  return "Moderate — worth exploring";
+  if (score < 25) return "Not strongly present";
+  if (score < 40) return "Mild or subclinical";
+  if (score < 65) return "Moderate \u2014 worth exploring";
   return "Strong signal";
 }
 
-// ─────────────────────────────────────────────────────────────────
-// RENDER
-// ─────────────────────────────────────────────────────────────────
-function renderSections() {
-  const container = document.getElementById('questionnaire');
-  container.innerHTML = '';
+const STEPS = [];
+SECTIONS.forEach((section, si) => {
+  const nextStart = si < SECTIONS.length - 1 ? SECTIONS[si+1].start : ITEMS.length;
+  STEPS.push({ type:'section', title:section.title, count:nextStart - section.start, sectionIndex:si });
+  for (let i = section.start; i < nextStart; i++) STEPS.push({ type:'question', itemIndex:i, sectionIndex:si });
+});
 
-  SECTIONS.forEach((section, si) => {
-    const nextStart = si < SECTIONS.length - 1 ? SECTIONS[si + 1].start : ITEMS.length;
+function renderStep() {
+  const area = document.getElementById('questionArea');
+  const step = STEPS[currentIndex];
+  const answered = responses.filter(r => r !== null).length;
+  document.getElementById('progressFill').style.width = Math.round((answered / ITEMS.length) * 100) + '%';
+  document.getElementById('navCounter').textContent = answered + ' of ' + ITEMS.length;
+  document.getElementById('navSection').textContent = SECTIONS[step.sectionIndex].title;
+  document.getElementById('prevBtn').disabled = currentIndex === 0;
 
-    const sh = document.createElement('div');
-    sh.className = 'section-heading';
-    sh.innerHTML = `<h2>${section.title}</h2><div class="section-line"></div>`;
-    container.appendChild(sh);
-
-    for (let i = section.start; i < nextStart; i++) {
-      const item = ITEMS[i];
-      const card = document.createElement('div');
-      card.className = 'question-card';
-      card.id = `qcard-${i}`;
-
-      const inner = document.createElement('div');
-      inner.className = 'question-inner' + (responses[i] !== null ? ' answered' : '');
-      inner.id = `qinner-${i}`;
-
-      const qnum = document.createElement('span');
-      qnum.className = 'q-num';
-      qnum.textContent = `Q${i + 1}`;
-
-      const qtext = document.createElement('div');
-      qtext.className = 'question-text';
-      qtext.textContent = item.q;
-
-      const opts = document.createElement('div');
-      opts.className = 'options';
-
-      LABELS.forEach((label, val) => {
-        const btn = document.createElement('button');
-        btn.className = 'opt-btn' + (responses[i] === val + 1 ? ' selected' : '');
-        if (isLocked) btn.classList.add('locked');
-        btn.textContent = label;
-        btn.onclick = () => { if (!isLocked) selectResponse(i, val + 1); };
-        opts.appendChild(btn);
-      });
-
-      inner.appendChild(qnum);
-      inner.appendChild(qtext);
-      inner.appendChild(opts);
-      card.appendChild(inner);
-      container.appendChild(card);
-    }
-  });
-
-  updateProgress();
-}
-
-function selectResponse(qIdx, val) {
-  if (isLocked) return;
-  responses[qIdx] = val;
-
-  const inner = document.getElementById(`qinner-${qIdx}`);
-  if (inner) {
-    inner.classList.add('answered');
-    inner.classList.remove('highlight');
-    const btns = inner.querySelectorAll('.opt-btn');
-    btns.forEach((btn, i) => {
-      btn.classList.toggle('selected', i === val - 1);
+  if (step.type === 'section') {
+    area.innerHTML = '<div class="section-card active"><h2>' + step.title + '</h2><div class="section-count">' + step.count + ' questions</div><button class="section-continue-btn" onclick="goForward()">Continue</button></div>';
+  } else {
+    const qi = step.itemIndex;
+    let opts = '';
+    LABELS.forEach(function(label, v) {
+      opts += '<button class="q-opt-btn' + (responses[qi] === v+1 ? ' selected' : '') + '" onclick="answerQuestion(' + qi + ',' + (v+1) + ')">' + label + '</button>';
     });
+    area.innerHTML = '<div class="q-card active"><div class="q-number">Question ' + (qi+1) + ' of ' + ITEMS.length + '</div><div class="q-text">' + ITEMS[qi].q + '</div><div class="q-options">' + opts + '</div><div class="key-hint">Press <kbd>1</kbd><kbd>2</kbd><kbd>3</kbd><kbd>4</kbd><kbd>5</kbd> to answer, <kbd>\u2190</kbd><kbd>\u2192</kbd> to navigate</div></div>';
   }
-
-  updateProgress();
 }
 
-function updateProgress() {
-  const answered = responses.filter(r => r !== null).length;
-  const total = ITEMS.length;
-  const pct = Math.round((answered / total) * 100);
-  document.getElementById('progressBar').style.width = pct + '%';
-  document.getElementById('progressLabel').textContent = `${answered} of ${total} answered`;
+function answerQuestion(qi, val) {
+  responses[qi] = val;
+  var btns = document.querySelectorAll('.q-opt-btn');
+  btns.forEach(function(btn, i) { btn.classList.toggle('selected', i === val-1); });
+  setTimeout(goForward, 200);
 }
 
-// ─────────────────────────────────────────────────────────────────
-// INTERPRETATION
-// ─────────────────────────────────────────────────────────────────
-function generateInterpretation(scores) {
-  const { A, U, O } = scores;
-  const STRONG = 65, MODERATE = 40;
+function goForward() { if (currentIndex < STEPS.length-1) { currentIndex++; renderStep(); } else showReview(); }
+function goBack() { if (currentIndex > 0) { currentIndex--; renderStep(); } }
+function skipQuestion() { goForward(); }
 
-  const strongProfiles = [];
-  if (A >= STRONG) strongProfiles.push('ADHD');
-  if (U >= STRONG) strongProfiles.push('autism');
-  if (O >= STRONG) strongProfiles.push('OCD');
-
-  const moderateProfiles = [];
-  if (A >= MODERATE && A < STRONG) moderateProfiles.push('ADHD');
-  if (U >= MODERATE && U < STRONG) moderateProfiles.push('autism');
-  if (O >= MODERATE && O < STRONG) moderateProfiles.push('OCD');
-
-  let para1 = '';
-  let para2 = '';
-  let para3 = '';
-
-  // ── Opening: what the pattern looks like ──
-  if (strongProfiles.length === 0 && moderateProfiles.length === 0) {
-    para1 = 'Your responses do not show a pronounced pattern aligned with ADHD, autism, or OCD traits. This could mean these profiles are genuinely not a major feature of your experience, or that your traits are more evenly distributed or situational. It is also worth knowing that depression, anxiety, trauma, and chronic stress can produce experiences — difficulty concentrating, emotional dysregulation, social withdrawal, repetitive thinking — that closely resemble these profiles without being them. Equally, a low score does not rule out an underlying condition if you have developed strong compensatory or masking strategies over your lifetime. This is particularly common in women, people socialised as female, those diagnosed late, and anyone who has spent years adapting to environments that required them to appear typical. If something still feels persistently difficult or different, that is worth exploring with a professional, even if this questionnaire did not produce a strong signal.';
-  } else if (strongProfiles.length === 1 && moderateProfiles.length === 0) {
-    // CHANGED: Profile-specific language instead of generic "depending on which profile"
-    let profileDetail = '';
-    if (strongProfiles[0] === 'ADHD') {
-      profileDetail = 'The experiences described across the questionnaire — particularly around sustained attention, impulse regulation, task initiation, time perception, and emotional reactivity — cluster meaningfully in this direction.';
-    } else if (strongProfiles[0] === 'autism') {
-      profileDetail = 'The experiences described across the questionnaire — particularly around social processing, sensory sensitivity, preference for routine, and focused interests — cluster meaningfully in this direction.';
-    } else {
-      profileDetail = 'The experiences described across the questionnaire — particularly around intrusive thoughts, checking and reassurance-seeking, anxiety about uncertainty, and difficulty disengaging from mental loops — cluster meaningfully in this direction.';
-    }
-    para1 = `Your responses show a pronounced pattern of traits consistent with ${strongProfiles[0]}. ${profileDetail} This is not a diagnosis. Clinicians arrive at diagnoses by integrating self-report with developmental history, direct observation, and an assessment of how traits affect daily functioning — none of which a questionnaire can replicate. What this does give you is a coherent starting point.`;
-  } else if (strongProfiles.length >= 2) {
-    para1 = `Your responses show pronounced patterns consistent with more than one profile — specifically ${strongProfiles.join(' and ')}. This is more common than many people realise: ADHD and autism co-occur in roughly 50–70% of cases, and OCD overlaps significantly with both. Rather than meaning your results are unclear, this likely reflects that your experience is genuinely complex, and that a single-label explanation would be an oversimplification. As with any self-report tool, a formal assessment would integrate this picture with your history, observed behaviour, and functional impact before any conclusions are drawn.`;
-  } else {
-    const all = [...strongProfiles, ...moderateProfiles];
-    para1 = `Your responses show a moderate pattern across ${all.join(' and ')} traits. The signal is present but not pronounced — which can reflect genuine mild traits, a mixed picture, or simply high variability in how these traits express themselves day to day.`;
-  }
-
-  // ── Middle: the overlap explanation ──
-  const hasOverlap = (A >= MODERATE && O >= MODERATE) || (U >= MODERATE && O >= MODERATE) || (A >= MODERATE && U >= MODERATE);
-  if (hasOverlap) {
-    if (U >= MODERATE && O >= MODERATE) {
-      para2 = 'The overlap between your autism and OCD scores is worth noting specifically. Autistic people experience clinically significant OCD at roughly three to four times the rate of the general population, and the two can be difficult to distinguish because both involve repetitive behaviours, rigid thinking, and high anxiety. The difference in origin matters for treatment — OCD responds well to specific therapy approaches that are not always appropriate for autistic rigidity — so unpicking which is which, ideally with a clinician familiar with both, is genuinely useful.';
-    } else if (A >= MODERATE && U >= MODERATE) {
-      para2 = 'Your ADHD and autism scores are both elevated. This combination — sometimes called AuDHD — is now recognised as a distinct presentation rather than simply two separate conditions running in parallel. People with both often describe an internal experience that feels more contradictory and effortful than either label alone would suggest: the ADHD drive for novelty pulling against the autistic need for predictability, for instance, or the hyperactivity of ADHD masking the sensory sensitivities that are more obvious in autism. If this resonates, it is worth seeking assessment from someone specifically experienced with both.';
-    } else if (A >= MODERATE && O >= MODERATE) {
-      // CHANGED: Added softening qualifier about ego-syntonic/dystonic boundary
-      para2 = 'Your ADHD and OCD scores are both notable. These two co-occur more than expected by chance, and share features like intrusive thoughts and difficulty regulating attention — though the mechanisms differ. ADHD intrusive thoughts tend to be ego-syntonic (they feel like part of you), while OCD intrusive thoughts are typically ego-dystonic (they feel alien and distressing). This distinction is not always clean-cut, particularly when both conditions are present, but as a general pattern it can help you reflect on which dynamic feels more familiar to your own experience.';
-    }
-  }
-
-  // ── Close: what to do next ──
-  if (strongProfiles.length > 0 || moderateProfiles.length > 0) {
-    // CHANGED: Added base rate acknowledgement, functional impairment framing, and masking caveat
-    para3 = 'A note on context: people who seek out a tool like this are already a non-random group. You are likely here because something in your experience prompted the question. That context matters when interpreting these scores — they may mean something different for someone actively investigating a pattern than they would for a person completing the questionnaire out of idle curiosity. As a next step, this score profile can be a useful thing to bring to a GP or mental health professional as a starting point for a conversation — not as evidence of a diagnosis, but as a structured description of patterns you have noticed in yourself. If you are not ready for that, or if access is difficult, many people find it helpful to read first-person accounts by people with the profiles that resonated most, and to see whether those accounts reflect their own inner experience. Self-knowledge itself has value, independent of any formal label. If at any point reflecting on these results feels distressing or overwhelming, please reach out to a trusted person or a mental health support line rather than sitting with it alone.';
-  } else {
-    para3 = 'If you feel the questionnaire did not quite capture your experience, it is worth trying again at a different time, or looking at more specific tools for any area that feels relevant. The questions here are broad by design, and some people\'s traits only become visible in more targeted assessments. It may also be worth considering whether strong coping strategies have developed over time that reduce the visible frequency of these experiences without removing the underlying effort they require.';
-  }
-
-  return [para1, para2, para3].filter(Boolean).map(p => `<p style="margin-bottom:14px;">${p}</p>`).join('');
+function jumpToQuestion(qi) {
+  var idx = STEPS.findIndex(function(s) { return s.type === 'question' && s.itemIndex === qi; });
+  if (idx >= 0) { currentIndex = idx; document.getElementById('reviewScreen').classList.remove('active'); document.getElementById('questionScreen').classList.add('active'); renderStep(); }
 }
 
-// ─────────────────────────────────────────────────────────────────
-// SUBMIT
-// ─────────────────────────────────────────────────────────────────
-function submitAssessment() {
-  const answered = responses.filter(r => r !== null).length;
-  const total = ITEMS.length;
-  const MIN_ANSWERS = Math.ceil(total * 0.8); // 80% threshold (50 of 62)
-  const unanswered = responses.map((r, i) => r === null ? i : -1).filter(i => i >= 0);
-  const warningEl = document.getElementById('warning');
-
+function showReview() {
+  document.getElementById('questionScreen').classList.remove('active');
+  document.getElementById('reviewScreen').classList.add('active');
+  var answered = responses.filter(function(r) { return r !== null; }).length;
+  var skipped = ITEMS.length - answered;
+  var MIN_ANSWERS = Math.ceil(ITEMS.length * 0.8);
+  var txt = 'You answered ' + answered + ' of ' + ITEMS.length + ' questions.';
+  if (skipped > 0) txt += ' ' + skipped + ' skipped (tap a number to answer it).';
+  document.getElementById('reviewSummary').textContent = txt;
+  var grid = document.getElementById('reviewGrid');
+  grid.innerHTML = '';
+  ITEMS.forEach(function(_, i) {
+    var d = document.createElement('div');
+    d.className = 'review-dot ' + (responses[i] !== null ? 'answered' : 'skipped');
+    d.textContent = i + 1;
+    d.onclick = function() { jumpToQuestion(i); };
+    grid.appendChild(d);
+  });
+  var calcBtn = document.getElementById('calcBtn');
+  var warn = document.getElementById('reviewWarning');
   if (answered < MIN_ANSWERS) {
-    warningEl.textContent = `Please answer at least ${MIN_ANSWERS} of ${total} questions before submitting. You have answered ${answered} so far. Unanswered questions are highlighted above.`;
-    warningEl.classList.add('visible');
-    unanswered.forEach(i => {
-      const inner = document.getElementById(`qinner-${i}`);
-      if (inner) inner.classList.add('highlight');
-    });
-    const first = document.getElementById(`qcard-${unanswered[0]}`);
-    if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    return;
-  }
-
-  warningEl.classList.remove('visible');
-
-  // Lock answers after submission
-  isLocked = true;
-  document.querySelectorAll('.opt-btn').forEach(btn => {
-    btn.classList.add('locked');
-  });
-  document.getElementById('submitBtn').style.display = 'none';
-
-  const isPartial = answered < total;
-  const scores = calcScores();
-
-  ['A','U','O'].forEach(tag => {
-    document.getElementById(`score${tag}`).textContent = scores[tag];
-    document.getElementById(`band${tag}`).textContent = getBand(scores[tag]);
-    setTimeout(() => {
-      document.getElementById(`bar${tag}`).style.width = scores[tag] + '%';
-    }, 100);
-  });
-
-  // Show partial completion note if applicable
-  const partialNote = document.getElementById('partialNote');
-  if (isPartial) {
-    const answered = responses.filter(r => r !== null).length;
-    partialNote.textContent = `These scores are based on ${answered} of ${ITEMS.length} questions. Scores are normalised to the items you answered, so they remain comparable, but may be less stable than a complete set. Unanswered items are marked below.`;
-    partialNote.style.display = 'block';
+    calcBtn.disabled = true;
+    warn.textContent = 'Please answer at least ' + MIN_ANSWERS + ' questions. You need ' + (MIN_ANSWERS - answered) + ' more.';
+    warn.classList.add('visible');
   } else {
-    partialNote.style.display = 'none';
+    calcBtn.disabled = false;
+    if (skipped > 0) { warn.textContent = skipped + ' questions skipped. Scores will be normalised to your answered items.'; warn.classList.add('visible'); }
+    else warn.classList.remove('visible');
+  }
+}
+
+function backToQuestions() {
+  document.getElementById('reviewScreen').classList.remove('active');
+  document.getElementById('questionScreen').classList.add('active');
+  currentIndex = STEPS.length - 1;
+  renderStep();
+}
+
+function generateInterpretation(scores) {
+  var A = scores.A, U = scores.U, O = scores.O;
+  var STRONG = 65, MODERATE = 40;
+  var sp = [], mp = [];
+  if (A >= STRONG) sp.push('ADHD'); if (U >= STRONG) sp.push('autism'); if (O >= STRONG) sp.push('OCD');
+  if (A >= MODERATE && A < STRONG) mp.push('ADHD'); if (U >= MODERATE && U < STRONG) mp.push('autism'); if (O >= MODERATE && O < STRONG) mp.push('OCD');
+  var p1='', p2='', p3='';
+
+  if (sp.length === 0 && mp.length === 0) {
+    p1 = 'Your responses do not show a pronounced pattern aligned with ADHD, autism, or OCD traits. This could mean these profiles are genuinely not a major feature of your experience, or that your traits are more evenly distributed or situational. It is also worth knowing that depression, anxiety, trauma, and chronic stress can produce experiences \u2014 difficulty concentrating, emotional dysregulation, social withdrawal, repetitive thinking \u2014 that closely resemble these profiles without being them. Equally, a low score does not rule out an underlying condition if you have developed strong compensatory or masking strategies over your lifetime. This is particularly common in women, people socialised as female, those diagnosed late, and anyone who has spent years adapting to environments that required them to appear typical. If something still feels persistently difficult or different, that is worth exploring with a professional, even if this questionnaire did not produce a strong signal.';
+  } else if (sp.length === 1 && mp.length === 0) {
+    var d = '';
+    if (sp[0]==='ADHD') d = 'The experiences described across the questionnaire \u2014 particularly around sustained attention, impulse regulation, task initiation, time perception, and emotional reactivity \u2014 cluster meaningfully in this direction.';
+    else if (sp[0]==='autism') d = 'The experiences described across the questionnaire \u2014 particularly around social processing, sensory sensitivity, preference for routine, and focused interests \u2014 cluster meaningfully in this direction.';
+    else d = 'The experiences described across the questionnaire \u2014 particularly around intrusive thoughts, checking and reassurance-seeking, anxiety about uncertainty, and difficulty disengaging from mental loops \u2014 cluster meaningfully in this direction.';
+    p1 = 'Your responses show a pronounced pattern of traits consistent with ' + sp[0] + '. ' + d + ' This is not a diagnosis. Clinicians arrive at diagnoses by integrating self-report with developmental history, direct observation, and an assessment of how traits affect daily functioning \u2014 none of which a questionnaire can replicate. What this does give you is a coherent starting point.';
+  } else if (sp.length >= 2) {
+    p1 = 'Your responses show pronounced patterns consistent with more than one profile \u2014 specifically ' + sp.join(' and ') + '. This is more common than many people realise: ADHD and autism co-occur in roughly 50\u201370% of cases, and OCD overlaps significantly with both. Rather than meaning your results are unclear, this likely reflects that your experience is genuinely complex, and that a single-label explanation would be an oversimplification.';
+  } else {
+    var all = sp.concat(mp);
+    p1 = 'Your responses show a moderate pattern across ' + all.join(' and ') + ' traits. The signal is present but not pronounced \u2014 which can reflect genuine mild traits, a mixed picture, or simply high variability in how these traits express themselves day to day.';
   }
 
-  const interpBox  = document.getElementById('interpretationBox');
-  const interpText = document.getElementById('interpretationText');
-  interpText.innerHTML = generateInterpretation(scores);
-  interpBox.style.display = 'block';
+  if ((A >= MODERATE && O >= MODERATE) || (U >= MODERATE && O >= MODERATE) || (A >= MODERATE && U >= MODERATE)) {
+    if (U >= MODERATE && O >= MODERATE) {
+      p2 = 'The overlap between your autism and OCD scores is worth noting specifically. Autistic people experience clinically significant OCD at roughly three to four times the rate of the general population, and the two can be difficult to distinguish because both involve repetitive behaviours, rigid thinking, and high anxiety. The difference in origin matters for treatment \u2014 OCD responds well to specific therapy approaches that are not always appropriate for autistic rigidity \u2014 so unpicking which is which, ideally with a clinician familiar with both, is genuinely useful.';
+    } else if (A >= MODERATE && U >= MODERATE) {
+      p2 = 'Your ADHD and autism scores are both elevated. This combination \u2014 sometimes called AuDHD \u2014 is now recognised as a distinct presentation rather than simply two separate conditions running in parallel. People with both often describe an internal experience that feels more contradictory and effortful than either label alone would suggest: the ADHD drive for novelty pulling against the autistic need for predictability, for instance, or the hyperactivity of ADHD masking the sensory sensitivities that are more obvious in autism.';
+    } else if (A >= MODERATE && O >= MODERATE) {
+      p2 = 'Your ADHD and OCD scores are both notable. These two co-occur more than expected by chance, and share features like intrusive thoughts and difficulty regulating attention \u2014 though the mechanisms differ. ADHD intrusive thoughts tend to be ego-syntonic (they feel like part of you), while OCD intrusive thoughts are typically ego-dystonic (they feel alien and distressing). This distinction is not always clean-cut, particularly when both conditions are present, but as a general pattern it can help you reflect on which dynamic feels more familiar.';
+    }
+  }
 
-  const tbody = document.getElementById('detailTable');
+  if (sp.length > 0 || mp.length > 0) {
+    p3 = 'A note on context: people who seek out a tool like this are already a non-random group. You are likely here because something in your experience prompted the question. As a next step, this score profile can be a useful thing to bring to a GP or mental health professional as a starting point for a conversation \u2014 not as evidence of a diagnosis, but as a structured description of patterns you have noticed in yourself. If you are not ready for that, or if access is difficult, many people find it helpful to read first-person accounts by people with the profiles that resonated most. Self-knowledge itself has value, independent of any formal label. If reflecting on these results feels distressing, please reach out to a trusted person or a mental health support line.';
+  } else {
+    p3 = 'If you feel the questionnaire did not quite capture your experience, it is worth trying again at a different time, or looking at more specific tools for any area that feels relevant. It may also be worth considering whether strong coping strategies have developed over time that reduce the visible frequency of these experiences without removing the underlying effort they require.';
+  }
+
+  return [p1, p2, p3].filter(Boolean).map(function(p) { return '<p style="margin-bottom:14px;">' + p + '</p>'; }).join('');
+}
+
+function submitFromReview() {
+  var answered = responses.filter(function(r) { return r !== null; }).length;
+  var total = ITEMS.length;
+  var isPartial = answered < total;
+  var scores = calcScores();
+  document.getElementById('reviewScreen').classList.remove('active');
+  document.getElementById('resultsScreen').classList.add('active');
+  window.scrollTo({ top: 0 });
+
+  ['A','U','O'].forEach(function(tag) {
+    document.getElementById('score' + tag).textContent = scores[tag];
+    document.getElementById('band' + tag).textContent = getBand(scores[tag]);
+    setTimeout(function() { document.getElementById('bar' + tag).style.width = scores[tag] + '%'; }, 100);
+  });
+
+  var partialNote = document.getElementById('partialNote');
+  if (isPartial) {
+    partialNote.textContent = 'These scores are based on ' + answered + ' of ' + total + ' questions. Scores are normalised to the items you answered, so they remain comparable, but may be less stable than a complete set.';
+    partialNote.style.display = 'block';
+  } else { partialNote.style.display = 'none'; }
+
+  document.getElementById('interpretationText').innerHTML = generateInterpretation(scores);
+  document.getElementById('interpretationBox').style.display = 'block';
+
+  var tbody = document.getElementById('detailTable');
   tbody.innerHTML = '';
-
-  ITEMS.forEach((item, i) => {
-    const raw = responses[i];
-    const t = raw !== null ? transform(raw, item.type) : null;
-    const row = document.createElement('tr');
+  ITEMS.forEach(function(item, i) {
+    var raw = responses[i];
+    var t = raw !== null ? transform(raw, item.type) : null;
+    var row = document.createElement('tr');
     if (raw === null) row.style.opacity = '0.45';
-
-    const tagHTML = item.tags.map(tag => {
-      if (item.tags.length === 1) {
-        return `<span class="tag-pill tag-${tag.toLowerCase()}">${tag}</span>`;
-      }
-      return `<span class="tag-pill ${normalisedTagClass(item.tags)}">${tag}</span>`;
+    var tagHTML = item.tags.map(function(tag) {
+      if (item.tags.length === 1) return '<span class="tag-pill tag-' + tag.toLowerCase() + '">' + tag + '</span>';
+      return '<span class="tag-pill ' + normalisedTagClass(item.tags) + '">' + tag + '</span>';
     }).join(' ');
-
-    row.innerHTML = `
-      <td class="q-col">Q${i+1}</td>
-      <td>${item.short}</td>
-      <td class="tag-col">${tagHTML}</td>
-      <td class="raw-col">${raw !== null ? LABELS[raw-1] : '—'}</td>
-      <td class="trans-col">${t !== null ? t : '—'}</td>
-    `;
+    row.innerHTML = '<td class="q-col">Q' + (i+1) + '</td><td>' + item.short + '</td><td class="tag-col">' + tagHTML + '</td><td class="raw-col">' + (raw !== null ? LABELS[raw-1] : '\u2014') + '</td><td class="trans-col">' + (t !== null ? t : '\u2014') + '</td>';
     tbody.appendChild(row);
   });
-
-  const resultsEl = document.getElementById('results');
-  resultsEl.classList.add('visible');
-  setTimeout(() => {
-    resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, 100);
 }
 
-// ─────────────────────────────────────────────────────────────────
-// EXPORT
-// ─────────────────────────────────────────────────────────────────
 function buildExportText() {
-  // Uses the locked responses, so scores always match what was displayed.
-  const scores = calcScores();
-  const date = new Date().toLocaleDateString('en-GB');
-  const transformedScores = ITEMS.map((item, i) => responses[i] !== null ? transform(responses[i], item.type) : '');
-  const row  = [date, scores.A, scores.U, scores.O, ...transformedScores].join('\t');
-  const header = ['Date','A_score','U_score','O_score',
-    ...ITEMS.map((_,i) => `Q${i+1}`)].join('\t');
+  var scores = calcScores();
+  var date = new Date().toLocaleDateString('en-GB');
+  var ts = ITEMS.map(function(item, i) { return responses[i] !== null ? transform(responses[i], item.type) : ''; });
+  var row = [date, scores.A, scores.U, scores.O].concat(ts).join('\t');
+  var header = ['Date','A_score','U_score','O_score'].concat(ITEMS.map(function(_,i) { return 'Q'+(i+1); })).join('\t');
   return header + '\n' + row;
 }
 
-function showFallbackBox(text) {
-  const existing = document.getElementById('fallbackBox');
-  if (existing) existing.remove();
-
-  const wrap = document.createElement('div');
-  wrap.id = 'fallbackBox';
-  wrap.style.cssText = 'margin-top:14px;';
-
-  const msg = document.createElement('p');
-  msg.textContent = 'Automatic copy is not available in this context. Select all the text below and copy it manually (Ctrl+A then Ctrl+C):';
-  msg.style.cssText = 'font-size:0.85rem;color:var(--accent-o);margin-bottom:8px;';
-
-  const ta = document.createElement('textarea');
-  ta.value = text;
-  ta.style.cssText = 'width:100%;height:80px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:10px;font-family:monospace;font-size:0.75rem;resize:vertical;';
-  ta.addEventListener('focus', () => ta.select());
-
-  wrap.appendChild(msg);
-  wrap.appendChild(ta);
-
-  const btn = document.querySelector('[onclick="copyToClipboard()"]');
-  btn.parentNode.insertBefore(wrap, btn.nextSibling);
-  ta.focus();
-}
-
 function copyToClipboard() {
-  const text = buildExportText();
-  const btn  = document.querySelector('[onclick="copyToClipboard()"]');
-
+  var text = buildExportText();
+  var btn = document.querySelector('[onclick="copyToClipboard()"]');
   if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(text).then(() => {
-      const orig = btn.textContent;
-      btn.textContent = '\u2713 Copied!';
-      btn.style.background = 'var(--accent-u)';
-      setTimeout(() => { btn.textContent = orig; btn.style.background = ''; }, 2500);
-    }).catch(() => {
-      if (!execCommandCopy(text)) showFallbackBox(text);
-    });
+    navigator.clipboard.writeText(text).then(function() {
+      var orig = btn.textContent; btn.textContent = '\u2713 Copied!'; btn.style.background = 'var(--accent-u)';
+      setTimeout(function() { btn.textContent = orig; btn.style.background = ''; }, 2500);
+    }).catch(function() { fallbackCopy(text); });
     return;
   }
-
-  if (!execCommandCopy(text)) showFallbackBox(text);
+  fallbackCopy(text);
 }
 
-function execCommandCopy(text) {
+function fallbackCopy(text) {
   try {
-    const ta = document.createElement('textarea');
-    ta.value = text;
+    var ta = document.createElement('textarea'); ta.value = text;
     ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0;';
-    document.body.appendChild(ta);
-    ta.focus();
-    ta.select();
-    const ok = document.execCommand('copy');
-    document.body.removeChild(ta);
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    var ok = document.execCommand('copy'); document.body.removeChild(ta);
     if (ok) {
-      const btn = document.querySelector('[onclick="copyToClipboard()"]');
-      const orig = btn.textContent;
-      btn.textContent = '\u2713 Copied!';
-      btn.style.background = 'var(--accent-u)';
-      setTimeout(() => { btn.textContent = orig; btn.style.background = ''; }, 2500);
+      var btn = document.querySelector('[onclick="copyToClipboard()"]');
+      var orig = btn.textContent; btn.textContent = '\u2713 Copied!'; btn.style.background = 'var(--accent-u)';
+      setTimeout(function() { btn.textContent = orig; btn.style.background = ''; }, 2500);
     }
-    return ok;
-  } catch(e) {
-    return false;
-  }
+  } catch(e) {}
 }
 
 function resetAssessment() {
-  responses.fill(null);
-  isLocked = false;
-  document.getElementById('results').classList.remove('visible');
+  responses.fill(null); currentIndex = 0;
+  document.getElementById('resultsScreen').classList.remove('active');
+  document.getElementById('reviewScreen').classList.remove('active');
+  document.getElementById('questionScreen').classList.remove('active');
+  document.getElementById('introScreen').style.display = '';
   document.getElementById('interpretationBox').style.display = 'none';
   document.getElementById('interpretationText').innerHTML = '';
-  document.getElementById('submitBtn').style.display = '';
-  renderSections();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.scrollTo({ top: 0 });
 }
 
-// ─────────────────────────────────────────────────────────────────
-// INIT
-// ─────────────────────────────────────────────────────────────────
-renderSections();
+function startAssessment() {
+  document.getElementById('introScreen').style.display = 'none';
+  document.getElementById('questionScreen').classList.add('active');
+  currentIndex = 0;
+  renderStep();
+}
+
+document.addEventListener('keydown', function(e) {
+  if (!document.getElementById('questionScreen').classList.contains('active')) return;
+  var step = STEPS[currentIndex];
+  if (!step || step.type !== 'question') {
+    if (e.key === 'Enter' || e.key === 'ArrowRight') { goForward(); e.preventDefault(); }
+    if (e.key === 'ArrowLeft') { goBack(); e.preventDefault(); }
+    return;
+  }
+  var qi = step.itemIndex;
+  if (e.key >= '1' && e.key <= '5') { answerQuestion(qi, parseInt(e.key)); e.preventDefault(); return; }
+  if (e.key === 'ArrowLeft') { goBack(); e.preventDefault(); }
+  if (e.key === 'ArrowRight') { goForward(); e.preventDefault(); }
+});
 </script>
 </body>
 </html>
