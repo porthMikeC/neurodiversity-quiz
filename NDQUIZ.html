@@ -446,7 +446,7 @@
 
 <header>
   <h1>Neurodivergent Self-Assessment</h1>
-  <p>Answer each question honestly based on your general experience across your life, not just recently. There are no right or wrong answers. Your scores are calculated privately in your browser — nothing is sent anywhere.</p>
+  <p>Answer each question honestly based on your general experience across your life, not just recently. Choose the response that reflects how you actually experience things, not how you have learned to appear — this is especially important if you tend to mask or compensate, whether consciously or not. There are no right or wrong answers. Your scores are calculated privately in your browser — nothing is sent anywhere.</p>
   <p style="margin-top:10px;color:var(--text-dimmer);font-size:0.8rem;">This is an exploratory self-reflection tool, not a validated clinical instrument. It is designed to help you notice patterns and find language for your experience — not to provide a diagnosis. If you have developed strong strategies for managing or masking difficulties — something particularly common in women, people socialised as female, and anyone diagnosed late or not at all — your scores may underestimate the presence of underlying traits. A low score does not mean these patterns are absent from your experience. If completing this questionnaire brings up intense distress or feels overwhelming, please step away and speak to someone you trust or contact a mental health support line before continuing.</p>
 </header>
 
@@ -454,19 +454,20 @@
   <div class="progress-bar-bg">
     <div class="progress-bar-fill" id="progressBar"></div>
   </div>
-  <div class="progress-label" id="progressLabel">0 of 62 answered</div>
+  <div class="progress-label" id="progressLabel">0 of 67 answered</div>
 </div>
 
 <div id="questionnaire"></div>
 
 <div class="submit-bar">
   <button class="btn btn-primary" id="submitBtn" onclick="submitAssessment()">Calculate my scores</button>
-  <div class="warning" id="warning">Please answer all questions before submitting. Unanswered questions are highlighted above.</div>
+  <div class="warning" id="warning"></div>
 </div>
 
 <div id="results">
   <div class="results-header">Your results</div>
   <p class="results-sub">These scores reflect patterns across your responses. They are not a diagnosis — they are a map of where your experience clusters, and a starting point for understanding yourself more clearly. All three scores use the same 0–100 scale and can be compared directly. When interpreting these results, consider not just whether you recognise the patterns described, but whether they cause meaningful difficulty in your relationships, work, self-care, or daily functioning. Traits without impairment are part of normal human variation.</p>
+  <p class="results-sub" id="partialNote" style="display:none;color:var(--accent-o);"></p>
 
   <div class="score-grid">
     <div class="score-card adhd">
@@ -522,7 +523,7 @@
 
   <div class="export-section">
     <h3>Copy to spreadsheet</h3>
-    <p>This gives you a single row of tab-separated values. Paste it into your spreadsheet to build up a comparison across sessions or people. Each row is: Date, A score, U score, O score, then all 60 transformed item scores. You may also find it useful to ask someone who knows you well — a partner, close friend, or family member — to complete this questionnaire about you independently and compare the two rows. Research consistently shows that self-report and informant perspectives differ, and the gap between them is itself informative.</p>
+    <p>This gives you a single row of tab-separated values. Paste it into your spreadsheet to build up a comparison across sessions or people. Each row is: Date, A score, U score, O score, then all 67 transformed item scores. You may also find it useful to ask someone who knows you well — a partner, close friend, or family member — to complete this questionnaire about you independently and compare the two rows. Research consistently shows that self-report and informant perspectives differ, and the gap between them is itself informative.</p>
     <div class="btn-row">
       <button class="btn btn-primary" onclick="copyToClipboard()">Copy row to clipboard</button>
       <button class="btn btn-secondary" onclick="resetAssessment()">Start again</button>
@@ -542,16 +543,16 @@
 
 const SECTIONS = [
   { title: "Attention & Focus", start: 0 },
-  { title: "Impulsivity & Control", start: 8 },
-  { title: "Activity & Energy Regulation", start: 13 },
-  { title: "Executive Function", start: 17 },
-  { title: "Social Interaction", start: 23 },
-  { title: "Emotional Regulation", start: 29 },
-  { title: "Repetitive & Restricted Patterns", start: 34 },
-  { title: "Sensory Processing", start: 39 },
-  { title: "Cognitive Style", start: 43 },
-  { title: "Anxiety & Fear", start: 50 },
-  { title: "Developmental Course & Coping", start: 56 },
+  { title: "Impulsivity & Control", start: 9 },
+  { title: "Activity & Energy Regulation", start: 15 },
+  { title: "Executive Function", start: 19 },
+  { title: "Social Interaction", start: 26 },
+  { title: "Emotional Regulation", start: 32 },
+  { title: "Repetitive & Restricted Patterns", start: 39 },
+  { title: "Sensory Processing", start: 44 },
+  { title: "Cognitive Style", start: 48 },
+  { title: "Anxiety & Fear", start: 55 },
+  { title: "Developmental Course & Coping", start: 61 },
 ];
 
 function normalisedTagClass(tags) {
@@ -570,16 +571,16 @@ const ITEMS = [
   { q: "When working somewhere with background noise or movement, how often does it fail to pull your attention away?", tags:["A"], type:"reversed", short:"Background noise doesn't pull attention" },
   { q: "Once focused on something, how often does shifting to a completely different task feel easy and natural?", tags:["U"], type:"reversed", short:"Shifting tasks feels easy" },
   { q: "How often do particular thoughts return to your mind repeatedly, even when you would rather move on from them?", tags:["O"], type:"regular", short:"Thoughts returning repeatedly" },
-
-  // ── Impulsivity & Control (8-12) ──
+  // NEW: Hyperfocus disengagement (ADHD-specific, distinguishes from autistic deep interest)
+  { q: "When you are deeply absorbed in something, how often do you find it difficult to stop even when you are aware that something more important needs your attention?", tags:["A"], type:"regular", short:"Difficulty stopping absorption despite knowing priorities" },
   { q: "How often do you commit to a course of action and only afterwards think through what the consequences might be?", tags:["A"], type:"regular", short:"Acting before thinking through consequences" },
   { q: "Before committing to something, how often do you naturally pause to think it through first?", tags:["A"], type:"reversed", short:"Naturally pausing before committing" },
   { q: "How often do you feel you need to carry out a particular action before you can feel settled or calm?", tags:["O"], type:"regular", short:"Needing action to feel settled" },
   // CHANGED: peak → peak_high. "Very often" mental replaying is high OCD signal, not low.
   { q: "How often do you find yourself mentally replaying or reviewing something — counting, checking, going over it again — in order to feel reassured?", tags:["O"], type:"peak_high", short:"Mental replaying to feel reassured" },
   { q: "Once you have started a habitual behaviour or sequence, how often does stopping partway through feel straightforward?", tags:["U","O"], type:"reversed", short:"Stopping habitual behaviour feels easy" },
-
-  // ── Activity & Energy Regulation (13-16) ──
+  // NEW: Reward sensitivity / delay aversion (Sonuga-Barke dual pathway, Barkley motivational deficit)
+  { q: "How often do you find yourself choosing something immediately available over something better that would require waiting?", tags:["A"], type:"regular", short:"Choosing immediate reward over delayed better option" },
   { q: "How often do you notice an urge to be moving or doing something, even in situations where sitting still is expected?", tags:["A"], type:"regular", short:"Urge to move when sitting still expected" },
   { q: "Even when sitting quietly, how often is there an underlying feeling of being internally switched on or agitated?", tags:["A","O"], type:"regular", short:"Internal agitation when sitting quietly" },
   { q: "How often do you find yourself tapping, shifting, bouncing your leg, or fidgeting during sedentary activities?", tags:["A","U"], type:"regular", short:"Fidgeting during sedentary activities" },
@@ -592,8 +593,8 @@ const ITEMS = [
   { q: "When a situation calls for a different approach than your usual one, how often does adapting feel comfortable?", tags:["U","O"], type:"reversed", short:"Adapting to different approach feels comfortable" },
   { q: "How often do you move between different tasks during a day without any noticeable friction or effort?", tags:["U","A"], type:"reversed", short:"Moving between tasks without friction" },
   { q: "How often does wanting to get something exactly right prevent you from starting it, or from calling it finished?", tags:["O","U"], type:"peak", short:"Perfectionism preventing starting or finishing" },
-
-  // ── Social Interaction (23-28) ──
+  // NEW: Working memory impairment (explicit, beyond task-completion framing of Q20)
+  { q: "How often do you find that information you were holding in mind — a number, a name, what you went into a room to get — has simply vanished by the time you need it?", tags:["A"], type:"regular", short:"Information held in mind vanishing before use" },
   { q: "In conversation, how often do you find a natural moment to stop talking and give the other person extended space to respond?", tags:["A"], type:"reversed", short:"Finding natural moment to stop talking" },
   { q: "How often do you pick up on unspoken signals — tone, posture, expression — without consciously having to think about it?", tags:["U"], type:"reversed", short:"Picking up unspoken signals automatically" },
   { q: "When someone is being indirect or ironic, how often does the intended meaning come to you immediately?", tags:["U"], type:"reversed", short:"Indirect/ironic meaning comes immediately" },
@@ -604,6 +605,10 @@ const ITEMS = [
   // ── Emotional Regulation (29-33) ──
   { q: "How often do your emotional responses escalate more quickly or intensely than the situation seems to call for?", tags:["A"], type:"peak", short:"Emotions escalating beyond situation" },
   { q: "How often does a critical comment or perceived rejection leave a strong and lasting impression on you emotionally?", tags:["A"], type:"regular", short:"Critical comment leaving strong impression" },
+  // NEW: RSD anticipatory avoidance
+  { q: "How often do you avoid putting yourself forward — for opportunities, in conversations, or in relationships — because the possibility of being turned down or judged feels too difficult to risk?", tags:["A"], type:"regular", short:"Avoiding opportunities due to fear of rejection" },
+  // NEW: RSD rejection misperception
+  { q: "How often do you interpret a neutral or ambiguous signal from someone — a delayed reply, a change of tone, a cancelled plan — as a sign that they are upset with you or have lost interest in you?", tags:["A"], type:"regular", short:"Interpreting neutral signals as rejection" },
   { q: "How often does an accumulation of demands reach a point where you feel unable to continue and need to withdraw?", tags:["U"], type:"peak", short:"Demands accumulating to point of withdrawal" },
   { q: "How often does an unexpected change to your plans or usual routine cause you noticeable distress?", tags:["U","O"], type:"regular", short:"Unexpected change causing noticeable distress" },
   { q: "How often does your mood shift noticeably across the course of a single day in response to things happening around you?", tags:["A"], type:"regular", short:"Mood shifting noticeably across the day" },
@@ -694,6 +699,7 @@ const MAX_SCORES = (() => {
 
 function calcScores() {
   const sums = { A: 0, U: 0, O: 0 };
+  const answeredCounts = { A: 0, U: 0, O: 0 };
 
   ITEMS.forEach((item, i) => {
     const raw = responses[i];
@@ -701,13 +707,16 @@ function calcScores() {
     const t = transform(raw, item.type);
     item.tags.forEach(tag => {
       sums[tag] += t;
+      answeredCounts[tag]++;
     });
   });
 
   const scores = {};
   ['A','U','O'].forEach(tag => {
-    scores[tag] = Math.round((sums[tag] / MAX_SCORES[tag]) * 100);
+    const maxForAnswered = answeredCounts[tag] * 4;
+    scores[tag] = maxForAnswered > 0 ? Math.round((sums[tag] / maxForAnswered) * 100) : 0;
   });
+  scores._answeredCounts = answeredCounts;
   return scores;
 }
 
@@ -871,10 +880,15 @@ function generateInterpretation(scores) {
 // SUBMIT
 // ─────────────────────────────────────────────────────────────────
 function submitAssessment() {
+  const answered = responses.filter(r => r !== null).length;
+  const total = ITEMS.length;
+  const MIN_ANSWERS = Math.ceil(total * 0.8); // 80% threshold (50 of 62)
   const unanswered = responses.map((r, i) => r === null ? i : -1).filter(i => i >= 0);
+  const warningEl = document.getElementById('warning');
 
-  if (unanswered.length > 0) {
-    document.getElementById('warning').classList.add('visible');
+  if (answered < MIN_ANSWERS) {
+    warningEl.textContent = `Please answer at least ${MIN_ANSWERS} of ${total} questions before submitting. You have answered ${answered} so far. Unanswered questions are highlighted above.`;
+    warningEl.classList.add('visible');
     unanswered.forEach(i => {
       const inner = document.getElementById(`qinner-${i}`);
       if (inner) inner.classList.add('highlight');
@@ -884,7 +898,7 @@ function submitAssessment() {
     return;
   }
 
-  document.getElementById('warning').classList.remove('visible');
+  warningEl.classList.remove('visible');
 
   // Lock answers after submission
   isLocked = true;
@@ -893,6 +907,7 @@ function submitAssessment() {
   });
   document.getElementById('submitBtn').style.display = 'none';
 
+  const isPartial = answered < total;
   const scores = calcScores();
 
   ['A','U','O'].forEach(tag => {
@@ -902,6 +917,16 @@ function submitAssessment() {
       document.getElementById(`bar${tag}`).style.width = scores[tag] + '%';
     }, 100);
   });
+
+  // Show partial completion note if applicable
+  const partialNote = document.getElementById('partialNote');
+  if (isPartial) {
+    const answered = responses.filter(r => r !== null).length;
+    partialNote.textContent = `These scores are based on ${answered} of ${ITEMS.length} questions. Scores are normalised to the items you answered, so they remain comparable, but may be less stable than a complete set. Unanswered items are marked below.`;
+    partialNote.style.display = 'block';
+  } else {
+    partialNote.style.display = 'none';
+  }
 
   const interpBox  = document.getElementById('interpretationBox');
   const interpText = document.getElementById('interpretationText');
@@ -913,8 +938,9 @@ function submitAssessment() {
 
   ITEMS.forEach((item, i) => {
     const raw = responses[i];
-    const t = transform(raw, item.type);
+    const t = raw !== null ? transform(raw, item.type) : null;
     const row = document.createElement('tr');
+    if (raw === null) row.style.opacity = '0.45';
 
     const tagHTML = item.tags.map(tag => {
       if (item.tags.length === 1) {
@@ -927,8 +953,8 @@ function submitAssessment() {
       <td class="q-col">Q${i+1}</td>
       <td>${item.short}</td>
       <td class="tag-col">${tagHTML}</td>
-      <td class="raw-col">${LABELS[raw-1]}</td>
-      <td class="trans-col">${t}</td>
+      <td class="raw-col">${raw !== null ? LABELS[raw-1] : '—'}</td>
+      <td class="trans-col">${t !== null ? t : '—'}</td>
     `;
     tbody.appendChild(row);
   });
@@ -947,7 +973,7 @@ function buildExportText() {
   // Uses the locked responses, so scores always match what was displayed.
   const scores = calcScores();
   const date = new Date().toLocaleDateString('en-GB');
-  const transformedScores = ITEMS.map((item, i) => transform(responses[i], item.type));
+  const transformedScores = ITEMS.map((item, i) => responses[i] !== null ? transform(responses[i], item.type) : '');
   const row  = [date, scores.A, scores.U, scores.O, ...transformedScores].join('\t');
   const header = ['Date','A_score','U_score','O_score',
     ...ITEMS.map((_,i) => `Q${i+1}`)].join('\t');
