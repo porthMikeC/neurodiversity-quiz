@@ -4,1698 +4,842 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Neurodiversity Self-Assessment</title>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Special+Elite&display=swap" rel="stylesheet" />
 <style>
-body { background: #1A1A2E; margin: 0; padding: 0; }
-
-#nd-root {
-  font-family: 'DM Sans', sans-serif;
-  max-width: 740px;
-  margin: 0 auto;
-  padding: 20px;
-  color: #E0DCD8;
-  line-height: 1.6;
-}
-
-#nd-root * { box-sizing: border-box; }
-
-/* ── Disclaimer ── */
-.nd-disclaimer {
-  background: #22223A;
-  border: 1px solid #3A3A58;
-  border-left: 4px solid #6ECF9A;
-  border-radius: 8px;
-  padding: 14px 18px;
-  margin-bottom: 28px;
-  font-size: 0.85rem;
-  color: #9A9490;
-  line-height: 1.55;
-}
-
-/* ── Header ── */
-.nd-header {
-  text-align: center;
-  margin-bottom: 28px;
-  padding-bottom: 24px;
-  border-bottom: 2px solid #2E2E45;
-}
-
-.nd-header h1 {
-  font-family: 'Instrument Serif', serif;
-  font-size: 2.4rem;
-  color: #E0DCD8;
-  margin: 0 0 8px 0;
-  letter-spacing: -0.5px;
-}
-
-.nd-header p {
-  color: #9A9490;
-  font-size: 0.95rem;
-  margin: 0;
-  max-width: 520px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* ── Progress bar ── */
-.nd-progress-bar-wrap {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: #1A1A2E;
-  padding: 12px 0;
-  margin-bottom: 24px;
-}
-
-.nd-progress-track {
-  width: 100%;
-  height: 8px;
-  background: #2E2E45;
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.nd-progress-fill {
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(90deg, #6ECF9A, #4AAF7A);
-  border-radius: 4px;
-  transition: width 0.3s ease;
-}
-
-.nd-progress-text {
-  text-align: center;
-  font-size: 0.8rem;
-  color: #9A9490;
-  margin-top: 6px;
-}
-
-/* ── Sections ── */
-.nd-section { margin-bottom: 40px; }
-
-.nd-section-title {
-  font-family: 'Instrument Serif', serif;
-  font-size: 1.5rem;
-  color: #E0DCD8;
-  margin: 0 0 6px 0;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #2E2E45;
-}
-
-.nd-section-subtitle {
-  font-size: 0.85rem;
-  color: #7A7470;
-  margin: 0 0 20px 0;
-}
-
-/* ── Question cards ── */
-.nd-question-card {
-  background: #22223A;
-  border: 1px solid #2E2E45;
-  border-radius: 10px;
-  padding: 20px;
-  margin-bottom: 14px;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.nd-question-card.nd-answered {
-  border-color: #6ECF9A;
-  box-shadow: 0 0 0 1px #6ECF9A;
-}
-
-.nd-question-text {
-  font-size: 0.95rem;
-  color: #E0DCD8;
-  margin: 0 0 14px 0;
-  font-weight: 500;
-}
-
-.nd-question-num {
-  color: #7A7470;
-  font-size: 0.8rem;
-  font-weight: 400;
-}
-
-/* ── Likert scale ── */
-.nd-likert {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.nd-likert label {
-  flex: 1;
-  min-width: 60px;
-  text-align: center;
-  padding: 8px 4px;
-  border: 1px solid #3A3A58;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 0.78rem;
-  color: #FFE033 !important;
-  transition: all 0.15s ease;
-  background: #1E1E34;
-  font-weight: 600;
-}
-
-/* Keyboard focus on label */
-.nd-likert label:focus-within,
-.nd-likert label:hover {
-  border-color: #6ECF9A;
-  color: #FFE033 !important;
-  background: #2A2A48;
-  outline: none;
-}
-
-.nd-likert input[type="radio"] {
-  display: none;
-}
-
-/* Selected state driven by JS adding .nd-selected to the label */
-.nd-likert label.nd-selected {
-  background: #2A4A3A;
-  color: #FFE033 !important;
-  border-color: #6ECF9A;
-  border-width: 2px;
-  font-weight: 700;
-  box-shadow: 0 0 0 1px #6ECF9A;
-}
-
-/* ── Developmental scale variant ── */
-.nd-likert-dev label { /* same visual, different text content set in HTML */ }
-
-/* ── Buttons ── */
-.nd-submit-wrap {
-  text-align: center;
-  padding: 30px 0;
-}
-
-.nd-btn-primary {
-  display: inline-block;
-  background: #22223A;
-  color: #FFE033 !important;
-  border: 2px solid #6ECF9A;
-  padding: 14px 48px;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 700;
-  cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
-  transition: background 0.2s ease, border-color 0.2s ease;
-  letter-spacing: 0.3px;
-}
-
-.nd-btn-primary:hover,
-.nd-btn-primary:focus {
-  background: #2E2E50;
-  border-color: #8EDDB0;
-  outline: none;
-}
-
-.nd-btn-primary:focus-visible {
-  outline: 2px solid #FFE033;
-  outline-offset: 3px;
-}
-
-.nd-btn-secondary {
-  display: inline-block;
-  background: transparent;
-  color: #FFE033 !important;
-  border: 2px solid #6ECF9A;
-  padding: 12px 36px;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  font-weight: 700;
-  cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
-  transition: all 0.2s ease;
-  margin: 6px;
-  letter-spacing: 0.3px;
-}
-
-.nd-btn-secondary:hover,
-.nd-btn-secondary:focus {
-  background: #2E2E50;
-  border-color: #8EDDB0;
-  outline: none;
-}
-
-.nd-error-msg {
-  color: #FF7A5A;
-  text-align: center;
-  margin-bottom: 16px;
-  font-size: 0.9rem;
-  display: none;
-  padding: 10px;
-  background: rgba(255,122,90,0.1);
-  border-radius: 6px;
-}
-
-/* ── Results overlay ── */
-#nd-results-overlay {
-  display: none;
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.78);
-  z-index: 9999;
-  overflow-y: auto;
-  padding: 40px 20px;
-}
-
-#nd-results-overlay.nd-visible { display: block; }
-
-.nd-results-panel {
-  background: #1A1A2E;
-  max-width: 640px;
-  margin: 0 auto;
-  border-radius: 14px;
-  padding: 36px 30px;
-  position: relative;
-}
-
-.nd-results-close {
-  position: absolute;
-  top: 16px; right: 20px;
-  background: none;
-  border: none;
-  font-size: 1.6rem;
-  cursor: pointer;
-  color: #9A9490 !important;
-  font-family: 'DM Sans', sans-serif;
-  line-height: 1;
-  padding: 4px;
-  border-radius: 4px;
-  transition: color 0.15s;
-}
-.nd-results-close:hover { color: #E0DCD8 !important; }
-.nd-results-close:focus-visible { outline: 2px solid #6ECF9A; outline-offset: 2px; }
-
-.nd-results-title {
-  font-family: 'Instrument Serif', serif;
-  font-size: 1.8rem;
-  text-align: center;
-  margin: 0 0 6px 0;
-  color: #E0DCD8;
-}
-
-.nd-results-overall-label {
-  text-align: center;
-  font-size: 0.85rem;
-  color: #9A9490;
-  margin: 0 0 4px 0;
-}
-
-.nd-results-overall-score {
-  text-align: center;
-  font-family: 'Instrument Serif', serif;
-  font-size: 3.2rem;
-  color: #6ECF9A;
-  margin: 0 0 6px 0;
-  line-height: 1;
-}
-
-.nd-results-overall-note {
-  text-align: center;
-  font-size: 0.78rem;
-  color: #7A7470;
-  margin: 0 0 24px 0;
-}
-
-/* ── Dimension blocks ── */
-.nd-dimension-block {
-  background: #22223A;
-  border-radius: 10px;
-  padding: 18px;
-  margin-bottom: 14px;
-  border: 1px solid #2E2E45;
-}
-
-.nd-dimension-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-}
-
-.nd-dimension-name {
-  font-weight: 600;
-  font-size: 1rem;
-  color: #E0DCD8;
-}
-
-.nd-dimension-sub {
-  font-size: 0.78rem;
-  color: #9A9490;
-}
-
-.nd-dimension-pct {
-  font-family: 'Instrument Serif', serif;
-  font-size: 1.4rem;
-  font-weight: 600;
-}
-
-.nd-dimension-bar-track {
-  width: 100%;
-  height: 10px;
-  background: #2E2E45;
-  border-radius: 5px;
-  overflow: hidden;
-  margin-bottom: 8px;
-}
-
-.nd-dimension-bar-fill {
-  height: 100%;
-  border-radius: 5px;
-  transition: width 0.55s ease;
-  width: 0%;
-}
-
-.nd-dimension-level {
-  font-size: 0.82rem;
-  font-weight: 600;
-  padding: 3px 10px;
-  border-radius: 12px;
-  display: inline-block;
-  margin-bottom: 10px;
-}
-
-.nd-dimension-desc {
-  font-size: 0.88rem;
-  color: #B0AAA4;
-  line-height: 1.55;
-  margin: 0;
-}
-
-/* Dimension colour tokens */
-.nd-spark .nd-dimension-pct  { color: #F0A050; }
-.nd-spark .nd-dimension-bar-fill { background: #F0A050; }
-.nd-spark .nd-dimension-level { background: #3A2E20; color: #F0A050; }
-
-.nd-depth .nd-dimension-pct  { color: #60A0E0; }
-.nd-depth .nd-dimension-bar-fill { background: #60A0E0; }
-.nd-depth .nd-dimension-level { background: #1E2E3E; color: #60A0E0; }
-
-.nd-sentinel .nd-dimension-pct  { color: #B090D0; }
-.nd-sentinel .nd-dimension-bar-fill { background: #B090D0; }
-.nd-sentinel .nd-dimension-level { background: #2E2038; color: #B090D0; }
-
-/* ── Combo section ── */
-.nd-combo-section {
-  margin-top: 24px;
-  padding-top: 20px;
-  border-top: 1px solid #2E2E45;
-  display: none;
-}
-
-.nd-combo-section-title {
-  font-family: 'Instrument Serif', serif;
-  font-size: 1.3rem;
-  margin: 0 0 12px 0;
-  color: #E0DCD8;
-}
-
-.nd-combo-block {
-  background: #22223A;
-  border: 1px solid #2E2E45;
-  border-radius: 10px;
-  padding: 16px;
-  margin-bottom: 10px;
-}
-
-.nd-combo-block-title {
-  font-weight: 600;
-  font-size: 0.92rem;
-  margin: 0 0 6px 0;
-  color: #E0DCD8;
-}
-
-.nd-combo-block-text {
-  font-size: 0.86rem;
-  color: #B0AAA4;
-  line-height: 1.5;
-  margin: 0;
-}
-
-/* ── Results disclaimer ── */
-.nd-results-disclaimer {
-  margin-top: 20px;
-  padding: 12px 16px;
-  background: #22223A;
-  border-left: 3px solid #6ECF9A;
-  border-radius: 6px;
-  font-size: 0.82rem;
-  color: #9A9490;
-  line-height: 1.5;
-}
-
-/* ── Results buttons ── */
-.nd-results-buttons {
-  text-align: center;
-  margin-top: 24px;
-  padding-top: 20px;
-  border-top: 1px solid #2E2E45;
-}
-
-/* ── Responsive ── */
-@media (max-width: 600px) {
-  #nd-root { padding: 14px; }
-  .nd-header h1 { font-size: 1.8rem; }
-  .nd-likert { gap: 5px; }
-  .nd-likert label { min-width: 50px; font-size: 0.72rem; padding: 7px 2px; }
-  .nd-results-panel { padding: 24px 18px; }
-  .nd-results-overall-score { font-size: 2.6rem; }
-  .nd-btn-primary, .nd-btn-secondary { padding: 12px 24px; font-size: 0.9rem; }
-}
+  :root {
+    --yellow: #FFE900;
+    --pink: #FF3CAC;
+    --cyan: #00F5FF;
+    --green: #39FF14;
+    --orange: #FF6B00;
+    --bg: #0D0D0D;
+    --card: #1A1A1A;
+    --border: #333;
+    --text: #F0EDE0;
+    --muted: #888;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    margin: 0; padding: 0;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 39px, #1a1a1a 39px, #1a1a1a 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, #1a1a1a 39px, #1a1a1a 40px);
+    background-size: 40px 40px;
+  }
+  #nd-root {
+    font-family: 'Special Elite', cursive;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 24px 20px;
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .nd-header {
+    text-align: center;
+    margin-bottom: 32px;
+    padding: 32px 24px;
+    background: var(--card);
+    border: 3px solid var(--yellow);
+    box-shadow: 8px 8px 0 var(--yellow);
+    position: relative;
+  }
+  .nd-header::before {
+    content: '★ BRAIN SCAN INITIATED ★';
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.5rem;
+    color: var(--pink);
+    letter-spacing: 3px;
+    display: block;
+    margin-bottom: 16px;
+  }
+  .nd-header h1 {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 1.3rem;
+    color: var(--yellow);
+    margin: 0 0 12px 0;
+    line-height: 1.6;
+    text-shadow: 3px 3px 0 var(--pink), 6px 6px 0 rgba(255,60,172,0.3);
+  }
+  .nd-header p {
+    color: #CCC;
+    font-family: 'VT323', monospace;
+    font-size: 1.2rem;
+    margin: 0;
+    letter-spacing: 1px;
+  }
+  .nd-disclaimer {
+    background: #1A1200;
+    border: 2px dashed var(--yellow);
+    padding: 14px 18px;
+    margin-bottom: 16px;
+    font-family: 'VT323', monospace;
+    font-size: 1.1rem;
+    color: #CCC;
+    position: relative;
+  }
+  .nd-disclaimer::before {
+    content: '⚠ NOTE ⚠';
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.5rem;
+    color: var(--yellow);
+    display: block;
+    margin-bottom: 8px;
+  }
+  .nd-disclaimer strong { color: var(--yellow); }
+  .nd-scale-key {
+    background: #0A0A0A;
+    border: 2px solid #333;
+    padding: 12px 18px;
+    margin-bottom: 28px;
+    font-family: 'VT323', monospace;
+    font-size: 1.05rem;
+    color: #AAA;
+    line-height: 1.7;
+  }
+  .nd-scale-key::before {
+    content: '▸ RESPONSE SCALE ◂';
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.45rem;
+    color: var(--cyan);
+    display: block;
+    margin-bottom: 8px;
+    letter-spacing: 2px;
+  }
+  .nd-progress-bar-wrap {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+    padding: 12px 0;
+    margin-bottom: 24px;
+    border-bottom: 2px solid var(--border);
+  }
+  .nd-progress-track {
+    width: 100%;
+    height: 14px;
+    background: #222;
+    border: 2px solid var(--green);
+  }
+  .nd-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: repeating-linear-gradient(90deg, var(--green) 0px, var(--green) 8px, #00CC10 8px, #00CC10 10px);
+    transition: width 0.3s steps(10);
+  }
+  .nd-progress-text {
+    text-align: center;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.5rem;
+    color: var(--green);
+    margin-top: 6px;
+    letter-spacing: 2px;
+  }
+  .nd-section { margin-bottom: 44px; }
+  .nd-section-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.75rem;
+    color: var(--cyan);
+    margin: 0 0 6px 0;
+    padding: 12px 16px;
+    background: #001A1A;
+    border-left: 5px solid var(--cyan);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    line-height: 1.8;
+  }
+  .nd-section-subtitle {
+    font-family: 'VT323', monospace;
+    font-size: 1.1rem;
+    color: var(--muted);
+    margin: 0 0 20px 8px;
+    letter-spacing: 1px;
+  }
+  .nd-question-card {
+    background: var(--card);
+    border: 2px solid var(--border);
+    padding: 18px;
+    margin-bottom: 12px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    position: relative;
+  }
+  .nd-question-card::before {
+    content: '';
+    position: absolute;
+    top: 3px; left: 3px; right: -3px; bottom: -3px;
+    background: var(--border);
+    z-index: -1;
+  }
+  .nd-question-card.nd-answered { border-color: var(--green); box-shadow: 4px 4px 0 var(--green); }
+  .nd-question-card.nd-answered::before { background: var(--green); }
+  .nd-question-text {
+    font-family: 'Special Elite', cursive;
+    font-size: 0.95rem;
+    color: var(--text);
+    margin: 0 0 14px 0;
+  }
+  .nd-question-num {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.5rem;
+    color: var(--pink);
+    margin-right: 6px;
+  }
+  .nd-likert { display: flex; gap: 6px; flex-wrap: wrap; }
+  .nd-likert input[type="radio"] { display: none; }
+  .nd-likert label {
+    flex: 1;
+    min-width: 62px;
+    text-align: center;
+    padding: 8px 4px;
+    border: 2px solid #444;
+    cursor: pointer;
+    font-family: 'VT323', monospace;
+    font-size: 1rem;
+    color: var(--text);
+    transition: all 0.1s;
+    background: #111;
+    letter-spacing: 0.5px;
+  }
+  .nd-likert label:hover, .nd-likert label:focus-within {
+    border-color: var(--pink);
+    color: var(--pink);
+    background: #1A001A;
+    outline: none;
+  }
+  .nd-likert label.nd-selected {
+    background: #0A1A00;
+    color: var(--green) !important;
+    border-color: var(--green);
+    border-width: 2px;
+    font-weight: 700;
+    box-shadow: 3px 3px 0 var(--green);
+  }
+  .nd-submit-wrap { text-align: center; padding: 30px 0; }
+  .nd-btn-primary {
+    display: inline-block;
+    background: var(--yellow);
+    color: #000 !important;
+    border: 3px solid #000;
+    padding: 16px 40px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.65rem;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 2px;
+    box-shadow: 5px 5px 0 #000;
+    transition: all 0.1s;
+    line-height: 1.8;
+  }
+  .nd-btn-primary:hover { transform: translate(2px,2px); box-shadow: 3px 3px 0 #000; }
+  .nd-btn-primary:active { transform: translate(5px,5px); box-shadow: none; }
+  .nd-btn-secondary {
+    display: inline-block;
+    background: transparent;
+    color: var(--cyan) !important;
+    border: 2px solid var(--cyan);
+    padding: 10px 24px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.5rem;
+    cursor: pointer;
+    letter-spacing: 1px;
+    margin: 6px;
+    box-shadow: 4px 4px 0 var(--cyan);
+    transition: all 0.1s;
+    line-height: 1.8;
+  }
+  .nd-btn-secondary:hover { transform: translate(2px,2px); box-shadow: 2px 2px 0 var(--cyan); }
+  .nd-error-msg {
+    color: var(--pink);
+    text-align: center;
+    margin-bottom: 16px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.55rem;
+    display: none;
+    padding: 12px;
+    background: #1A0010;
+    border: 2px solid var(--pink);
+    line-height: 1.8;
+  }
+  #nd-results-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9);
+    z-index: 9999;
+    overflow-y: auto;
+    padding: 40px 20px;
+  }
+  #nd-results-overlay.nd-visible { display: block; }
+  .nd-results-panel {
+    background: var(--bg);
+    max-width: 660px;
+    margin: 0 auto;
+    border: 3px solid var(--yellow);
+    box-shadow: 10px 10px 0 var(--yellow);
+    padding: 36px 30px;
+    position: relative;
+  }
+  .nd-results-close {
+    position: absolute;
+    top: 12px; right: 16px;
+    background: var(--pink);
+    border: 2px solid #000;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.6rem;
+    color: #000 !important;
+    cursor: pointer;
+    padding: 6px 10px;
+    box-shadow: 3px 3px 0 #000;
+    line-height: 1;
+  }
+  .nd-results-close:hover { transform: translate(1px,1px); box-shadow: 2px 2px 0 #000; }
+  .nd-results-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 1rem;
+    text-align: center;
+    margin: 0 0 20px 0;
+    color: var(--yellow);
+    text-shadow: 3px 3px 0 var(--pink);
+    line-height: 1.7;
+  }
+  .nd-results-overall-label {
+    text-align: center;
+    font-family: 'VT323', monospace;
+    font-size: 1.1rem;
+    color: var(--muted);
+    margin: 0 0 4px 0;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+  .nd-results-overall-score {
+    text-align: center;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 2.8rem;
+    color: var(--green);
+    margin: 0 0 4px 0;
+    text-shadow: 4px 4px 0 #006600;
+    line-height: 1.2;
+  }
+  .nd-results-overall-note {
+    text-align: center;
+    font-family: 'VT323', monospace;
+    font-size: 1rem;
+    color: var(--muted);
+    margin: 0 0 28px 0;
+    letter-spacing: 1px;
+  }
+  .nd-dimension-block {
+    background: #111;
+    border: 2px solid #333;
+    padding: 18px;
+    margin-bottom: 14px;
+  }
+  .nd-dimension-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+  .nd-dimension-name {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.65rem;
+    line-height: 1.7;
+  }
+  .nd-dimension-sub {
+    font-family: 'VT323', monospace;
+    font-size: 1rem;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+  .nd-dimension-pct {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 1.2rem;
+    line-height: 1;
+  }
+  .nd-dimension-bar-track {
+    width: 100%;
+    height: 12px;
+    background: #222;
+    border: 2px solid #444;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  .nd-dimension-bar-fill { height: 100%; width: 0%; transition: width 0.6s steps(20); }
+  .nd-dimension-level {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.45rem;
+    padding: 4px 10px;
+    display: inline-block;
+    margin-bottom: 10px;
+    border: 2px solid currentColor;
+    letter-spacing: 2px;
+  }
+  .nd-dimension-desc {
+    font-family: 'VT323', monospace;
+    font-size: 1.1rem;
+    color: #BBB;
+    line-height: 1.5;
+    margin: 0;
+    letter-spacing: 0.5px;
+  }
+  .nd-spark { border-color: var(--orange); }
+  .nd-spark .nd-dimension-name { color: var(--orange); }
+  .nd-spark .nd-dimension-pct  { color: var(--orange); text-shadow: 2px 2px 0 #662200; }
+  .nd-spark .nd-dimension-bar-fill { background: repeating-linear-gradient(90deg, var(--orange) 0px, var(--orange) 7px, #CC5500 7px, #CC5500 10px); }
+  .nd-spark .nd-dimension-level { color: var(--orange); background: #1A0A00; }
+  .nd-depth { border-color: var(--cyan); }
+  .nd-depth .nd-dimension-name { color: var(--cyan); }
+  .nd-depth .nd-dimension-pct  { color: var(--cyan); text-shadow: 2px 2px 0 #006666; }
+  .nd-depth .nd-dimension-bar-fill { background: repeating-linear-gradient(90deg, var(--cyan) 0px, var(--cyan) 7px, #00AAAA 7px, #00AAAA 10px); }
+  .nd-depth .nd-dimension-level { color: var(--cyan); background: #001A1A; }
+  .nd-sentinel { border-color: var(--pink); }
+  .nd-sentinel .nd-dimension-name { color: var(--pink); }
+  .nd-sentinel .nd-dimension-pct  { color: var(--pink); text-shadow: 2px 2px 0 #660044; }
+  .nd-sentinel .nd-dimension-bar-fill { background: repeating-linear-gradient(90deg, var(--pink) 0px, var(--pink) 7px, #CC0088 7px, #CC0088 10px); }
+  .nd-sentinel .nd-dimension-level { color: var(--pink); background: #1A0010; }
+  .nd-combo-section { margin-top: 24px; padding-top: 20px; border-top: 2px dashed #333; display: none; }
+  .nd-combo-section-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.6rem;
+    color: var(--yellow);
+    margin: 0 0 14px 0;
+    letter-spacing: 2px;
+    line-height: 1.8;
+  }
+  .nd-combo-block { background: #0D0D00; border: 2px solid var(--yellow); padding: 14px; margin-bottom: 10px; }
+  .nd-combo-block-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.55rem;
+    color: var(--yellow);
+    margin: 0 0 8px 0;
+    line-height: 1.8;
+  }
+  .nd-combo-block-text { font-family: 'VT323', monospace; font-size: 1.1rem; color: #CCC; line-height: 1.5; margin: 0; }
+  .nd-results-disclaimer {
+    margin-top: 20px;
+    padding: 12px 16px;
+    background: #0A1A00;
+    border: 2px dashed var(--green);
+    font-family: 'VT323', monospace;
+    font-size: 1.1rem;
+    color: #AAA;
+    line-height: 1.5;
+  }
+  .nd-results-disclaimer strong { color: var(--green); }
+  .nd-results-buttons { text-align: center; margin-top: 24px; padding-top: 20px; border-top: 2px solid #333; }
+  @media (max-width: 600px) {
+    #nd-root { padding: 12px; }
+    .nd-header h1 { font-size: 0.9rem; }
+    .nd-likert label { min-width: 50px; font-size: 0.88rem; padding: 7px 2px; }
+    .nd-results-panel { padding: 20px 14px; }
+    .nd-results-overall-score { font-size: 2rem; }
+    .nd-btn-primary { font-size: 0.55rem; padding: 14px 20px; }
+    .nd-section-title { font-size: 0.6rem; }
+  }
 </style>
 </head>
 <body>
-
-
-
 <div id="nd-root">
 
   <div class="nd-header">
-    <h1>Neurodiversity Self-Assessment</h1>
-    <p>69 questions exploring how your mind works. There are no right or wrong answers — rate each statement based on your typical experience.</p>
+    <h1>Neurodiversity<br>Self-Assessment</h1>
+    <p>58 questions &bull; no right or wrong answers &bull; rate each based on your typical experience</p>
   </div>
 
   <div class="nd-disclaimer">
-    <strong style="color:#E0DCD8;">This is a self-reflection tool, not a clinical diagnosis.</strong>
+    <strong>This is a self-reflection tool, not a clinical diagnosis.</strong>
     High scores indicate traits worth exploring — they do not confirm any diagnosis. If your results feel significant, consider speaking with a qualified clinician who specialises in neurodevelopmental conditions.
   </div>
 
-  <div class="nd-progress-bar-wrap" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Assessment progress">
-    <div class="nd-progress-track">
-      <div class="nd-progress-fill" id="ndProgressFill"></div>
-    </div>
-    <div class="nd-progress-text" id="ndProgressText">0 of 69 answered</div>
+  <div class="nd-scale-key">
+    All questions use the same five-point scale:<br>
+    <strong style="color:var(--text);">Never &nbsp;·&nbsp; Rarely &nbsp;·&nbsp; Sometimes &nbsp;·&nbsp; Often &nbsp;·&nbsp; Very often</strong><br>
+    Some questions are phrased positively — for those, selecting "Never" or "Rarely" is the high-trait signal.
   </div>
 
-  <!-- ═══ SECTION 1 ═══ -->
+  <div class="nd-progress-bar-wrap" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Assessment progress">
+    <div class="nd-progress-track"><div class="nd-progress-fill" id="ndProgressFill"></div></div>
+    <div class="nd-progress-text" id="ndProgressText">0 OF 58 ANSWERED</div>
+  </div>
+
+  <!-- SECTION 1: Attention & Focus (8 items) -->
   <div class="nd-section">
     <h2 class="nd-section-title">1. Attention &amp; Focus</h2>
     <p class="nd-section-subtitle">How your mind directs and sustains attention</p>
-
-    <div class="nd-question-card" data-q="1" data-dim="A">
-      <p class="nd-question-text"><span class="nd-question-num">Q1.</span> Do you often overlook details or make mistakes in routine tasks because your mind drifts?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q1 response">
-        <input type="radio" name="ndq1" id="ndq1v1" value="1" /><label for="ndq1v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq1" id="ndq1v2" value="2" /><label for="ndq1v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq1" id="ndq1v3" value="3" /><label for="ndq1v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq1" id="ndq1v4" value="4" /><label for="ndq1v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq1" id="ndq1v5" value="5" /><label for="ndq1v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="2" data-dim="A">
-      <p class="nd-question-text"><span class="nd-question-num">Q2.</span> Do you frequently make careless mistakes because you get distracted during tasks?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q2 response">
-        <input type="radio" name="ndq2" id="ndq2v1" value="1" /><label for="ndq2v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq2" id="ndq2v2" value="2" /><label for="ndq2v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq2" id="ndq2v3" value="3" /><label for="ndq2v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq2" id="ndq2v4" value="4" /><label for="ndq2v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq2" id="ndq2v5" value="5" /><label for="ndq2v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="3" data-dim="A">
-      <p class="nd-question-text"><span class="nd-question-num">Q3.</span> Do you find it hard to keep your attention on tasks that are not stimulating or interesting?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q3 response">
-        <input type="radio" name="ndq3" id="ndq3v1" value="1" /><label for="ndq3v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq3" id="ndq3v2" value="2" /><label for="ndq3v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq3" id="ndq3v3" value="3" /><label for="ndq3v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq3" id="ndq3v4" value="4" /><label for="ndq3v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq3" id="ndq3v5" value="5" /><label for="ndq3v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="4" data-dim="AU">
-      <p class="nd-question-text"><span class="nd-question-num">Q4.</span> Do you sometimes become so absorbed in highly interesting topics that you lose track of time or other obligations?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q4 response">
-        <input type="radio" name="ndq4" id="ndq4v1" value="1" /><label for="ndq4v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq4" id="ndq4v2" value="2" /><label for="ndq4v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq4" id="ndq4v3" value="3" /><label for="ndq4v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq4" id="ndq4v4" value="4" /><label for="ndq4v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq4" id="ndq4v5" value="5" /><label for="ndq4v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="5" data-dim="O">
-      <p class="nd-question-text"><span class="nd-question-num">Q5.</span> Do your thoughts ever feel dominated by particular worries or obsessions that grab your attention?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q5 response">
-        <input type="radio" name="ndq5" id="ndq5v1" value="1" /><label for="ndq5v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq5" id="ndq5v2" value="2" /><label for="ndq5v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq5" id="ndq5v3" value="3" /><label for="ndq5v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq5" id="ndq5v4" value="4" /><label for="ndq5v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq5" id="ndq5v5" value="5" /><label for="ndq5v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="6" data-dim="U">
-      <p class="nd-question-text"><span class="nd-question-num">Q6.</span> Do you tend to focus very intensely on a few specific, restricted interests, sometimes to the exclusion of other things?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q6 response">
-        <input type="radio" name="ndq6" id="ndq6v1" value="1" /><label for="ndq6v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq6" id="ndq6v2" value="2" /><label for="ndq6v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq6" id="ndq6v3" value="3" /><label for="ndq6v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq6" id="ndq6v4" value="4" /><label for="ndq6v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq6" id="ndq6v5" value="5" /><label for="ndq6v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="7" data-dim="A">
-      <p class="nd-question-text"><span class="nd-question-num">Q7.</span> Are you easily pulled away from what you're doing by noises, movement, notifications, or other external stimuli?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q7 response">
-        <input type="radio" name="ndq7" id="ndq7v1" value="1" /><label for="ndq7v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq7" id="ndq7v2" value="2" /><label for="ndq7v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq7" id="ndq7v3" value="3" /><label for="ndq7v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq7" id="ndq7v4" value="4" /><label for="ndq7v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq7" id="ndq7v5" value="5" /><label for="ndq7v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="8" data-dim="U">
-      <p class="nd-question-text"><span class="nd-question-num">Q8.</span> Once your attention locks onto something, do you find it very difficult to shift to another task or topic?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q8 response">
-        <input type="radio" name="ndq8" id="ndq8v1" value="1" /><label for="ndq8v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq8" id="ndq8v2" value="2" /><label for="ndq8v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq8" id="ndq8v3" value="3" /><label for="ndq8v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq8" id="ndq8v4" value="4" /><label for="ndq8v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq8" id="ndq8v5" value="5" /><label for="ndq8v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="9" data-dim="O">
-      <p class="nd-question-text"><span class="nd-question-num">Q9.</span> Do you experience intrusive thoughts that keep coming back and preoccupy your mind, even when you don't want them?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q9 response">
-        <input type="radio" name="ndq9" id="ndq9v1" value="1" /><label for="ndq9v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq9" id="ndq9v2" value="2" /><label for="ndq9v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq9" id="ndq9v3" value="3" /><label for="ndq9v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq9" id="ndq9v4" value="4" /><label for="ndq9v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq9" id="ndq9v5" value="5" /><label for="ndq9v5" tabindex="0">Very often</label>
-      </div>
-    </div>
+    <div class="nd-question-card" data-q="1" data-dim="A" data-rev="1"><p class="nd-question-text"><span class="nd-question-num">Q1.</span> When you finish a routine task, how often do you find it was completed without any errors?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq1" id="ndq1v1" value="1"/><label for="ndq1v1" tabindex="0">Never</label><input type="radio" name="ndq1" id="ndq1v2" value="2"/><label for="ndq1v2" tabindex="0">Rarely</label><input type="radio" name="ndq1" id="ndq1v3" value="3"/><label for="ndq1v3" tabindex="0">Sometimes</label><input type="radio" name="ndq1" id="ndq1v4" value="4"/><label for="ndq1v4" tabindex="0">Often</label><input type="radio" name="ndq1" id="ndq1v5" value="5"/><label for="ndq1v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="2" data-dim="A" data-rev="1"><p class="nd-question-text"><span class="nd-question-num">Q2.</span> How often do you work through a task from start to finish without losing your thread of concentration?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq2" id="ndq2v1" value="1"/><label for="ndq2v1" tabindex="0">Never</label><input type="radio" name="ndq2" id="ndq2v2" value="2"/><label for="ndq2v2" tabindex="0">Rarely</label><input type="radio" name="ndq2" id="ndq2v3" value="3"/><label for="ndq2v3" tabindex="0">Sometimes</label><input type="radio" name="ndq2" id="ndq2v4" value="4"/><label for="ndq2v4" tabindex="0">Often</label><input type="radio" name="ndq2" id="ndq2v5" value="5"/><label for="ndq2v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="3" data-dim="A" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q3.</span> When engaged with something you find genuinely interesting, how often do hours pass without you registering the time?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq3" id="ndq3v1" value="1"/><label for="ndq3v1" tabindex="0">Never</label><input type="radio" name="ndq3" id="ndq3v2" value="2"/><label for="ndq3v2" tabindex="0">Rarely</label><input type="radio" name="ndq3" id="ndq3v3" value="3"/><label for="ndq3v3" tabindex="0">Sometimes</label><input type="radio" name="ndq3" id="ndq3v4" value="4"/><label for="ndq3v4" tabindex="0">Often</label><input type="radio" name="ndq3" id="ndq3v5" value="5"/><label for="ndq3v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="4" data-dim="U" data-rev="1"><p class="nd-question-text"><span class="nd-question-num">Q4.</span> How often do you find yourself equally drawn to a wide range of topics rather than returning repeatedly to a few specific ones?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq4" id="ndq4v1" value="1"/><label for="ndq4v1" tabindex="0">Never</label><input type="radio" name="ndq4" id="ndq4v2" value="2"/><label for="ndq4v2" tabindex="0">Rarely</label><input type="radio" name="ndq4" id="ndq4v3" value="3"/><label for="ndq4v3" tabindex="0">Sometimes</label><input type="radio" name="ndq4" id="ndq4v4" value="4"/><label for="ndq4v4" tabindex="0">Often</label><input type="radio" name="ndq4" id="ndq4v5" value="5"/><label for="ndq4v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="5" data-dim="O" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q5.</span> How often do particular worries or concerns keep pulling at your attention even when you are trying to focus on something else?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq5" id="ndq5v1" value="1"/><label for="ndq5v1" tabindex="0">Never</label><input type="radio" name="ndq5" id="ndq5v2" value="2"/><label for="ndq5v2" tabindex="0">Rarely</label><input type="radio" name="ndq5" id="ndq5v3" value="3"/><label for="ndq5v3" tabindex="0">Sometimes</label><input type="radio" name="ndq5" id="ndq5v4" value="4"/><label for="ndq5v4" tabindex="0">Often</label><input type="radio" name="ndq5" id="ndq5v5" value="5"/><label for="ndq5v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="6" data-dim="A" data-rev="1"><p class="nd-question-text"><span class="nd-question-num">Q6.</span> When working somewhere with background noise or movement, how often does it fail to pull your attention away?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq6" id="ndq6v1" value="1"/><label for="ndq6v1" tabindex="0">Never</label><input type="radio" name="ndq6" id="ndq6v2" value="2"/><label for="ndq6v2" tabindex="0">Rarely</label><input type="radio" name="ndq6" id="ndq6v3" value="3"/><label for="ndq6v3" tabindex="0">Sometimes</label><input type="radio" name="ndq6" id="ndq6v4" value="4"/><label for="ndq6v4" tabindex="0">Often</label><input type="radio" name="ndq6" id="ndq6v5" value="5"/><label for="ndq6v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="7" data-dim="U" data-rev="1"><p class="nd-question-text"><span class="nd-question-num">Q7.</span> Once focused on something, how often does shifting to a completely different task feel easy and natural?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq7" id="ndq7v1" value="1"/><label for="ndq7v1" tabindex="0">Never</label><input type="radio" name="ndq7" id="ndq7v2" value="2"/><label for="ndq7v2" tabindex="0">Rarely</label><input type="radio" name="ndq7" id="ndq7v3" value="3"/><label for="ndq7v3" tabindex="0">Sometimes</label><input type="radio" name="ndq7" id="ndq7v4" value="4"/><label for="ndq7v4" tabindex="0">Often</label><input type="radio" name="ndq7" id="ndq7v5" value="5"/><label for="ndq7v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="8" data-dim="O" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q8.</span> How often do particular thoughts return to your mind repeatedly, even when you would rather move on from them?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq8" id="ndq8v1" value="1"/><label for="ndq8v1" tabindex="0">Never</label><input type="radio" name="ndq8" id="ndq8v2" value="2"/><label for="ndq8v2" tabindex="0">Rarely</label><input type="radio" name="ndq8" id="ndq8v3" value="3"/><label for="ndq8v3" tabindex="0">Sometimes</label><input type="radio" name="ndq8" id="ndq8v4" value="4"/><label for="ndq8v4" tabindex="0">Often</label><input type="radio" name="ndq8" id="ndq8v5" value="5"/><label for="ndq8v5" tabindex="0">Very often</label></div></div>
   </div>
 
-  <!-- ═══ SECTION 2 ═══ -->
+  <!-- SECTION 2: Impulsivity & Control (5 items) -->
   <div class="nd-section">
     <h2 class="nd-section-title">2. Impulsivity &amp; Control</h2>
     <p class="nd-section-subtitle">How you manage urges and behavioural impulses</p>
-
-    <div class="nd-question-card" data-q="10" data-dim="A">
-      <p class="nd-question-text"><span class="nd-question-num">Q10.</span> Do you often make decisions quickly or impulsively, without much forethought?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q10 response">
-        <input type="radio" name="ndq10" id="ndq10v1" value="1" /><label for="ndq10v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq10" id="ndq10v2" value="2" /><label for="ndq10v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq10" id="ndq10v3" value="3" /><label for="ndq10v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq10" id="ndq10v4" value="4" /><label for="ndq10v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq10" id="ndq10v5" value="5" /><label for="ndq10v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="11" data-dim="A">
-      <p class="nd-question-text"><span class="nd-question-num">Q11.</span> Do you frequently interrupt other people in conversation or finish their sentences for them?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q11 response">
-        <input type="radio" name="ndq11" id="ndq11v1" value="1" /><label for="ndq11v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq11" id="ndq11v2" value="2" /><label for="ndq11v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq11" id="ndq11v3" value="3" /><label for="ndq11v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq11" id="ndq11v4" value="4" /><label for="ndq11v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq11" id="ndq11v5" value="5" /><label for="ndq11v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="12" data-dim="A">
-      <p class="nd-question-text"><span class="nd-question-num">Q12.</span> Do you sometimes act first and only think about the consequences afterwards?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q12 response">
-        <input type="radio" name="ndq12" id="ndq12v1" value="1" /><label for="ndq12v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq12" id="ndq12v2" value="2" /><label for="ndq12v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq12" id="ndq12v3" value="3" /><label for="ndq12v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq12" id="ndq12v4" value="4" /><label for="ndq12v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq12" id="ndq12v5" value="5" /><label for="ndq12v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="13" data-dim="O">
-      <p class="nd-question-text"><span class="nd-question-num">Q13.</span> Do you feel driven to perform certain actions or behaviours repeatedly in order to reduce anxiety or feel "just right"?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q13 response">
-        <input type="radio" name="ndq13" id="ndq13v1" value="1" /><label for="ndq13v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq13" id="ndq13v2" value="2" /><label for="ndq13v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq13" id="ndq13v3" value="3" /><label for="ndq13v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq13" id="ndq13v4" value="4" /><label for="ndq13v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq13" id="ndq13v5" value="5" /><label for="ndq13v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="14" data-dim="O">
-      <p class="nd-question-text"><span class="nd-question-num">Q14.</span> Do you have repeated mental rituals (such as counting, reviewing, or "checking in your head") to neutralise anxiety or bad outcomes?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q14 response">
-        <input type="radio" name="ndq14" id="ndq14v1" value="1" /><label for="ndq14v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq14" id="ndq14v2" value="2" /><label for="ndq14v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq14" id="ndq14v3" value="3" /><label for="ndq14v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq14" id="ndq14v4" value="4" /><label for="ndq14v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq14" id="ndq14v5" value="5" /><label for="ndq14v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="15" data-dim="UO">
-      <p class="nd-question-text"><span class="nd-question-num">Q15.</span> Do you find it hard to stop repetitive behaviours, even when you'd like to, or they don't really make sense?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q15 response">
-        <input type="radio" name="ndq15" id="ndq15v1" value="1" /><label for="ndq15v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq15" id="ndq15v2" value="2" /><label for="ndq15v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq15" id="ndq15v3" value="3" /><label for="ndq15v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq15" id="ndq15v4" value="4" /><label for="ndq15v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq15" id="ndq15v5" value="5" /><label for="ndq15v5" tabindex="0">Very often</label>
-      </div>
-    </div>
+    <div class="nd-question-card" data-q="9" data-dim="A" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q9.</span> How often do you commit to a course of action and only afterwards think through what the consequences might be?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq9" id="ndq9v1" value="1"/><label for="ndq9v1" tabindex="0">Never</label><input type="radio" name="ndq9" id="ndq9v2" value="2"/><label for="ndq9v2" tabindex="0">Rarely</label><input type="radio" name="ndq9" id="ndq9v3" value="3"/><label for="ndq9v3" tabindex="0">Sometimes</label><input type="radio" name="ndq9" id="ndq9v4" value="4"/><label for="ndq9v4" tabindex="0">Often</label><input type="radio" name="ndq9" id="ndq9v5" value="5"/><label for="ndq9v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="10" data-dim="A" data-rev="1"><p class="nd-question-text"><span class="nd-question-num">Q10.</span> Before committing to something, how often do you naturally pause to think it through first?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq10" id="ndq10v1" value="1"/><label for="ndq10v1" tabindex="0">Never</label><input type="radio" name="ndq10" id="ndq10v2" value="2"/><label for="ndq10v2" tabindex="0">Rarely</label><input type="radio" name="ndq10" id="ndq10v3" value="3"/><label for="ndq10v3" tabindex="0">Sometimes</label><input type="radio" name="ndq10" id="ndq10v4" value="4"/><label for="ndq10v4" tabindex="0">Often</label><input type="radio" name="ndq10" id="ndq10v5" value="5"/><label for="ndq10v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="11" data-dim="O" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q11.</span> How often do you feel you need to carry out a particular action before you can feel settled or calm?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq11" id="ndq11v1" value="1"/><label for="ndq11v1" tabindex="0">Never</label><input type="radio" name="ndq11" id="ndq11v2" value="2"/><label for="ndq11v2" tabindex="0">Rarely</label><input type="radio" name="ndq11" id="ndq11v3" value="3"/><label for="ndq11v3" tabindex="0">Sometimes</label><input type="radio" name="ndq11" id="ndq11v4" value="4"/><label for="ndq11v4" tabindex="0">Often</label><input type="radio" name="ndq11" id="ndq11v5" value="5"/><label for="ndq11v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="12" data-dim="O" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q12.</span> How often do you find yourself mentally replaying or reviewing something — counting, checking, going over it again — in order to feel reassured?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq12" id="ndq12v1" value="1"/><label for="ndq12v1" tabindex="0">Never</label><input type="radio" name="ndq12" id="ndq12v2" value="2"/><label for="ndq12v2" tabindex="0">Rarely</label><input type="radio" name="ndq12" id="ndq12v3" value="3"/><label for="ndq12v3" tabindex="0">Sometimes</label><input type="radio" name="ndq12" id="ndq12v4" value="4"/><label for="ndq12v4" tabindex="0">Often</label><input type="radio" name="ndq12" id="ndq12v5" value="5"/><label for="ndq12v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="13" data-dim="UO" data-rev="1"><p class="nd-question-text"><span class="nd-question-num">Q13.</span> Once you have started a habitual behaviour or sequence, how often does stopping partway through feel straightforward?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq13" id="ndq13v1" value="1"/><label for="ndq13v1" tabindex="0">Never</label><input type="radio" name="ndq13" id="ndq13v2" value="2"/><label for="ndq13v2" tabindex="0">Rarely</label><input type="radio" name="ndq13" id="ndq13v3" value="3"/><label for="ndq13v3" tabindex="0">Sometimes</label><input type="radio" name="ndq13" id="ndq13v4" value="4"/><label for="ndq13v4" tabindex="0">Often</label><input type="radio" name="ndq13" id="ndq13v5" value="5"/><label for="ndq13v5" tabindex="0">Very often</label></div></div>
   </div>
 
-  <!-- ═══ SECTION 3 ═══ -->
+  <!-- SECTION 3: Activity & Energy Regulation (4 items) -->
   <div class="nd-section">
     <h2 class="nd-section-title">3. Activity &amp; Energy Regulation</h2>
     <p class="nd-section-subtitle">How your body manages movement and energy</p>
-
-    <div class="nd-question-card" data-q="16" data-dim="A">
-      <p class="nd-question-text"><span class="nd-question-num">Q16.</span> As a child (and/or now), were you noticeably more active or "on the go" than peers — fidgety, restless, hard to sit still?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q16 response">
-        <input type="radio" name="ndq16" id="ndq16v1" value="1" /><label for="ndq16v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq16" id="ndq16v2" value="2" /><label for="ndq16v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq16" id="ndq16v3" value="3" /><label for="ndq16v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq16" id="ndq16v4" value="4" /><label for="ndq16v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq16" id="ndq16v5" value="5" /><label for="ndq16v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="17" data-dim="AO">
-      <p class="nd-question-text"><span class="nd-question-num">Q17.</span> Do you often feel an inner sense of restlessness, even if you're not moving much outwardly?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q17 response">
-        <input type="radio" name="ndq17" id="ndq17v1" value="1" /><label for="ndq17v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq17" id="ndq17v2" value="2" /><label for="ndq17v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq17" id="ndq17v3" value="3" /><label for="ndq17v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq17" id="ndq17v4" value="4" /><label for="ndq17v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq17" id="ndq17v5" value="5" /><label for="ndq17v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="18" data-dim="AU">
-      <p class="nd-question-text"><span class="nd-question-num">Q18.</span> Do you frequently fidget (tapping, leg bouncing, shifting position) or feel compelled to move?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q18 response">
-        <input type="radio" name="ndq18" id="ndq18v1" value="1" /><label for="ndq18v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq18" id="ndq18v2" value="2" /><label for="ndq18v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq18" id="ndq18v3" value="3" /><label for="ndq18v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq18" id="ndq18v4" value="4" /><label for="ndq18v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq18" id="ndq18v5" value="5" /><label for="ndq18v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="19" data-dim="U">
-      <p class="nd-question-text"><span class="nd-question-num">Q19.</span> Do you engage in repetitive movements such as hand flapping, rocking, or similar motor patterns, especially when stressed or excited?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q19 response">
-        <input type="radio" name="ndq19" id="ndq19v1" value="1" /><label for="ndq19v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq19" id="ndq19v2" value="2" /><label for="ndq19v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq19" id="ndq19v3" value="3" /><label for="ndq19v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq19" id="ndq19v4" value="4" /><label for="ndq19v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq19" id="ndq19v5" value="5" /><label for="ndq19v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="20" data-dim="O">
-      <p class="nd-question-text"><span class="nd-question-num">Q20.</span> Do you have repetitive physical rituals (e.g., touching, arranging, washing) that you feel you must do a certain way?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q20 response">
-        <input type="radio" name="ndq20" id="ndq20v1" value="1" /><label for="ndq20v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq20" id="ndq20v2" value="2" /><label for="ndq20v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq20" id="ndq20v3" value="3" /><label for="ndq20v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq20" id="ndq20v4" value="4" /><label for="ndq20v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq20" id="ndq20v5" value="5" /><label for="ndq20v5" tabindex="0">Very often</label>
-      </div>
-    </div>
+    <div class="nd-question-card" data-q="14" data-dim="A" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q14.</span> How often do you notice an urge to be moving or doing something, even in situations where sitting still is expected?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq14" id="ndq14v1" value="1"/><label for="ndq14v1" tabindex="0">Never</label><input type="radio" name="ndq14" id="ndq14v2" value="2"/><label for="ndq14v2" tabindex="0">Rarely</label><input type="radio" name="ndq14" id="ndq14v3" value="3"/><label for="ndq14v3" tabindex="0">Sometimes</label><input type="radio" name="ndq14" id="ndq14v4" value="4"/><label for="ndq14v4" tabindex="0">Often</label><input type="radio" name="ndq14" id="ndq14v5" value="5"/><label for="ndq14v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="15" data-dim="AO" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q15.</span> Even when sitting quietly, how often is there an underlying feeling of being internally switched on or agitated?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq15" id="ndq15v1" value="1"/><label for="ndq15v1" tabindex="0">Never</label><input type="radio" name="ndq15" id="ndq15v2" value="2"/><label for="ndq15v2" tabindex="0">Rarely</label><input type="radio" name="ndq15" id="ndq15v3" value="3"/><label for="ndq15v3" tabindex="0">Sometimes</label><input type="radio" name="ndq15" id="ndq15v4" value="4"/><label for="ndq15v4" tabindex="0">Often</label><input type="radio" name="ndq15" id="ndq15v5" value="5"/><label for="ndq15v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="16" data-dim="AU" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q16.</span> How often do you find yourself tapping, shifting, bouncing your leg, or fidgeting during sedentary activities?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq16" id="ndq16v1" value="1"/><label for="ndq16v1" tabindex="0">Never</label><input type="radio" name="ndq16" id="ndq16v2" value="2"/><label for="ndq16v2" tabindex="0">Rarely</label><input type="radio" name="ndq16" id="ndq16v3" value="3"/><label for="ndq16v3" tabindex="0">Sometimes</label><input type="radio" name="ndq16" id="ndq16v4" value="4"/><label for="ndq16v4" tabindex="0">Often</label><input type="radio" name="ndq16" id="ndq16v5" value="5"/><label for="ndq16v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="17" data-dim="U" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q17.</span> How often do you engage in rhythmic or repetitive physical movements — such as rocking or particular hand movements — especially when excited or under pressure?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq17" id="ndq17v1" value="1"/><label for="ndq17v1" tabindex="0">Never</label><input type="radio" name="ndq17" id="ndq17v2" value="2"/><label for="ndq17v2" tabindex="0">Rarely</label><input type="radio" name="ndq17" id="ndq17v3" value="3"/><label for="ndq17v3" tabindex="0">Sometimes</label><input type="radio" name="ndq17" id="ndq17v4" value="4"/><label for="ndq17v4" tabindex="0">Often</label><input type="radio" name="ndq17" id="ndq17v5" value="5"/><label for="ndq17v5" tabindex="0">Very often</label></div></div>
   </div>
 
-  <!-- ═══ SECTION 4 ═══ -->
+  <!-- SECTION 4: Executive Function (6 items) -->
   <div class="nd-section">
     <h2 class="nd-section-title">4. Executive Function</h2>
     <p class="nd-section-subtitle">How you plan, organise and manage tasks</p>
-
-    <div class="nd-question-card" data-q="21" data-dim="A">
-      <p class="nd-question-text"><span class="nd-question-num">Q21.</span> Do you often struggle to get started on tasks, even when you know they are important?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q21 response">
-        <input type="radio" name="ndq21" id="ndq21v1" value="1" /><label for="ndq21v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq21" id="ndq21v2" value="2" /><label for="ndq21v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq21" id="ndq21v3" value="3" /><label for="ndq21v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq21" id="ndq21v4" value="4" /><label for="ndq21v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq21" id="ndq21v5" value="5" /><label for="ndq21v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="22" data-dim="AU">
-      <p class="nd-question-text"><span class="nd-question-num">Q22.</span> Do you find planning, organising tasks, and keeping track of things particularly difficult?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q22 response">
-        <input type="radio" name="ndq22" id="ndq22v1" value="1" /><label for="ndq22v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq22" id="ndq22v2" value="2" /><label for="ndq22v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq22" id="ndq22v3" value="3" /><label for="ndq22v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq22" id="ndq22v4" value="4" /><label for="ndq22v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq22" id="ndq22v5" value="5" /><label for="ndq22v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="23" data-dim="A">
-      <p class="nd-question-text"><span class="nd-question-num">Q23.</span> Do you frequently lose track of time, underestimate how long things take, or miss deadlines because of "time blindness"?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q23 response">
-        <input type="radio" name="ndq23" id="ndq23v1" value="1" /><label for="ndq23v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq23" id="ndq23v2" value="2" /><label for="ndq23v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq23" id="ndq23v3" value="3" /><label for="ndq23v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq23" id="ndq23v4" value="4" /><label for="ndq23v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq23" id="ndq23v5" value="5" /><label for="ndq23v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="24" data-dim="A">
-      <p class="nd-question-text"><span class="nd-question-num">Q24.</span> Do you have difficulty holding information in mind (e.g., instructions, what you were about to do) while completing tasks?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q24 response">
-        <input type="radio" name="ndq24" id="ndq24v1" value="1" /><label for="ndq24v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq24" id="ndq24v2" value="2" /><label for="ndq24v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq24" id="ndq24v3" value="3" /><label for="ndq24v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq24" id="ndq24v4" value="4" /><label for="ndq24v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq24" id="ndq24v5" value="5" /><label for="ndq24v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="25" data-dim="UO">
-      <p class="nd-question-text"><span class="nd-question-num">Q25.</span> Do you tend to get mentally "stuck" on certain ideas or ways of doing things and find it hard to be flexible?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q25 response">
-        <input type="radio" name="ndq25" id="ndq25v1" value="1" /><label for="ndq25v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq25" id="ndq25v2" value="2" /><label for="ndq25v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq25" id="ndq25v3" value="3" /><label for="ndq25v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq25" id="ndq25v4" value="4" /><label for="ndq25v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq25" id="ndq25v5" value="5" /><label for="ndq25v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="26" data-dim="UA">
-      <p class="nd-question-text"><span class="nd-question-num">Q26.</span> Do you find switching between tasks, topics, or routines particularly effortful or disorienting?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q26 response">
-        <input type="radio" name="ndq26" id="ndq26v1" value="1" /><label for="ndq26v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq26" id="ndq26v2" value="2" /><label for="ndq26v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq26" id="ndq26v3" value="3" /><label for="ndq26v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq26" id="ndq26v4" value="4" /><label for="ndq26v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq26" id="ndq26v5" value="5" /><label for="ndq26v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="27" data-dim="OU">
-      <p class="nd-question-text"><span class="nd-question-num">Q27.</span> Do you sometimes get paralysed by perfectionism — struggling to start or finish because it doesn't feel "good enough" yet?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q27 response">
-        <input type="radio" name="ndq27" id="ndq27v1" value="1" /><label for="ndq27v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq27" id="ndq27v2" value="2" /><label for="ndq27v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq27" id="ndq27v3" value="3" /><label for="ndq27v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq27" id="ndq27v4" value="4" /><label for="ndq27v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq27" id="ndq27v5" value="5" /><label for="ndq27v5" tabindex="0">Very often</label>
-      </div>
-    </div>
+    <div class="nd-question-card" data-q="18" data-dim="A" data-rev="1"><p class="nd-question-text"><span class="nd-question-num">Q18.</span> How often do you find it easy to begin a task promptly, even one you know is important but not enjoyable?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq18" id="ndq18v1" value="1"/><label for="ndq18v1" tabindex="0">Never</label><input type="radio" name="ndq18" id="ndq18v2" value="2"/><label for="ndq18v2" tabindex="0">Rarely</label><input type="radio" name="ndq18" id="ndq18v3" value="3"/><label for="ndq18v3" tabindex="0">Sometimes</label><input type="radio" name="ndq18" id="ndq18v4" value="4"/><label for="ndq18v4" tabindex="0">Often</label><input type="radio" name="ndq18" id="ndq18v5" value="5"/><label for="ndq18v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="19" data-dim="A" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q19.</span> How often do you look up and find that a lot more time has passed than you were expecting?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq19" id="ndq19v1" value="1"/><label for="ndq19v1" tabindex="0">Never</label><input type="radio" name="ndq19" id="ndq19v2" value="2"/><label for="ndq19v2" tabindex="0">Rarely</label><input type="radio" name="ndq19" id="ndq19v3" value="3"/><label for="ndq19v3" tabindex="0">Sometimes</label><input type="radio" name="ndq19" id="ndq19v4" value="4"/><label for="ndq19v4" tabindex="0">Often</label><input type="radio" name="ndq19" id="ndq19v5" value="5"/><label for="ndq19v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="20" data-dim="A" data-rev="1"><p class="nd-question-text"><span class="nd-question-num">Q20.</span> While completing a multi-step task, how often do you find it easy to hold the earlier steps in mind as you work through later ones?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq20" id="ndq20v1" value="1"/><label for="ndq20v1" tabindex="0">Never</label><input type="radio" name="ndq20" id="ndq20v2" value="2"/><label for="ndq20v2" tabindex="0">Rarely</label><input type="radio" name="ndq20" id="ndq20v3" value="3"/><label for="ndq20v3" tabindex="0">Sometimes</label><input type="radio" name="ndq20" id="ndq20v4" value="4"/><label for="ndq20v4" tabindex="0">Often</label><input type="radio" name="ndq20" id="ndq20v5" value="5"/><label for="ndq20v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="21" data-dim="UO" data-rev="1"><p class="nd-question-text"><span class="nd-question-num">Q21.</span> When a situation calls for a different approach than your usual one, how often does adapting feel comfortable?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq21" id="ndq21v1" value="1"/><label for="ndq21v1" tabindex="0">Never</label><input type="radio" name="ndq21" id="ndq21v2" value="2"/><label for="ndq21v2" tabindex="0">Rarely</label><input type="radio" name="ndq21" id="ndq21v3" value="3"/><label for="ndq21v3" tabindex="0">Sometimes</label><input type="radio" name="ndq21" id="ndq21v4" value="4"/><label for="ndq21v4" tabindex="0">Often</label><input type="radio" name="ndq21" id="ndq21v5" value="5"/><label for="ndq21v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="22" data-dim="UA" data-rev="1"><p class="nd-question-text"><span class="nd-question-num">Q22.</span> How often do you move between different tasks during a day without any noticeable friction or effort?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq22" id="ndq22v1" value="1"/><label for="ndq22v1" tabindex="0">Never</label><input type="radio" name="ndq22" id="ndq22v2" value="2"/><label for="ndq22v2" tabindex="0">Rarely</label><input type="radio" name="ndq22" id="ndq22v3" value="3"/><label for="ndq22v3" tabindex="0">Sometimes</label><input type="radio" name="ndq22" id="ndq22v4" value="4"/><label for="ndq22v4" tabindex="0">Often</label><input type="radio" name="ndq22" id="ndq22v5" value="5"/><label for="ndq22v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="23" data-dim="OU" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q23.</span> How often does wanting to get something exactly right prevent you from starting it, or from calling it finished?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq23" id="ndq23v1" value="1"/><label for="ndq23v1" tabindex="0">Never</label><input type="radio" name="ndq23" id="ndq23v2" value="2"/><label for="ndq23v2" tabindex="0">Rarely</label><input type="radio" name="ndq23" id="ndq23v3" value="3"/><label for="ndq23v3" tabindex="0">Sometimes</label><input type="radio" name="ndq23" id="ndq23v4" value="4"/><label for="ndq23v4" tabindex="0">Often</label><input type="radio" name="ndq23" id="ndq23v5" value="5"/><label for="ndq23v5" tabindex="0">Very often</label></div></div>
   </div>
 
-  <!-- ═══ SECTION 5 ═══ -->
+  <!-- SECTION 5: Social Interaction (6 items) -->
   <div class="nd-section">
     <h2 class="nd-section-title">5. Social Interaction</h2>
     <p class="nd-section-subtitle">How you navigate social situations and communication</p>
-
-    <div class="nd-question-card" data-q="28" data-dim="A">
-      <p class="nd-question-text"><span class="nd-question-num">Q28.</span> Do you often talk more than others expect, or find it hard to gauge when to stop talking?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q28 response">
-        <input type="radio" name="ndq28" id="ndq28v1" value="1" /><label for="ndq28v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq28" id="ndq28v2" value="2" /><label for="ndq28v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq28" id="ndq28v3" value="3" /><label for="ndq28v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq28" id="ndq28v4" value="4" /><label for="ndq28v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq28" id="ndq28v5" value="5" /><label for="ndq28v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="29" data-dim="U">
-      <p class="nd-question-text"><span class="nd-question-num">Q29.</span> Do you find it difficult to read social cues such as body language, tone of voice, or implied meanings?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q29 response">
-        <input type="radio" name="ndq29" id="ndq29v1" value="1" /><label for="ndq29v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq29" id="ndq29v2" value="2" /><label for="ndq29v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq29" id="ndq29v3" value="3" /><label for="ndq29v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq29" id="ndq29v4" value="4" /><label for="ndq29v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq29" id="ndq29v5" value="5" /><label for="ndq29v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="30" data-dim="U">
-      <p class="nd-question-text"><span class="nd-question-num">Q30.</span> Do you tend to interpret language very literally and sometimes miss jokes, sarcasm, or indirect hints?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q30 response">
-        <input type="radio" name="ndq30" id="ndq30v1" value="1" /><label for="ndq30v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq30" id="ndq30v2" value="2" /><label for="ndq30v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq30" id="ndq30v3" value="3" /><label for="ndq30v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq30" id="ndq30v4" value="4" /><label for="ndq30v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq30" id="ndq30v5" value="5" /><label for="ndq30v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="31" data-dim="O">
-      <p class="nd-question-text"><span class="nd-question-num">Q31.</span> Do you experience social anxiety mainly driven by specific obsessive fears (e.g., saying something wrong, offending, contaminating)?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q31 response">
-        <input type="radio" name="ndq31" id="ndq31v1" value="1" /><label for="ndq31v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq31" id="ndq31v2" value="2" /><label for="ndq31v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq31" id="ndq31v3" value="3" /><label for="ndq31v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq31" id="ndq31v4" value="4" /><label for="ndq31v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq31" id="ndq31v5" value="5" /><label for="ndq31v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="32" data-dim="UO">
-      <p class="nd-question-text"><span class="nd-question-num">Q32.</span> Do you withdraw from social situations because they feel overwhelming, confusing, or anxiety-provoking?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q32 response">
-        <input type="radio" name="ndq32" id="ndq32v1" value="1" /><label for="ndq32v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq32" id="ndq32v2" value="2" /><label for="ndq32v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq32" id="ndq32v3" value="3" /><label for="ndq32v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq32" id="ndq32v4" value="4" /><label for="ndq32v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq32" id="ndq32v5" value="5" /><label for="ndq32v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="33" data-dim="U">
-      <p class="nd-question-text"><span class="nd-question-num">Q33.</span> Do you often monologue at length about your special interests, and find it hard to notice when others lose interest?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q33 response">
-        <input type="radio" name="ndq33" id="ndq33v1" value="1" /><label for="ndq33v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq33" id="ndq33v2" value="2" /><label for="ndq33v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq33" id="ndq33v3" value="3" /><label for="ndq33v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq33" id="ndq33v4" value="4" /><label for="ndq33v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq33" id="ndq33v5" value="5" /><label for="ndq33v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="34" data-dim="A">
-      <p class="nd-question-text"><span class="nd-question-num">Q34.</span> Do you sometimes blurt out comments that feel impulsive or socially inappropriate, only realising afterwards?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q34 response">
-        <input type="radio" name="ndq34" id="ndq34v1" value="1" /><label for="ndq34v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq34" id="ndq34v2" value="2" /><label for="ndq34v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq34" id="ndq34v3" value="3" /><label for="ndq34v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq34" id="ndq34v4" value="4" /><label for="ndq34v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq34" id="ndq34v5" value="5" /><label for="ndq34v5" tabindex="0">Very often</label>
-      </div>
-    </div>
+    <div class="nd-question-card" data-q="24" data-dim="A" data-rev="1"><p class="nd-question-text"><span class="nd-question-num">Q24.</span> In conversation, how often do you find a natural moment to stop talking and give the other person extended space to respond?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq24" id="ndq24v1" value="1"/><label for="ndq24v1" tabindex="0">Never</label><input type="radio" name="ndq24" id="ndq24v2" value="2"/><label for="ndq24v2" tabindex="0">Rarely</label><input type="radio" name="ndq24" id="ndq24v3" value="3"/><label for="ndq24v3" tabindex="0">Sometimes</label><input type="radio" name="ndq24" id="ndq24v4" value="4"/><label for="ndq24v4" tabindex="0">Often</label><input type="radio" name="ndq24" id="ndq24v5" value="5"/><label for="ndq24v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="25" data-dim="U" data-rev="1"><p class="nd-question-text"><span class="nd-question-num">Q25.</span> How often do you pick up on unspoken signals — tone, posture, expression — without consciously having to think about it?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq25" id="ndq25v1" value="1"/><label for="ndq25v1" tabindex="0">Never</label><input type="radio" name="ndq25" id="ndq25v2" value="2"/><label for="ndq25v2" tabindex="0">Rarely</label><input type="radio" name="ndq25" id="ndq25v3" value="3"/><label for="ndq25v3" tabindex="0">Sometimes</label><input type="radio" name="ndq25" id="ndq25v4" value="4"/><label for="ndq25v4" tabindex="0">Often</label><input type="radio" name="ndq25" id="ndq25v5" value="5"/><label for="ndq25v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="26" data-dim="U" data-rev="1"><p class="nd-question-text"><span class="nd-question-num">Q26.</span> When someone is being indirect or ironic, how often does the intended meaning come to you immediately?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq26" id="ndq26v1" value="1"/><label for="ndq26v1" tabindex="0">Never</label><input type="radio" name="ndq26" id="ndq26v2" value="2"/><label for="ndq26v2" tabindex="0">Rarely</label><input type="radio" name="ndq26" id="ndq26v3" value="3"/><label for="ndq26v3" tabindex="0">Sometimes</label><input type="radio" name="ndq26" id="ndq26v4" value="4"/><label for="ndq26v4" tabindex="0">Often</label><input type="radio" name="ndq26" id="ndq26v5" value="5"/><label for="ndq26v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="27" data-dim="UO" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q27.</span> How often do social situations leave you feeling drained in a way that goes beyond ordinary tiredness?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq27" id="ndq27v1" value="1"/><label for="ndq27v1" tabindex="0">Never</label><input type="radio" name="ndq27" id="ndq27v2" value="2"/><label for="ndq27v2" tabindex="0">Rarely</label><input type="radio" name="ndq27" id="ndq27v3" value="3"/><label for="ndq27v3" tabindex="0">Sometimes</label><input type="radio" name="ndq27" id="ndq27v4" value="4"/><label for="ndq27v4" tabindex="0">Often</label><input type="radio" name="ndq27" id="ndq27v5" value="5"/><label for="ndq27v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="28" data-dim="U" data-rev="1"><p class="nd-question-text"><span class="nd-question-num">Q28.</span> When discussing something you find fascinating, how often do you notice the other person's interest beginning to drift and adjust accordingly?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq28" id="ndq28v1" value="1"/><label for="ndq28v1" tabindex="0">Never</label><input type="radio" name="ndq28" id="ndq28v2" value="2"/><label for="ndq28v2" tabindex="0">Rarely</label><input type="radio" name="ndq28" id="ndq28v3" value="3"/><label for="ndq28v3" tabindex="0">Sometimes</label><input type="radio" name="ndq28" id="ndq28v4" value="4"/><label for="ndq28v4" tabindex="0">Often</label><input type="radio" name="ndq28" id="ndq28v5" value="5"/><label for="ndq28v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="29" data-dim="A" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q29.</span> How often do you say something in conversation and only realise a moment later that it came across differently than you intended?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq29" id="ndq29v1" value="1"/><label for="ndq29v1" tabindex="0">Never</label><input type="radio" name="ndq29" id="ndq29v2" value="2"/><label for="ndq29v2" tabindex="0">Rarely</label><input type="radio" name="ndq29" id="ndq29v3" value="3"/><label for="ndq29v3" tabindex="0">Sometimes</label><input type="radio" name="ndq29" id="ndq29v4" value="4"/><label for="ndq29v4" tabindex="0">Often</label><input type="radio" name="ndq29" id="ndq29v5" value="5"/><label for="ndq29v5" tabindex="0">Very often</label></div></div>
   </div>
 
-  <!-- ═══ SECTION 6 ═══ -->
+  <!-- SECTION 6: Emotional Regulation (5 items) -->
   <div class="nd-section">
     <h2 class="nd-section-title">6. Emotional Regulation</h2>
     <p class="nd-section-subtitle">How you experience and manage your emotions</p>
-
-    <div class="nd-question-card" data-q="35" data-dim="A">
-      <p class="nd-question-text"><span class="nd-question-num">Q35.</span> Do your emotions sometimes escalate quickly, leading you to react more intensely than you intended?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q35 response">
-        <input type="radio" name="ndq35" id="ndq35v1" value="1" /><label for="ndq35v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq35" id="ndq35v2" value="2" /><label for="ndq35v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq35" id="ndq35v3" value="3" /><label for="ndq35v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq35" id="ndq35v4" value="4" /><label for="ndq35v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq35" id="ndq35v5" value="5" /><label for="ndq35v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="36" data-dim="A">
-      <p class="nd-question-text"><span class="nd-question-num">Q36.</span> Do you have a strong sensitivity to perceived rejection or criticism, reacting with significant hurt, anger, or shame?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q36 response">
-        <input type="radio" name="ndq36" id="ndq36v1" value="1" /><label for="ndq36v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq36" id="ndq36v2" value="2" /><label for="ndq36v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq36" id="ndq36v3" value="3" /><label for="ndq36v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq36" id="ndq36v4" value="4" /><label for="ndq36v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq36" id="ndq36v5" value="5" /><label for="ndq36v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="37" data-dim="U">
-      <p class="nd-question-text"><span class="nd-question-num">Q37.</span> Do you experience meltdowns or shutdowns when sensory input or changes become too overwhelming?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q37 response">
-        <input type="radio" name="ndq37" id="ndq37v1" value="1" /><label for="ndq37v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq37" id="ndq37v2" value="2" /><label for="ndq37v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq37" id="ndq37v3" value="3" /><label for="ndq37v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq37" id="ndq37v4" value="4" /><label for="ndq37v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq37" id="ndq37v5" value="5" /><label for="ndq37v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="38" data-dim="UO">
-      <p class="nd-question-text"><span class="nd-question-num">Q38.</span> Do you feel significant distress when your routines, plans, or usual patterns are disrupted?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q38 response">
-        <input type="radio" name="ndq38" id="ndq38v1" value="1" /><label for="ndq38v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq38" id="ndq38v2" value="2" /><label for="ndq38v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq38" id="ndq38v3" value="3" /><label for="ndq38v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq38" id="ndq38v4" value="4" /><label for="ndq38v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq38" id="ndq38v5" value="5" /><label for="ndq38v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="39" data-dim="O">
-      <p class="nd-question-text"><span class="nd-question-num">Q39.</span> Do you experience intense anxiety specifically linked to intrusive or unwanted thoughts?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q39 response">
-        <input type="radio" name="ndq39" id="ndq39v1" value="1" /><label for="ndq39v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq39" id="ndq39v2" value="2" /><label for="ndq39v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq39" id="ndq39v3" value="3" /><label for="ndq39v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq39" id="ndq39v4" value="4" /><label for="ndq39v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq39" id="ndq39v5" value="5" /><label for="ndq39v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="40" data-dim="A">
-      <p class="nd-question-text"><span class="nd-question-num">Q40.</span> Do your moods shift noticeably over the course of a day or week, often in response to external events or demands?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q40 response">
-        <input type="radio" name="ndq40" id="ndq40v1" value="1" /><label for="ndq40v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq40" id="ndq40v2" value="2" /><label for="ndq40v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq40" id="ndq40v3" value="3" /><label for="ndq40v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq40" id="ndq40v4" value="4" /><label for="ndq40v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq40" id="ndq40v5" value="5" /><label for="ndq40v5" tabindex="0">Very often</label>
-      </div>
-    </div>
+    <div class="nd-question-card" data-q="30" data-dim="A" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q30.</span> How often do your emotional responses escalate more quickly or intensely than the situation seems to call for?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq30" id="ndq30v1" value="1"/><label for="ndq30v1" tabindex="0">Never</label><input type="radio" name="ndq30" id="ndq30v2" value="2"/><label for="ndq30v2" tabindex="0">Rarely</label><input type="radio" name="ndq30" id="ndq30v3" value="3"/><label for="ndq30v3" tabindex="0">Sometimes</label><input type="radio" name="ndq30" id="ndq30v4" value="4"/><label for="ndq30v4" tabindex="0">Often</label><input type="radio" name="ndq30" id="ndq30v5" value="5"/><label for="ndq30v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="31" data-dim="A" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q31.</span> How often does a critical comment or perceived rejection leave a strong and lasting impression on you emotionally?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq31" id="ndq31v1" value="1"/><label for="ndq31v1" tabindex="0">Never</label><input type="radio" name="ndq31" id="ndq31v2" value="2"/><label for="ndq31v2" tabindex="0">Rarely</label><input type="radio" name="ndq31" id="ndq31v3" value="3"/><label for="ndq31v3" tabindex="0">Sometimes</label><input type="radio" name="ndq31" id="ndq31v4" value="4"/><label for="ndq31v4" tabindex="0">Often</label><input type="radio" name="ndq31" id="ndq31v5" value="5"/><label for="ndq31v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="32" data-dim="U" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q32.</span> How often does an accumulation of demands reach a point where you feel unable to continue and need to withdraw?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq32" id="ndq32v1" value="1"/><label for="ndq32v1" tabindex="0">Never</label><input type="radio" name="ndq32" id="ndq32v2" value="2"/><label for="ndq32v2" tabindex="0">Rarely</label><input type="radio" name="ndq32" id="ndq32v3" value="3"/><label for="ndq32v3" tabindex="0">Sometimes</label><input type="radio" name="ndq32" id="ndq32v4" value="4"/><label for="ndq32v4" tabindex="0">Often</label><input type="radio" name="ndq32" id="ndq32v5" value="5"/><label for="ndq32v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="33" data-dim="UO" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q33.</span> How often does an unexpected change to your plans or usual routine cause you noticeable distress?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq33" id="ndq33v1" value="1"/><label for="ndq33v1" tabindex="0">Never</label><input type="radio" name="ndq33" id="ndq33v2" value="2"/><label for="ndq33v2" tabindex="0">Rarely</label><input type="radio" name="ndq33" id="ndq33v3" value="3"/><label for="ndq33v3" tabindex="0">Sometimes</label><input type="radio" name="ndq33" id="ndq33v4" value="4"/><label for="ndq33v4" tabindex="0">Often</label><input type="radio" name="ndq33" id="ndq33v5" value="5"/><label for="ndq33v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="34" data-dim="A" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q34.</span> How often does your mood shift noticeably across the course of a single day in response to things happening around you?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq34" id="ndq34v1" value="1"/><label for="ndq34v1" tabindex="0">Never</label><input type="radio" name="ndq34" id="ndq34v2" value="2"/><label for="ndq34v2" tabindex="0">Rarely</label><input type="radio" name="ndq34" id="ndq34v3" value="3"/><label for="ndq34v3" tabindex="0">Sometimes</label><input type="radio" name="ndq34" id="ndq34v4" value="4"/><label for="ndq34v4" tabindex="0">Often</label><input type="radio" name="ndq34" id="ndq34v5" value="5"/><label for="ndq34v5" tabindex="0">Very often</label></div></div>
   </div>
 
-  <!-- ═══ SECTION 7 ═══ -->
+  <!-- SECTION 7: Repetitive & Restricted Patterns (5 items) -->
   <div class="nd-section">
     <h2 class="nd-section-title">7. Repetitive &amp; Restricted Patterns</h2>
     <p class="nd-section-subtitle">How repetition and routine feature in your life</p>
-
-    <div class="nd-question-card" data-q="41" data-dim="U">
-      <p class="nd-question-text"><span class="nd-question-num">Q41.</span> Do you have a small number of intense, restricted interests that you return to again and again?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q41 response">
-        <input type="radio" name="ndq41" id="ndq41v1" value="1" /><label for="ndq41v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq41" id="ndq41v2" value="2" /><label for="ndq41v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq41" id="ndq41v3" value="3" /><label for="ndq41v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq41" id="ndq41v4" value="4" /><label for="ndq41v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq41" id="ndq41v5" value="5" /><label for="ndq41v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="42" data-dim="UO">
-      <p class="nd-question-text"><span class="nd-question-num">Q42.</span> Do you feel a strong need for sameness, routine, or predictable patterns in your day-to-day life?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q42 response">
-        <input type="radio" name="ndq42" id="ndq42v1" value="1" /><label for="ndq42v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq42" id="ndq42v2" value="2" /><label for="ndq42v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq42" id="ndq42v3" value="3" /><label for="ndq42v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq42" id="ndq42v4" value="4" /><label for="ndq42v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq42" id="ndq42v5" value="5" /><label for="ndq42v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="43" data-dim="O">
-      <p class="nd-question-text"><span class="nd-question-num">Q43.</span> Do you engage in rituals mainly to prevent harm, contamination, or bad outcomes (e.g., elaborate washing, checking, arranging)?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q43 response">
-        <input type="radio" name="ndq43" id="ndq43v1" value="1" /><label for="ndq43v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq43" id="ndq43v2" value="2" /><label for="ndq43v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq43" id="ndq43v3" value="3" /><label for="ndq43v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq43" id="ndq43v4" value="4" /><label for="ndq43v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq43" id="ndq43v5" value="5" /><label for="ndq43v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="44" data-dim="O">
-      <p class="nd-question-text"><span class="nd-question-num">Q44.</span> Have you collected or hoarded items because of a fear that something bad might happen if you got rid of them?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q44 response">
-        <input type="radio" name="ndq44" id="ndq44v1" value="1" /><label for="ndq44v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq44" id="ndq44v2" value="2" /><label for="ndq44v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq44" id="ndq44v3" value="3" /><label for="ndq44v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq44" id="ndq44v4" value="4" /><label for="ndq44v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq44" id="ndq44v5" value="5" /><label for="ndq44v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="45" data-dim="O">
-      <p class="nd-question-text"><span class="nd-question-num">Q45.</span> Do you repeatedly ask for reassurance (e.g., "Are you sure?" "Did I do something wrong?") to ease anxiety or doubt?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q45 response">
-        <input type="radio" name="ndq45" id="ndq45v1" value="1" /><label for="ndq45v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq45" id="ndq45v2" value="2" /><label for="ndq45v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq45" id="ndq45v3" value="3" /><label for="ndq45v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq45" id="ndq45v4" value="4" /><label for="ndq45v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq45" id="ndq45v5" value="5" /><label for="ndq45v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="46" data-dim="UA">
-      <p class="nd-question-text"><span class="nd-question-num">Q46.</span> Do you frequently rewatch, reread, or replay favourite media for comfort, predictability, or regulation?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q46 response">
-        <input type="radio" name="ndq46" id="ndq46v1" value="1" /><label for="ndq46v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq46" id="ndq46v2" value="2" /><label for="ndq46v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq46" id="ndq46v3" value="3" /><label for="ndq46v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq46" id="ndq46v4" value="4" /><label for="ndq46v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq46" id="ndq46v5" value="5" /><label for="ndq46v5" tabindex="0">Very often</label>
-      </div>
-    </div>
+    <div class="nd-question-card" data-q="35" data-dim="U" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q35.</span> How often do you find yourself returning to the same small set of topics or activities for the majority of your focused attention?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq35" id="ndq35v1" value="1"/><label for="ndq35v1" tabindex="0">Never</label><input type="radio" name="ndq35" id="ndq35v2" value="2"/><label for="ndq35v2" tabindex="0">Rarely</label><input type="radio" name="ndq35" id="ndq35v3" value="3"/><label for="ndq35v3" tabindex="0">Sometimes</label><input type="radio" name="ndq35" id="ndq35v4" value="4"/><label for="ndq35v4" tabindex="0">Often</label><input type="radio" name="ndq35" id="ndq35v5" value="5"/><label for="ndq35v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="36" data-dim="UO" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q36.</span> How often is having a predictable structure or routine to your day genuinely important to your sense of wellbeing?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq36" id="ndq36v1" value="1"/><label for="ndq36v1" tabindex="0">Never</label><input type="radio" name="ndq36" id="ndq36v2" value="2"/><label for="ndq36v2" tabindex="0">Rarely</label><input type="radio" name="ndq36" id="ndq36v3" value="3"/><label for="ndq36v3" tabindex="0">Sometimes</label><input type="radio" name="ndq36" id="ndq36v4" value="4"/><label for="ndq36v4" tabindex="0">Often</label><input type="radio" name="ndq36" id="ndq36v5" value="5"/><label for="ndq36v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="37" data-dim="O" data-rev="1"><p class="nd-question-text"><span class="nd-question-num">Q37.</span> How often can you discard or give away possessions without any particular worry about what might happen as a result?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq37" id="ndq37v1" value="1"/><label for="ndq37v1" tabindex="0">Never</label><input type="radio" name="ndq37" id="ndq37v2" value="2"/><label for="ndq37v2" tabindex="0">Rarely</label><input type="radio" name="ndq37" id="ndq37v3" value="3"/><label for="ndq37v3" tabindex="0">Sometimes</label><input type="radio" name="ndq37" id="ndq37v4" value="4"/><label for="ndq37v4" tabindex="0">Often</label><input type="radio" name="ndq37" id="ndq37v5" value="5"/><label for="ndq37v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="38" data-dim="O" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q38.</span> How often do you seek reassurance from others — asking "are you sure?" or similar — in order to settle a feeling of doubt?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq38" id="ndq38v1" value="1"/><label for="ndq38v1" tabindex="0">Never</label><input type="radio" name="ndq38" id="ndq38v2" value="2"/><label for="ndq38v2" tabindex="0">Rarely</label><input type="radio" name="ndq38" id="ndq38v3" value="3"/><label for="ndq38v3" tabindex="0">Sometimes</label><input type="radio" name="ndq38" id="ndq38v4" value="4"/><label for="ndq38v4" tabindex="0">Often</label><input type="radio" name="ndq38" id="ndq38v5" value="5"/><label for="ndq38v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="39" data-dim="UA" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q39.</span> How often do you return to familiar media — rewatching, rereading, replaying — specifically because knowing what will happen feels comforting?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq39" id="ndq39v1" value="1"/><label for="ndq39v1" tabindex="0">Never</label><input type="radio" name="ndq39" id="ndq39v2" value="2"/><label for="ndq39v2" tabindex="0">Rarely</label><input type="radio" name="ndq39" id="ndq39v3" value="3"/><label for="ndq39v3" tabindex="0">Sometimes</label><input type="radio" name="ndq39" id="ndq39v4" value="4"/><label for="ndq39v4" tabindex="0">Often</label><input type="radio" name="ndq39" id="ndq39v5" value="5"/><label for="ndq39v5" tabindex="0">Very often</label></div></div>
   </div>
 
-  <!-- ═══ SECTION 8 ═══ -->
+  <!-- SECTION 8: Sensory Processing (4 items) -->
   <div class="nd-section">
     <h2 class="nd-section-title">8. Sensory Processing</h2>
     <p class="nd-section-subtitle">How you experience sensory input from the world around you</p>
-
-    <div class="nd-question-card" data-q="47" data-dim="U">
-      <p class="nd-question-text"><span class="nd-question-num">Q47.</span> Are you particularly sensitive to sounds, lights, textures, smells, or other sensory input compared to most people?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q47 response">
-        <input type="radio" name="ndq47" id="ndq47v1" value="1" /><label for="ndq47v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq47" id="ndq47v2" value="2" /><label for="ndq47v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq47" id="ndq47v3" value="3" /><label for="ndq47v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq47" id="ndq47v4" value="4" /><label for="ndq47v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq47" id="ndq47v5" value="5" /><label for="ndq47v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="48" data-dim="AU">
-      <p class="nd-question-text"><span class="nd-question-num">Q48.</span> Do you seek out strong sensory experiences (e.g., movement, pressure, certain textures) because they are calming or stimulating?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q48 response">
-        <input type="radio" name="ndq48" id="ndq48v1" value="1" /><label for="ndq48v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq48" id="ndq48v2" value="2" /><label for="ndq48v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq48" id="ndq48v3" value="3" /><label for="ndq48v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq48" id="ndq48v4" value="4" /><label for="ndq48v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq48" id="ndq48v5" value="5" /><label for="ndq48v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="49" data-dim="U">
-      <p class="nd-question-text"><span class="nd-question-num">Q49.</span> Do you experience sensory overload that can lead you to shut down, withdraw, or feel unable to function?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q49 response">
-        <input type="radio" name="ndq49" id="ndq49v1" value="1" /><label for="ndq49v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq49" id="ndq49v2" value="2" /><label for="ndq49v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq49" id="ndq49v3" value="3" /><label for="ndq49v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq49" id="ndq49v4" value="4" /><label for="ndq49v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq49" id="ndq49v5" value="5" /><label for="ndq49v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="50" data-dim="U">
-      <p class="nd-question-text"><span class="nd-question-num">Q50.</span> Do you avoid certain textures, fabrics, or foods because they feel unbearably uncomfortable or "wrong"?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q50 response">
-        <input type="radio" name="ndq50" id="ndq50v1" value="1" /><label for="ndq50v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq50" id="ndq50v2" value="2" /><label for="ndq50v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq50" id="ndq50v3" value="3" /><label for="ndq50v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq50" id="ndq50v4" value="4" /><label for="ndq50v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq50" id="ndq50v5" value="5" /><label for="ndq50v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="51" data-dim="UO">
-      <p class="nd-question-text"><span class="nd-question-num">Q51.</span> Do certain sensory sensations trigger a strong sense of threat or danger, feeding into anxiety or compulsive patterns?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q51 response">
-        <input type="radio" name="ndq51" id="ndq51v1" value="1" /><label for="ndq51v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq51" id="ndq51v2" value="2" /><label for="ndq51v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq51" id="ndq51v3" value="3" /><label for="ndq51v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq51" id="ndq51v4" value="4" /><label for="ndq51v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq51" id="ndq51v5" value="5" /><label for="ndq51v5" tabindex="0">Very often</label>
-      </div>
-    </div>
+    <div class="nd-question-card" data-q="40" data-dim="U" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q40.</span> How often do sensory experiences — sounds, light levels, textures, or smells — affect you more strongly than they appear to affect those around you?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq40" id="ndq40v1" value="1"/><label for="ndq40v1" tabindex="0">Never</label><input type="radio" name="ndq40" id="ndq40v2" value="2"/><label for="ndq40v2" tabindex="0">Rarely</label><input type="radio" name="ndq40" id="ndq40v3" value="3"/><label for="ndq40v3" tabindex="0">Sometimes</label><input type="radio" name="ndq40" id="ndq40v4" value="4"/><label for="ndq40v4" tabindex="0">Often</label><input type="radio" name="ndq40" id="ndq40v5" value="5"/><label for="ndq40v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="41" data-dim="AU" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q41.</span> How often do you actively seek out intense sensory input — pressure, movement, strong flavours — because you find it settling or satisfying?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq41" id="ndq41v1" value="1"/><label for="ndq41v1" tabindex="0">Never</label><input type="radio" name="ndq41" id="ndq41v2" value="2"/><label for="ndq41v2" tabindex="0">Rarely</label><input type="radio" name="ndq41" id="ndq41v3" value="3"/><label for="ndq41v3" tabindex="0">Sometimes</label><input type="radio" name="ndq41" id="ndq41v4" value="4"/><label for="ndq41v4" tabindex="0">Often</label><input type="radio" name="ndq41" id="ndq41v5" value="5"/><label for="ndq41v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="42" data-dim="U" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q42.</span> How often do specific textures, fabrics, or food consistencies produce a physical discomfort strong enough to influence your choices?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq42" id="ndq42v1" value="1"/><label for="ndq42v1" tabindex="0">Never</label><input type="radio" name="ndq42" id="ndq42v2" value="2"/><label for="ndq42v2" tabindex="0">Rarely</label><input type="radio" name="ndq42" id="ndq42v3" value="3"/><label for="ndq42v3" tabindex="0">Sometimes</label><input type="radio" name="ndq42" id="ndq42v4" value="4"/><label for="ndq42v4" tabindex="0">Often</label><input type="radio" name="ndq42" id="ndq42v5" value="5"/><label for="ndq42v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="43" data-dim="UO" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q43.</span> How often does a particular sensory experience reliably trigger a feeling of unease or heightened anxiety?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq43" id="ndq43v1" value="1"/><label for="ndq43v1" tabindex="0">Never</label><input type="radio" name="ndq43" id="ndq43v2" value="2"/><label for="ndq43v2" tabindex="0">Rarely</label><input type="radio" name="ndq43" id="ndq43v3" value="3"/><label for="ndq43v3" tabindex="0">Sometimes</label><input type="radio" name="ndq43" id="ndq43v4" value="4"/><label for="ndq43v4" tabindex="0">Often</label><input type="radio" name="ndq43" id="ndq43v5" value="5"/><label for="ndq43v5" tabindex="0">Very often</label></div></div>
   </div>
 
-  <!-- ═══ SECTION 9 ═══ -->
+  <!-- SECTION 9: Cognitive Style (5 items) -->
   <div class="nd-section">
     <h2 class="nd-section-title">9. Cognitive Style</h2>
     <p class="nd-section-subtitle">The characteristic patterns of how you think</p>
-
-    <div class="nd-question-card" data-q="52" data-dim="A">
-      <p class="nd-question-text"><span class="nd-question-num">Q52.</span> Do you naturally generate lots of ideas, possibilities, or connections, sometimes jumping between them quickly?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q52 response">
-        <input type="radio" name="ndq52" id="ndq52v1" value="1" /><label for="ndq52v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq52" id="ndq52v2" value="2" /><label for="ndq52v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq52" id="ndq52v3" value="3" /><label for="ndq52v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq52" id="ndq52v4" value="4" /><label for="ndq52v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq52" id="ndq52v5" value="5" /><label for="ndq52v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="53" data-dim="UO">
-      <p class="nd-question-text"><span class="nd-question-num">Q53.</span> Do you tend to focus on details (patterns, errors, inconsistencies) that others might overlook?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q53 response">
-        <input type="radio" name="ndq53" id="ndq53v1" value="1" /><label for="ndq53v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq53" id="ndq53v2" value="2" /><label for="ndq53v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq53" id="ndq53v3" value="3" /><label for="ndq53v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq53" id="ndq53v4" value="4" /><label for="ndq53v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq53" id="ndq53v5" value="5" /><label for="ndq53v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="54" data-dim="UO">
-      <p class="nd-question-text"><span class="nd-question-num">Q54.</span> Do you often think in very black-and-white or all-or-nothing terms (e.g., success/failure, good/bad)?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q54 response">
-        <input type="radio" name="ndq54" id="ndq54v1" value="1" /><label for="ndq54v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq54" id="ndq54v2" value="2" /><label for="ndq54v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq54" id="ndq54v3" value="3" /><label for="ndq54v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq54" id="ndq54v4" value="4" /><label for="ndq54v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq54" id="ndq54v5" value="5" /><label for="ndq54v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="55" data-dim="O">
-      <p class="nd-question-text"><span class="nd-question-num">Q55.</span> Do you find yourself imagining worst-case scenarios or catastrophising about what might happen?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q55 response">
-        <input type="radio" name="ndq55" id="ndq55v1" value="1" /><label for="ndq55v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq55" id="ndq55v2" value="2" /><label for="ndq55v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq55" id="ndq55v3" value="3" /><label for="ndq55v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq55" id="ndq55v4" value="4" /><label for="ndq55v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq55" id="ndq55v5" value="5" /><label for="ndq55v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="56" data-dim="OA">
-      <p class="nd-question-text"><span class="nd-question-num">Q56.</span> Do you spend a lot of time stuck in repetitive thinking or rumination about past events, worries, or perceived mistakes?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q56 response">
-        <input type="radio" name="ndq56" id="ndq56v1" value="1" /><label for="ndq56v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq56" id="ndq56v2" value="2" /><label for="ndq56v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq56" id="ndq56v3" value="3" /><label for="ndq56v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq56" id="ndq56v4" value="4" /><label for="ndq56v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq56" id="ndq56v5" value="5" /><label for="ndq56v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="57" data-dim="U">
-      <p class="nd-question-text"><span class="nd-question-num">Q57.</span> Do you notice patterns and connections in information, behaviour, or environments that others often miss?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q57 response">
-        <input type="radio" name="ndq57" id="ndq57v1" value="1" /><label for="ndq57v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq57" id="ndq57v2" value="2" /><label for="ndq57v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq57" id="ndq57v3" value="3" /><label for="ndq57v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq57" id="ndq57v4" value="4" /><label for="ndq57v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq57" id="ndq57v5" value="5" /><label for="ndq57v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="58" data-dim="O">
-      <p class="nd-question-text"><span class="nd-question-num">Q58.</span> Are you highly concerned with being morally "good," honest, or pure, to the point that it causes significant anxiety or compulsive behaviour?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q58 response">
-        <input type="radio" name="ndq58" id="ndq58v1" value="1" /><label for="ndq58v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq58" id="ndq58v2" value="2" /><label for="ndq58v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq58" id="ndq58v3" value="3" /><label for="ndq58v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq58" id="ndq58v4" value="4" /><label for="ndq58v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq58" id="ndq58v5" value="5" /><label for="ndq58v5" tabindex="0">Very often</label>
-      </div>
-    </div>
+    <div class="nd-question-card" data-q="44" data-dim="A" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q44.</span> How often does your thinking jump rapidly between different ideas or connections within a short space of time?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq44" id="ndq44v1" value="1"/><label for="ndq44v1" tabindex="0">Never</label><input type="radio" name="ndq44" id="ndq44v2" value="2"/><label for="ndq44v2" tabindex="0">Rarely</label><input type="radio" name="ndq44" id="ndq44v3" value="3"/><label for="ndq44v3" tabindex="0">Sometimes</label><input type="radio" name="ndq44" id="ndq44v4" value="4"/><label for="ndq44v4" tabindex="0">Often</label><input type="radio" name="ndq44" id="ndq44v5" value="5"/><label for="ndq44v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="45" data-dim="UO" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q45.</span> How often do you notice small inconsistencies or patterns in information that other people around you appear to have overlooked?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq45" id="ndq45v1" value="1"/><label for="ndq45v1" tabindex="0">Never</label><input type="radio" name="ndq45" id="ndq45v2" value="2"/><label for="ndq45v2" tabindex="0">Rarely</label><input type="radio" name="ndq45" id="ndq45v3" value="3"/><label for="ndq45v3" tabindex="0">Sometimes</label><input type="radio" name="ndq45" id="ndq45v4" value="4"/><label for="ndq45v4" tabindex="0">Often</label><input type="radio" name="ndq45" id="ndq45v5" value="5"/><label for="ndq45v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="46" data-dim="UO" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q46.</span> How often does your thinking settle into clear opposing categories — something either works or it doesn't — rather than feeling comfortable with ambiguity?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq46" id="ndq46v1" value="1"/><label for="ndq46v1" tabindex="0">Never</label><input type="radio" name="ndq46" id="ndq46v2" value="2"/><label for="ndq46v2" tabindex="0">Rarely</label><input type="radio" name="ndq46" id="ndq46v3" value="3"/><label for="ndq46v3" tabindex="0">Sometimes</label><input type="radio" name="ndq46" id="ndq46v4" value="4"/><label for="ndq46v4" tabindex="0">Often</label><input type="radio" name="ndq46" id="ndq46v5" value="5"/><label for="ndq46v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="47" data-dim="O" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q47.</span> How often, when considering a future situation, does your mind move towards imagining the worst likely outcome?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq47" id="ndq47v1" value="1"/><label for="ndq47v1" tabindex="0">Never</label><input type="radio" name="ndq47" id="ndq47v2" value="2"/><label for="ndq47v2" tabindex="0">Rarely</label><input type="radio" name="ndq47" id="ndq47v3" value="3"/><label for="ndq47v3" tabindex="0">Sometimes</label><input type="radio" name="ndq47" id="ndq47v4" value="4"/><label for="ndq47v4" tabindex="0">Often</label><input type="radio" name="ndq47" id="ndq47v5" value="5"/><label for="ndq47v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="48" data-dim="OA" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q48.</span> How often does your mind return to a past event or conversation, even when you would prefer to move on from it?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq48" id="ndq48v1" value="1"/><label for="ndq48v1" tabindex="0">Never</label><input type="radio" name="ndq48" id="ndq48v2" value="2"/><label for="ndq48v2" tabindex="0">Rarely</label><input type="radio" name="ndq48" id="ndq48v3" value="3"/><label for="ndq48v3" tabindex="0">Sometimes</label><input type="radio" name="ndq48" id="ndq48v4" value="4"/><label for="ndq48v4" tabindex="0">Often</label><input type="radio" name="ndq48" id="ndq48v5" value="5"/><label for="ndq48v5" tabindex="0">Very often</label></div></div>
   </div>
 
-  <!-- ═══ SECTION 10 ═══ -->
+  <!-- SECTION 10: Anxiety & Fear (6 items) -->
   <div class="nd-section">
     <h2 class="nd-section-title">10. Anxiety &amp; Fear</h2>
     <p class="nd-section-subtitle">The nature and triggers of your anxiety responses</p>
-
-    <div class="nd-question-card" data-q="59" data-dim="O">
-      <p class="nd-question-text"><span class="nd-question-num">Q59.</span> Do you have strong fears about contamination, germs, or dirt that lead to anxiety or avoidance?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q59 response">
-        <input type="radio" name="ndq59" id="ndq59v1" value="1" /><label for="ndq59v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq59" id="ndq59v2" value="2" /><label for="ndq59v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq59" id="ndq59v3" value="3" /><label for="ndq59v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq59" id="ndq59v4" value="4" /><label for="ndq59v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq59" id="ndq59v5" value="5" /><label for="ndq59v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="60" data-dim="O">
-      <p class="nd-question-text"><span class="nd-question-num">Q60.</span> Do you fear that you might cause harm to others or yourself, even if you don't want to and it feels out of character?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q60 response">
-        <input type="radio" name="ndq60" id="ndq60v1" value="1" /><label for="ndq60v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq60" id="ndq60v2" value="2" /><label for="ndq60v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq60" id="ndq60v3" value="3" /><label for="ndq60v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq60" id="ndq60v4" value="4" /><label for="ndq60v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq60" id="ndq60v5" value="5" /><label for="ndq60v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="61" data-dim="O">
-      <p class="nd-question-text"><span class="nd-question-num">Q61.</span> Do you repeatedly check things (locks, appliances, messages, work) because of fear something bad will happen if you don't?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q61 response">
-        <input type="radio" name="ndq61" id="ndq61v1" value="1" /><label for="ndq61v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq61" id="ndq61v2" value="2" /><label for="ndq61v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq61" id="ndq61v3" value="3" /><label for="ndq61v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq61" id="ndq61v4" value="4" /><label for="ndq61v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq61" id="ndq61v5" value="5" /><label for="ndq61v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="62" data-dim="O">
-      <p class="nd-question-text"><span class="nd-question-num">Q62.</span> Do you experience intrusive violent, sexual, or taboo thoughts that feel disturbing and inconsistent with your values?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q62 response">
-        <input type="radio" name="ndq62" id="ndq62v1" value="1" /><label for="ndq62v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq62" id="ndq62v2" value="2" /><label for="ndq62v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq62" id="ndq62v3" value="3" /><label for="ndq62v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq62" id="ndq62v4" value="4" /><label for="ndq62v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq62" id="ndq62v5" value="5" /><label for="ndq62v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="63" data-dim="A">
-      <p class="nd-question-text"><span class="nd-question-num">Q63.</span> Do you feel a general, ongoing anxiety that seems to arise from difficulties with organisation, planning, or follow-through?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q63 response">
-        <input type="radio" name="ndq63" id="ndq63v1" value="1" /><label for="ndq63v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq63" id="ndq63v2" value="2" /><label for="ndq63v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq63" id="ndq63v3" value="3" /><label for="ndq63v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq63" id="ndq63v4" value="4" /><label for="ndq63v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq63" id="ndq63v5" value="5" /><label for="ndq63v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="64" data-dim="UO">
-      <p class="nd-question-text"><span class="nd-question-num">Q64.</span> Does unpredictability (changes of plan, sudden events, unclear expectations) reliably trigger anxiety for you?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q64 response">
-        <input type="radio" name="ndq64" id="ndq64v1" value="1" /><label for="ndq64v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq64" id="ndq64v2" value="2" /><label for="ndq64v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq64" id="ndq64v3" value="3" /><label for="ndq64v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq64" id="ndq64v4" value="4" /><label for="ndq64v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq64" id="ndq64v5" value="5" /><label for="ndq64v5" tabindex="0">Very often</label>
-      </div>
-    </div>
+    <div class="nd-question-card" data-q="49" data-dim="O" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q49.</span> How often do concerns about dirt, germs, or contamination influence your behaviour or cause you noticeable unease?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq49" id="ndq49v1" value="1"/><label for="ndq49v1" tabindex="0">Never</label><input type="radio" name="ndq49" id="ndq49v2" value="2"/><label for="ndq49v2" tabindex="0">Rarely</label><input type="radio" name="ndq49" id="ndq49v3" value="3"/><label for="ndq49v3" tabindex="0">Sometimes</label><input type="radio" name="ndq49" id="ndq49v4" value="4"/><label for="ndq49v4" tabindex="0">Often</label><input type="radio" name="ndq49" id="ndq49v5" value="5"/><label for="ndq49v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="50" data-dim="O" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q50.</span> How often do thoughts about accidentally causing harm to someone arise in a way that feels distressing?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq50" id="ndq50v1" value="1"/><label for="ndq50v1" tabindex="0">Never</label><input type="radio" name="ndq50" id="ndq50v2" value="2"/><label for="ndq50v2" tabindex="0">Rarely</label><input type="radio" name="ndq50" id="ndq50v3" value="3"/><label for="ndq50v3" tabindex="0">Sometimes</label><input type="radio" name="ndq50" id="ndq50v4" value="4"/><label for="ndq50v4" tabindex="0">Often</label><input type="radio" name="ndq50" id="ndq50v5" value="5"/><label for="ndq50v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="51" data-dim="O" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q51.</span> How often do you check something — a lock, a message, a piece of work — more than once because of a lingering feeling that something might be wrong?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq51" id="ndq51v1" value="1"/><label for="ndq51v1" tabindex="0">Never</label><input type="radio" name="ndq51" id="ndq51v2" value="2"/><label for="ndq51v2" tabindex="0">Rarely</label><input type="radio" name="ndq51" id="ndq51v3" value="3"/><label for="ndq51v3" tabindex="0">Sometimes</label><input type="radio" name="ndq51" id="ndq51v4" value="4"/><label for="ndq51v4" tabindex="0">Often</label><input type="radio" name="ndq51" id="ndq51v5" value="5"/><label for="ndq51v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="52" data-dim="O" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q52.</span> How often do thoughts that feel disturbing or out of character enter your mind without invitation?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq52" id="ndq52v1" value="1"/><label for="ndq52v1" tabindex="0">Never</label><input type="radio" name="ndq52" id="ndq52v2" value="2"/><label for="ndq52v2" tabindex="0">Rarely</label><input type="radio" name="ndq52" id="ndq52v3" value="3"/><label for="ndq52v3" tabindex="0">Sometimes</label><input type="radio" name="ndq52" id="ndq52v4" value="4"/><label for="ndq52v4" tabindex="0">Often</label><input type="radio" name="ndq52" id="ndq52v5" value="5"/><label for="ndq52v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="53" data-dim="A" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q53.</span> How often do difficulties with staying organised or following through produce a background sense of anxiety in your day-to-day life?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq53" id="ndq53v1" value="1"/><label for="ndq53v1" tabindex="0">Never</label><input type="radio" name="ndq53" id="ndq53v2" value="2"/><label for="ndq53v2" tabindex="0">Rarely</label><input type="radio" name="ndq53" id="ndq53v3" value="3"/><label for="ndq53v3" tabindex="0">Sometimes</label><input type="radio" name="ndq53" id="ndq53v4" value="4"/><label for="ndq53v4" tabindex="0">Often</label><input type="radio" name="ndq53" id="ndq53v5" value="5"/><label for="ndq53v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="54" data-dim="O" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q54.</span> How often does concern about your own moral conduct cause you noticeable distress or prompt you to examine your own behaviour?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq54" id="ndq54v1" value="1"/><label for="ndq54v1" tabindex="0">Never</label><input type="radio" name="ndq54" id="ndq54v2" value="2"/><label for="ndq54v2" tabindex="0">Rarely</label><input type="radio" name="ndq54" id="ndq54v3" value="3"/><label for="ndq54v3" tabindex="0">Sometimes</label><input type="radio" name="ndq54" id="ndq54v4" value="4"/><label for="ndq54v4" tabindex="0">Often</label><input type="radio" name="ndq54" id="ndq54v5" value="5"/><label for="ndq54v5" tabindex="0">Very often</label></div></div>
   </div>
 
-  <!-- ═══ SECTION 11 — Developmental, uses bespoke scale ═══ -->
+  <!-- SECTION 11: Developmental Course (4 items) -->
   <div class="nd-section">
     <h2 class="nd-section-title">11. Developmental Course</h2>
     <p class="nd-section-subtitle">How these patterns have shown up across your lifetime</p>
-
-    <!-- Q65–Q66, Q69: Yes/No style — scale relabelled for face validity -->
-    <div class="nd-question-card" data-q="65" data-dim="A">
-      <p class="nd-question-text"><span class="nd-question-num">Q65.</span> Were attention, hyperactivity, or impulsivity-related difficulties noticeable before age 12?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q65 response">
-        <input type="radio" name="ndq65" id="ndq65v1" value="1" /><label for="ndq65v1" tabindex="0">Not at all</label>
-        <input type="radio" name="ndq65" id="ndq65v2" value="2" /><label for="ndq65v2" tabindex="0">A little</label>
-        <input type="radio" name="ndq65" id="ndq65v3" value="3" /><label for="ndq65v3" tabindex="0">Somewhat</label>
-        <input type="radio" name="ndq65" id="ndq65v4" value="4" /><label for="ndq65v4" tabindex="0">Clearly yes</label>
-        <input type="radio" name="ndq65" id="ndq65v5" value="5" /><label for="ndq65v5" tabindex="0">Definitely yes</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="66" data-dim="U">
-      <p class="nd-question-text"><span class="nd-question-num">Q66.</span> Were there early differences in communication (e.g., language development, nonverbal communication, social reciprocity) compared with peers?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q66 response">
-        <input type="radio" name="ndq66" id="ndq66v1" value="1" /><label for="ndq66v1" tabindex="0">Not at all</label>
-        <input type="radio" name="ndq66" id="ndq66v2" value="2" /><label for="ndq66v2" tabindex="0">A little</label>
-        <input type="radio" name="ndq66" id="ndq66v3" value="3" /><label for="ndq66v3" tabindex="0">Somewhat</label>
-        <input type="radio" name="ndq66" id="ndq66v4" value="4" /><label for="ndq66v4" tabindex="0">Clearly yes</label>
-        <input type="radio" name="ndq66" id="ndq66v5" value="5" /><label for="ndq66v5" tabindex="0">Definitely yes</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="67" data-dim="AO">
-      <p class="nd-question-text"><span class="nd-question-num">Q67.</span> Do your symptoms or traits noticeably worsen when you are under stress or pressure?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q67 response">
-        <input type="radio" name="ndq67" id="ndq67v1" value="1" /><label for="ndq67v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq67" id="ndq67v2" value="2" /><label for="ndq67v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq67" id="ndq67v3" value="3" /><label for="ndq67v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq67" id="ndq67v4" value="4" /><label for="ndq67v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq67" id="ndq67v5" value="5" /><label for="ndq67v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="68" data-dim="O">
-      <p class="nd-question-text"><span class="nd-question-num">Q68.</span> Do repetitive behaviours or compulsions give you short-term relief from anxiety, even though the relief doesn't last?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q68 response">
-        <input type="radio" name="ndq68" id="ndq68v1" value="1" /><label for="ndq68v1" tabindex="0">Never</label>
-        <input type="radio" name="ndq68" id="ndq68v2" value="2" /><label for="ndq68v2" tabindex="0">Rarely</label>
-        <input type="radio" name="ndq68" id="ndq68v3" value="3" /><label for="ndq68v3" tabindex="0">Sometimes</label>
-        <input type="radio" name="ndq68" id="ndq68v4" value="4" /><label for="ndq68v4" tabindex="0">Often</label>
-        <input type="radio" name="ndq68" id="ndq68v5" value="5" /><label for="ndq68v5" tabindex="0">Very often</label>
-      </div>
-    </div>
-
-    <div class="nd-question-card" data-q="69" data-dim="U">
-      <p class="nd-question-text"><span class="nd-question-num">Q69.</span> Looking back across your life, do your communication style, sensory profile, and need for sameness feel relatively stable over time?</p>
-      <div class="nd-likert" role="radiogroup" aria-label="Q69 response">
-        <input type="radio" name="ndq69" id="ndq69v1" value="1" /><label for="ndq69v1" tabindex="0">Not at all</label>
-        <input type="radio" name="ndq69" id="ndq69v2" value="2" /><label for="ndq69v2" tabindex="0">A little</label>
-        <input type="radio" name="ndq69" id="ndq69v3" value="3" /><label for="ndq69v3" tabindex="0">Somewhat</label>
-        <input type="radio" name="ndq69" id="ndq69v4" value="4" /><label for="ndq69v4" tabindex="0">Clearly yes</label>
-        <input type="radio" name="ndq69" id="ndq69v5" value="5" /><label for="ndq69v5" tabindex="0">Definitely yes</label>
-      </div>
-    </div>
+    <div class="nd-question-card" data-q="55" data-dim="A" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q55.</span> Looking back at childhood, how often do you recall attention, energy level, or self-control being a noticeable issue before the age of twelve?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq55" id="ndq55v1" value="1"/><label for="ndq55v1" tabindex="0">Never</label><input type="radio" name="ndq55" id="ndq55v2" value="2"/><label for="ndq55v2" tabindex="0">Rarely</label><input type="radio" name="ndq55" id="ndq55v3" value="3"/><label for="ndq55v3" tabindex="0">Sometimes</label><input type="radio" name="ndq55" id="ndq55v4" value="4"/><label for="ndq55v4" tabindex="0">Often</label><input type="radio" name="ndq55" id="ndq55v5" value="5"/><label for="ndq55v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="56" data-dim="U" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q56.</span> Reflecting on early childhood, how often do you recall your communication or social connection with others feeling different from that of your peers?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq56" id="ndq56v1" value="1"/><label for="ndq56v1" tabindex="0">Never</label><input type="radio" name="ndq56" id="ndq56v2" value="2"/><label for="ndq56v2" tabindex="0">Rarely</label><input type="radio" name="ndq56" id="ndq56v3" value="3"/><label for="ndq56v3" tabindex="0">Sometimes</label><input type="radio" name="ndq56" id="ndq56v4" value="4"/><label for="ndq56v4" tabindex="0">Often</label><input type="radio" name="ndq56" id="ndq56v5" value="5"/><label for="ndq56v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="57" data-dim="AO" data-rev="0"><p class="nd-question-text"><span class="nd-question-num">Q57.</span> How often do the difficulties you experience become noticeably more prominent during periods of high stress or demand?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq57" id="ndq57v1" value="1"/><label for="ndq57v1" tabindex="0">Never</label><input type="radio" name="ndq57" id="ndq57v2" value="2"/><label for="ndq57v2" tabindex="0">Rarely</label><input type="radio" name="ndq57" id="ndq57v3" value="3"/><label for="ndq57v3" tabindex="0">Sometimes</label><input type="radio" name="ndq57" id="ndq57v4" value="4"/><label for="ndq57v4" tabindex="0">Often</label><input type="radio" name="ndq57" id="ndq57v5" value="5"/><label for="ndq57v5" tabindex="0">Very often</label></div></div>
+    <div class="nd-question-card" data-q="58" data-dim="U" data-rev="1"><p class="nd-question-text"><span class="nd-question-num">Q58.</span> Looking across your life as a whole, how often do you notice significant variation in your social style or sensory sensitivities — as opposed to these feeling like stable, consistent features of who you are?</p><div class="nd-likert" role="radiogroup"><input type="radio" name="ndq58" id="ndq58v1" value="1"/><label for="ndq58v1" tabindex="0">Never</label><input type="radio" name="ndq58" id="ndq58v2" value="2"/><label for="ndq58v2" tabindex="0">Rarely</label><input type="radio" name="ndq58" id="ndq58v3" value="3"/><label for="ndq58v3" tabindex="0">Sometimes</label><input type="radio" name="ndq58" id="ndq58v4" value="4"/><label for="ndq58v4" tabindex="0">Often</label><input type="radio" name="ndq58" id="ndq58v5" value="5"/><label for="ndq58v5" tabindex="0">Very often</label></div></div>
   </div>
 
-  <div class="nd-error-msg" id="ndErrorMsg" role="alert">Please answer all 69 questions before viewing your results.</div>
-
+  <div class="nd-error-msg" id="ndErrorMsg" role="alert">!! ANSWER ALL 58 QUESTIONS BEFORE PROCEEDING !!</div>
   <div class="nd-submit-wrap">
-    <button class="nd-btn-primary" id="ndSubmitBtn" style="color:#FFE033!important;background:#22223A;border:2px solid #6ECF9A;font-weight:700;">View My Results</button>
+    <button class="nd-btn-primary" id="ndSubmitBtn">▶ VIEW MY RESULTS ◀</button>
   </div>
 
 </div><!-- /#nd-root -->
 
-<!-- ═══ RESULTS OVERLAY ═══ -->
+<!-- RESULTS OVERLAY -->
 <div id="nd-results-overlay" role="dialog" aria-modal="true" aria-labelledby="ndResultsTitle">
   <div class="nd-results-panel">
-    <button class="nd-results-close" id="ndCloseBtn" aria-label="Close results">&times;</button>
-    <div class="nd-results-title" id="ndResultsTitle">Your Neurodiversity Profile</div>
-    <div class="nd-results-overall-label">Overall Trait Score</div>
+    <button class="nd-results-close" id="ndCloseBtn" aria-label="Close results">✕ CLOSE</button>
+    <div class="nd-results-title" id="ndResultsTitle">YOUR BRAIN<br>PROFILE</div>
+    <div class="nd-results-overall-label">▸ OVERALL TRAIT SCORE ◂</div>
     <div class="nd-results-overall-score" id="ndOverallScore">0%</div>
-    <div class="nd-results-overall-note">Average across all three dimensions (weighted equally)</div>
+    <div class="nd-results-overall-note">Average across all three dimensions</div>
     <div id="ndDimensions"></div>
     <div id="ndCombos" class="nd-combo-section"></div>
     <div class="nd-results-disclaimer">
-      <strong style="color:#E0DCD8;">Remember:</strong> This is a self-reflection tool, not a clinical diagnosis. If your scores feel significant, consider speaking with a qualified professional.
+      <strong>Remember:</strong> This is a self-reflection tool, not a clinical diagnosis. If your scores feel significant, consider speaking with a qualified professional.
     </div>
     <div class="nd-results-buttons">
-      <button class="nd-btn-primary" id="ndCopyCSVBtn">Copy Results for Spreadsheet</button><br />
-      <button class="nd-btn-secondary" id="ndRetakeBtn">Retake Assessment</button>
-      <button class="nd-btn-secondary" id="ndCloseBtn2">Close</button>
+      <button class="nd-btn-primary" id="ndCopyCSVBtn">▶ COPY RESULTS FOR SPREADSHEET</button><br /><br />
+      <button class="nd-btn-secondary" id="ndRetakeBtn">↺ RETAKE</button>
+      <button class="nd-btn-secondary" id="ndCloseBtn2">✕ CLOSE</button>
     </div>
   </div>
 </div>
 
 <script>
-(function() {
+(function () {
   'use strict';
-
+  var TOTAL_QS = 58;
   var answers = {};
-  var totalQs = 69;
 
-  /* ── Progress ── */
+  /*
+   * SCORING
+   * Reversed items (data-rev="1"): scored = 6 - raw  (so Never=5, Very often=1)
+   * Forward items (data-rev="0"):  scored = raw       (so Never=1, Very often=5)
+   * Each dim letter in data-dim contributes scored value once; max per slot = 5.
+   * Dim%  = sum_scored / (slots × 5) × 100
+   * Overall = mean(Spark%, Depth%, Sentinel%)
+   */
+
   function updateProgress() {
     var count = Object.keys(answers).length;
-    var pct = Math.round((count / totalQs) * 100);
+    var pct = Math.round((count / TOTAL_QS) * 100);
     document.getElementById('ndProgressFill').style.width = pct + '%';
-    document.getElementById('ndProgressText').textContent = count + ' of ' + totalQs + ' answered';
-    var wrap = document.querySelector('.nd-progress-bar-wrap');
-    if (wrap) wrap.setAttribute('aria-valuenow', pct);
+    document.getElementById('ndProgressText').textContent = count + ' OF ' + TOTAL_QS + ' ANSWERED';
+    var w = document.querySelector('.nd-progress-bar-wrap');
+    if (w) w.setAttribute('aria-valuenow', pct);
   }
 
-  /* ── Radio change listener ── */
   var root = document.getElementById('nd-root');
-  root.addEventListener('change', function(e) {
-    if (e.target && e.target.type === 'radio') {
-      var name = e.target.name;
-      var num = parseInt(name.replace('ndq', ''), 10);
-      answers[num] = parseInt(e.target.value, 10);
 
-      // Remove nd-selected from all labels in this question group
-      var groupLabels = document.querySelectorAll('label[for^="' + name + '"]');
-      for (var l = 0; l < groupLabels.length; l++) {
-        groupLabels[l].className = groupLabels[l].className.replace(' nd-selected', '').replace('nd-selected', '').trim();
-      }
-      // Add nd-selected to the chosen label
-      var chosenLabel = document.querySelector('label[for="' + e.target.id + '"]');
-      if (chosenLabel) chosenLabel.className += ' nd-selected';
-
-      // Mark card as answered
-      var card = document.querySelector('.nd-question-card[data-q="' + num + '"]');
-      if (card) card.className = 'nd-question-card nd-answered';
-      updateProgress();
-    }
+  root.addEventListener('change', function (e) {
+    if (!e.target || e.target.type !== 'radio') return;
+    var name = e.target.name;
+    var num = parseInt(name.replace('ndq', ''), 10);
+    answers[num] = parseInt(e.target.value, 10);
+    var gl = document.querySelectorAll('label[for^="' + name + '"]');
+    for (var i = 0; i < gl.length; i++) gl[i].className = gl[i].className.replace(/\s*nd-selected/g, '').trim();
+    var cl = document.querySelector('label[for="' + e.target.id + '"]');
+    if (cl) cl.className += ' nd-selected';
+    var card = document.querySelector('.nd-question-card[data-q="' + num + '"]');
+    if (card) card.className = 'nd-question-card nd-answered';
+    updateProgress();
   });
 
-  /* ── Keyboard: allow Space/Enter on focused labels ── */
-  root.addEventListener('keydown', function(e) {
+  root.addEventListener('keydown', function (e) {
     if ((e.key === ' ' || e.key === 'Enter') && e.target.tagName === 'LABEL') {
       e.preventDefault();
-      var forId = e.target.getAttribute('for');
-      var radio = document.getElementById(forId);
-      if (radio) {
-        radio.checked = true;
-        radio.dispatchEvent(new Event('change', { bubbles: true }));
-      }
+      var r = document.getElementById(e.target.getAttribute('for'));
+      if (r) { r.checked = true; r.dispatchEvent(new Event('change', { bubbles: true })); }
     }
   });
 
-  /* ── Dimension map from DOM ── */
-  function getDimMap() {
-    var cards = document.querySelectorAll('.nd-question-card');
-    var map = [];
-    for (var i = 0; i < cards.length; i++) {
-      map.push(cards[i].getAttribute('data-dim') || '');
-    }
-    return map;
-  }
-
-  /* ── Scoring
-       Each dimension uses its own max (sum of 5 × questions tagged with that dim).
-       Overall = average of the three dimension percentages — same scale, no double-count skew.
-  ── */
   function calcScores() {
-    var dimMap = getDimMap();
-    var sT = 0, sM = 0, dT = 0, dM = 0, nT = 0, nM = 0;
-
-    for (var i = 0; i < dimMap.length; i++) {
-      var qn = i + 1;
-      var val = answers[qn] || 0;
-      var dim = dimMap[i];
-      if (dim.indexOf('A') !== -1) { sT += val; sM += 5; }
-      if (dim.indexOf('U') !== -1) { dT += val; dM += 5; }
-      if (dim.indexOf('O') !== -1) { nT += val; nM += 5; }
+    var cards = document.querySelectorAll('.nd-question-card[data-q]');
+    var sT=0,sM=0, dT=0,dM=0, nT=0,nM=0;
+    for (var i = 0; i < cards.length; i++) {
+      var c = cards[i];
+      var qn = parseInt(c.getAttribute('data-q'), 10);
+      var dim = c.getAttribute('data-dim') || '';
+      var rev = c.getAttribute('data-rev') === '1';
+      var raw = answers[qn] || 0;
+      if (!raw) continue;
+      var sc = rev ? (6 - raw) : raw;
+      if (dim.indexOf('A') !== -1) { sT += sc; sM += 5; }
+      if (dim.indexOf('U') !== -1) { dT += sc; dM += 5; }
+      if (dim.indexOf('O') !== -1) { nT += sc; nM += 5; }
     }
-
-    var sPct = sM > 0 ? Math.round((sT / sM) * 100) : 0;
-    var dPct = dM > 0 ? Math.round((dT / dM) * 100) : 0;
-    var nPct = nM > 0 ? Math.round((nT / nM) * 100) : 0;
-    // Overall = mean of dimension percentages (equal weighting, avoids cross-dim inflation)
-    var oPct = Math.round((sPct + dPct + nPct) / 3);
-
+    var sp = sM ? Math.round((sT/sM)*100) : 0;
+    var dp = dM ? Math.round((dT/dM)*100) : 0;
+    var np = nM ? Math.round((nT/nM)*100) : 0;
     return {
-      spark:    { total: sT, max: sM, pct: sPct },
-      depth:    { total: dT, max: dM, pct: dPct },
-      sentinel: { total: nT, max: nM, pct: nPct },
-      overall:  { pct: oPct }
+      spark:    { pct: sp },
+      depth:    { pct: dp },
+      sentinel: { pct: np },
+      overall:  { pct: Math.round((sp+dp+np)/3) }
     };
   }
 
-  function getLevel(pct) {
-    if (pct < 25) return 'Minimal';
-    if (pct < 45) return 'Mild';
-    if (pct < 65) return 'Moderate';
-    if (pct < 80) return 'Strong';
-    return 'Very Strong';
+  function getLevel(p) {
+    if (p < 25) return 'MINIMAL';
+    if (p < 45) return 'MILD';
+    if (p < 65) return 'MODERATE';
+    if (p < 80) return 'STRONG';
+    return 'VERY STRONG';
   }
 
-  function getDimDesc(name, pct) {
-    if (name === 'spark') {
-      if (pct < 25) return 'Your attention and impulse patterns are broadly typical. You probably find it relatively easy to stay on task and regulate your energy levels without needing to think much about it.';
-      if (pct < 45) return 'You show some Spark traits. You may occasionally struggle with focus, impulsivity, or restlessness, but these don\'t tend to dominate your daily experience.';
-      if (pct < 65) return 'You have a moderate Spark profile. Attention regulation, time management, and impulse control are likely ongoing themes. You probably have developed workarounds but find that they take conscious effort.';
-      if (pct < 80) return 'Your Spark profile is strong. The rapid-fire ideation, time blindness, emotional intensity, and restlessness are probably very familiar. You likely need external structure and deliberate strategies to manage daily demands, but this wiring also gives you creative energy most people can\'t access.';
-      return 'Your Spark profile is very strong. Your mind moves fast, generates connections constantly, and finds routine genuinely painful. You have likely struggled with conventional structures throughout your life, but you also bring extraordinary creative and divergent thinking capacity.';
-    }
-    if (name === 'depth') {
-      if (pct < 25) return 'Your social communication, sensory processing, and preference for routine are broadly typical.';
-      if (pct < 45) return 'You show some Depth traits. You may have a few intense interests, some sensory sensitivities, or occasional difficulty reading social cues.';
-      if (pct < 65) return 'You have a moderate Depth profile. Pattern recognition, deep focus on specific interests, sensory sensitivities, and a preference for predictability are likely noticeable themes.';
-      if (pct < 80) return 'Your Depth profile is strong. You probably experience the world with unusual intensity and detail. Deep interests, strong sensory preferences, and a need for predictable structure are likely central to how you function.';
-      return 'Your Depth profile is very strong. Your perceptual and cognitive processing is likely quite different from the typical population. You bring extraordinary analytical and observational abilities, but may find everyday social and sensory environments genuinely draining.';
-    }
-    if (name === 'sentinel') {
-      if (pct < 25) return 'Your anxiety and compulsive patterns are broadly typical. Most people experience some worry and checking behaviour, and yours falls within the expected range.';
-      if (pct < 45) return 'You show some Sentinel traits. Occasional intrusive thoughts, checking behaviours, or anxiety-driven rituals may be present but are probably manageable.';
-      if (pct < 65) return 'You have a moderate Sentinel profile. You probably experience recurring anxiety patterns, some compulsive behaviours, and intrusive thoughts that take effort to manage.';
-      if (pct < 80) return 'Your Sentinel profile is strong. Anxiety-driven patterns, intrusive thoughts, compulsive checking or rituals, and perfectionism are probably significant features of your daily experience.';
-      return 'Your Sentinel profile is very strong. Intrusive thoughts, compulsive behaviours, and anxiety-driven rituals are probably consuming significant time and energy. A clinician who specialises in anxiety and compulsive patterns can make a substantial difference.';
-    }
-    return '';
+  function getDesc(name, p) {
+    var t = {
+      spark: [
+        'Your attention and impulse patterns are broadly typical. Staying on task and regulating energy doesn\'t require much deliberate effort from you.',
+        'You show some Spark traits. Focus, impulsivity, or restlessness may occasionally be an issue but don\'t tend to dominate your daily experience.',
+        'You have a moderate Spark profile. Attention regulation, time management, and impulse control are likely ongoing themes that take conscious effort.',
+        'Your Spark profile is strong. Rapid-fire ideation, time blindness, emotional intensity, and restlessness are probably very familiar — alongside the creative energy that comes with this wiring.',
+        'Your Spark profile is very strong. Your mind moves fast, generates connections constantly, and finds routine genuinely painful. Extraordinary creative and divergent thinking capacity comes with the territory.'
+      ],
+      depth: [
+        'Your social communication, sensory processing, and preference for routine are broadly typical.',
+        'You show some Depth traits — a few intense interests, some sensory sensitivities, or occasional difficulty reading implicit social cues.',
+        'You have a moderate Depth profile. Pattern recognition, deep focus on specific interests, sensory sensitivities, and a preference for predictability are noticeable themes.',
+        'Your Depth profile is strong. You probably experience the world with unusual intensity and detail. Deep interests, sensory preferences, and a need for predictable structure are central to how you function.',
+        'Your Depth profile is very strong. Your perceptual and cognitive processing is likely quite different from the typical population — bringing extraordinary analytical ability alongside a world that can be genuinely draining.'
+      ],
+      sentinel: [
+        'Your anxiety and compulsive patterns are broadly typical. Some worry and checking behaviour is normal, and yours falls comfortably within the expected range.',
+        'You show some Sentinel traits. Occasional intrusive thoughts, checking behaviours, or anxiety-driven rituals may be present but are probably manageable.',
+        'You have a moderate Sentinel profile. Recurring anxiety patterns, some compulsive behaviours, and intrusive thoughts are likely present and take real effort to manage.',
+        'Your Sentinel profile is strong. Anxiety-driven patterns, intrusive thoughts, and compulsive checking or rituals are probably significant features of your daily experience.',
+        'Your Sentinel profile is very strong. Intrusive thoughts and compulsive behaviours are probably consuming significant time and energy. A specialist in anxiety and compulsive patterns can make a substantial difference.'
+      ]
+    };
+    var idx = p < 25 ? 0 : p < 45 ? 1 : p < 65 ? 2 : p < 80 ? 3 : 4;
+    return (t[name] || [])[idx] || '';
   }
 
-  /* ── Combos — fixed: pair combos and triple combo are mutually exclusive display ── */
   function getCombos(scores) {
-    var combos = [];
-    var s = scores.spark.pct;
-    var d = scores.depth.pct;
-    var n = scores.sentinel.pct;
-    var allThree = (s >= 45 && d >= 45 && n >= 45);
-
-    // Only show "All Three" if all are elevated — skip individual pairs in that case to avoid repetition
-    if (allThree) {
-      combos.push({ title: 'All Three Together', text: 'Having significant scores across all three dimensions means your internal experience is rich, complex, and often contradictory. But this triple wiring also means you have access to a remarkable range of perceptual, creative, and analytical capabilities. Understanding how these interact is key to working with your brain rather than against it.' });
+    var combos = [], s = scores.spark.pct, d = scores.depth.pct, n = scores.sentinel.pct;
+    if (s >= 45 && d >= 45 && n >= 45) {
+      combos.push({ title: 'ALL THREE TOGETHER', text: 'Having significant scores across all three dimensions means your internal experience is rich, complex, and often contradictory. This triple wiring also gives you access to a remarkable range of perceptual, creative, and analytical capabilities. Understanding how these interact is key to working with your brain rather than against it.' });
     } else {
-      if (s >= 45 && d >= 45) {
-        combos.push({ title: 'Spark + Depth', text: 'This combination is sometimes called AuDHD. You likely experience rapid-fire ideation alongside deep, focused interests. The tension between novelty-seeking and sameness-seeking can be confusing but also extraordinarily productive when both are channelled well.' });
-      }
-      if (s >= 45 && n >= 45) {
-        combos.push({ title: 'Spark + Sentinel', text: 'Impulsivity meets anxiety-driven caution. You might act on impulse and then ruminate intensely about whether you did the right thing. This push-pull dynamic is exhausting but, when understood, can produce both creativity and thoroughness.' });
-      }
-      if (d >= 45 && n >= 45) {
-        combos.push({ title: 'Depth + Sentinel', text: 'Deep pattern recognition combines with a threat-detection system that flags everything. You may notice details others miss and then worry intensely about what they mean. Understanding which patterns serve you and which are anxiety-driven is key.' });
-      }
+      if (s >= 45 && d >= 45) combos.push({ title: 'SPARK + DEPTH', text: 'Sometimes called AuDHD. You likely experience rapid-fire ideation alongside deep, focused interests. The tension between novelty-seeking and sameness-seeking can be confusing but also extraordinarily productive when channelled well.' });
+      if (s >= 45 && n >= 45) combos.push({ title: 'SPARK + SENTINEL', text: 'Impulsivity meets anxiety-driven caution. You might act on impulse and then ruminate intensely about whether you did the right thing. This push-pull is exhausting but can produce both creativity and thoroughness.' });
+      if (d >= 45 && n >= 45) combos.push({ title: 'DEPTH + SENTINEL', text: 'Deep pattern recognition combines with a threat-detection system that flags everything. You may notice details others miss and then worry intensely about what they mean. Learning which patterns serve you and which are anxiety-driven is key.' });
     }
-
-    // If only one dimension is elevated, note the dominant one
-    if (combos.length === 0 && (s >= 45 || d >= 45 || n >= 45)) {
-      var dom = 'Spark'; var dp = s;
-      if (d > dp) { dom = 'Depth'; dp = d; }
-      if (n > dp) { dom = 'Sentinel'; }
-      combos.push({ title: 'Predominantly ' + dom, text: 'Your profile is primarily shaped by one dimension. Focus your energy on learning about this specific dimension and building supports that address its particular challenges and leverage its strengths.' });
+    if (!combos.length && (s >= 45 || d >= 45 || n >= 45)) {
+      var dom = 'SPARK', dp = s;
+      if (d > dp) { dom = 'DEPTH'; dp = d; }
+      if (n > dp) dom = 'SENTINEL';
+      combos.push({ title: 'PREDOMINANTLY ' + dom, text: 'Your profile is primarily shaped by one dimension. Focus your energy on learning about it and building supports that address its particular challenges while leveraging its strengths.' });
     }
-
     return combos;
   }
 
-  /* ── Show results ── */
   function showResults() {
     var scores = calcScores();
     document.getElementById('ndOverallScore').textContent = scores.overall.pct + '%';
-
     var dc = document.getElementById('ndDimensions');
     dc.innerHTML = '';
-
     var dims = [
-      { key: 'spark',    label: 'The Spark',    sub: 'ADHD-related traits',               cls: 'nd-spark',    data: scores.spark },
-      { key: 'depth',    label: 'The Depth',    sub: 'Autism-related traits',              cls: 'nd-depth',    data: scores.depth },
-      { key: 'sentinel', label: 'The Sentinel', sub: 'Anxiety &amp; compulsive patterns', cls: 'nd-sentinel', data: scores.sentinel }
+      { key:'spark',    label:'THE SPARK',    sub:'ADHD-related traits',           cls:'nd-spark',    data:scores.spark    },
+      { key:'depth',    label:'THE DEPTH',    sub:'Autism-related traits',          cls:'nd-depth',    data:scores.depth    },
+      { key:'sentinel', label:'THE SENTINEL', sub:'Anxiety & compulsive patterns', cls:'nd-sentinel', data:scores.sentinel }
     ];
-
     for (var i = 0; i < dims.length; i++) {
       var d = dims[i];
-      var bl = document.createElement('div');
-      bl.className = 'nd-dimension-block ' + d.cls;
-
-      // Header row
-      var hd = document.createElement('div');
-      hd.className = 'nd-dimension-header';
-      hd.innerHTML =
-        '<div><span class="nd-dimension-name">' + d.label + '</span><br />' +
-        '<span class="nd-dimension-sub">' + d.sub + '</span></div>' +
-        '<span class="nd-dimension-pct">' + d.data.pct + '%</span>';
+      var bl = document.createElement('div'); bl.className = 'nd-dimension-block ' + d.cls;
+      var hd = document.createElement('div'); hd.className = 'nd-dimension-header';
+      hd.innerHTML = '<div><span class="nd-dimension-name">' + d.label + '</span><br/><span class="nd-dimension-sub">' + d.sub + '</span></div><span class="nd-dimension-pct">' + d.data.pct + '%</span>';
       bl.appendChild(hd);
-
-      // Bar
-      var bt = document.createElement('div');
-      bt.className = 'nd-dimension-bar-track';
-      var bf = document.createElement('div');
-      bf.className = 'nd-dimension-bar-fill';
-      bf.style.width = '0%';
-      bt.appendChild(bf);
-      bl.appendChild(bt);
-
-      // Level badge
-      var lv = document.createElement('span');
-      lv.className = 'nd-dimension-level';
-      lv.textContent = getLevel(d.data.pct);
-      bl.appendChild(lv);
-
-      // Description
-      var ds = document.createElement('p');
-      ds.className = 'nd-dimension-desc';
-      ds.textContent = getDimDesc(d.key, d.data.pct);
-      bl.appendChild(ds);
-
+      var bt = document.createElement('div'); bt.className = 'nd-dimension-bar-track';
+      var bf = document.createElement('div'); bf.className = 'nd-dimension-bar-fill'; bf.style.width = '0%';
+      bt.appendChild(bf); bl.appendChild(bt);
+      var lv = document.createElement('span'); lv.className = 'nd-dimension-level'; lv.textContent = getLevel(d.data.pct); bl.appendChild(lv);
+      var ds = document.createElement('p'); ds.className = 'nd-dimension-desc'; ds.textContent = getDesc(d.key, d.data.pct); bl.appendChild(ds);
       dc.appendChild(bl);
-
-      // Animate bar after paint
-      (function(fill, pct) {
-        setTimeout(function() { fill.style.width = pct + '%'; }, 80);
-      })(bf, d.data.pct);
+      (function(f,p){ setTimeout(function(){ f.style.width = p+'%'; }, 80); })(bf, d.data.pct);
     }
-
-    // Combos
-    var cc = document.getElementById('ndCombos');
-    var combos = getCombos(scores);
-    if (combos.length > 0) {
-      var ch = '<div class="nd-combo-section-title">How Your Dimensions Interact</div>';
-      for (var c = 0; c < combos.length; c++) {
-        ch += '<div class="nd-combo-block"><div class="nd-combo-block-title">' + combos[c].title + '</div>' +
-              '<p class="nd-combo-block-text">' + combos[c].text + '</p></div>';
-      }
-      cc.innerHTML = ch;
-      cc.style.display = 'block';
-    } else {
-      cc.style.display = 'none';
-    }
-
-    // Show overlay, lock scroll
+    var cc = document.getElementById('ndCombos'), combos = getCombos(scores);
+    if (combos.length) {
+      var ch = '<div class="nd-combo-section-title">▸ HOW YOUR DIMENSIONS INTERACT ◂</div>';
+      for (var c = 0; c < combos.length; c++) ch += '<div class="nd-combo-block"><div class="nd-combo-block-title">' + combos[c].title + '</div><p class="nd-combo-block-text">' + combos[c].text + '</p></div>';
+      cc.innerHTML = ch; cc.style.display = 'block';
+    } else { cc.style.display = 'none'; }
     document.getElementById('nd-results-overlay').className = 'nd-visible';
     document.body.style.overflow = 'hidden';
-
-    // Focus management for accessibility
-    var closeBtn = document.getElementById('ndCloseBtn');
-    if (closeBtn) setTimeout(function() { closeBtn.focus(); }, 100);
+    setTimeout(function(){ document.getElementById('ndCloseBtn').focus(); }, 100);
   }
 
-  /* ── CSV export ── */
   function buildCSV() {
-    var dimMap = getDimMap();
     var scores = calcScores();
-    var h = ['Name'];
-    for (var i = 1; i <= totalQs; i++) h.push('Q' + i);
-    h.push('Spark%', 'Depth%', 'Sentinel%', 'Overall%');
-
-    var dr = ['Dimension'];
-    for (var j = 0; j < dimMap.length; j++) {
-      var raw = dimMap[j];
+    var cards = document.querySelectorAll('.nd-question-card[data-q]');
+    var h=['Name'], dr=['Dimension'], sr=['Your Name Here'];
+    for (var i = 0; i < cards.length; i++) {
+      var qn = parseInt(cards[i].getAttribute('data-q'), 10);
+      var raw = cards[i].getAttribute('data-dim') || '';
       var parts = [];
-      if (raw.indexOf('A') !== -1) parts.push('A');
-      if (raw.indexOf('U') !== -1) parts.push('U');
-      if (raw.indexOf('O') !== -1) parts.push('O');
-      dr.push(parts.join('/'));
+      if (raw.indexOf('A')!==-1) parts.push('A');
+      if (raw.indexOf('U')!==-1) parts.push('U');
+      if (raw.indexOf('O')!==-1) parts.push('O');
+      h.push('Q'+qn); dr.push(parts.join('/')); sr.push(answers[qn]||0);
     }
-    dr.push('', '', '', '');
-
-    var sr = ['Your Name Here'];
-    for (var k = 1; k <= totalQs; k++) sr.push(answers[k] || 0);
+    h.push('Spark%','Depth%','Sentinel%','Overall%');
+    dr.push('','','','');
     sr.push(scores.spark.pct, scores.depth.pct, scores.sentinel.pct, scores.overall.pct);
-
-    return h.join(',') + '\n' + dr.join(',') + '\n' + sr.join(',');
+    return h.join(',')+'\n'+dr.join(',')+'\n'+sr.join(',');
   }
 
-  /* ── Close overlay helper ── */
   function closeOverlay() {
     document.getElementById('nd-results-overlay').className = '';
     document.body.style.overflow = '';
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  /* ── Submit ── */
-  document.getElementById('ndSubmitBtn').addEventListener('click', function() {
-    if (Object.keys(answers).length < totalQs) {
-      var el = document.getElementById('ndErrorMsg');
-      el.style.display = 'block';
-      setTimeout(function() { el.style.display = 'none'; }, 5000);
-      // Scroll to first unanswered question
-      for (var i = 1; i <= totalQs; i++) {
-        if (!answers[i]) {
-          var c = document.querySelector('.nd-question-card[data-q="' + i + '"]');
-          if (c) c.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          break;
-        }
+  document.getElementById('ndSubmitBtn').addEventListener('click', function () {
+    if (Object.keys(answers).length < TOTAL_QS) {
+      var el = document.getElementById('ndErrorMsg'); el.style.display = 'block';
+      setTimeout(function(){ el.style.display='none'; }, 5000);
+      for (var i = 1; i <= TOTAL_QS; i++) {
+        if (!answers[i]) { var c = document.querySelector('.nd-question-card[data-q="'+i+'"]'); if (c) c.scrollIntoView({behavior:'smooth',block:'center'}); break; }
       }
       return;
     }
     showResults();
   });
 
-  /* ── Close buttons ── */
   document.getElementById('ndCloseBtn').addEventListener('click', closeOverlay);
   document.getElementById('ndCloseBtn2').addEventListener('click', closeOverlay);
+  document.getElementById('nd-results-overlay').addEventListener('keydown', function(e){ if(e.key==='Escape') closeOverlay(); });
 
-  /* ── Trap focus inside overlay when open ── */
-  document.getElementById('nd-results-overlay').addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') closeOverlay();
+  document.getElementById('ndCopyCSVBtn').addEventListener('click', function () {
+    var csv = buildCSV(), btn = this, orig = btn.textContent;
+    function done(){ btn.textContent='✓ COPIED! PASTE INTO SPREADSHEET'; setTimeout(function(){ btn.textContent=orig; },3000); }
+    if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(csv).then(done).catch(function(){ fb(csv); done(); }); }
+    else { fb(csv); done(); }
   });
 
-  /* ── Copy CSV ── */
-  document.getElementById('ndCopyCSVBtn').addEventListener('click', function() {
-    var csv = buildCSV();
-    var btn = this;
-    var original = btn.textContent;
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(csv).then(function() {
-        btn.textContent = '✓ Copied! Paste into spreadsheet';
-        setTimeout(function() { btn.textContent = original; }, 3000);
-      }).catch(function() { fallbackCopy(csv, btn, original); });
-    } else {
-      fallbackCopy(csv, btn, original);
-    }
-  });
-
-  function fallbackCopy(text, btn, original) {
-    var ta = document.createElement('textarea');
-    ta.value = text;
-    ta.style.position = 'fixed';
-    ta.style.opacity = '0';
-    document.body.appendChild(ta);
-    ta.select();
-    try { document.execCommand('copy'); } catch(e) {}
+  function fb(text) {
+    var ta = document.createElement('textarea'); ta.value=text; ta.style.cssText='position:fixed;opacity:0;';
+    document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); }catch(e){}
     document.body.removeChild(ta);
-    btn.textContent = '✓ Copied! Paste into spreadsheet';
-    setTimeout(function() { btn.textContent = original; }, 3000);
   }
 
-  /* ── Retake ── */
-  document.getElementById('ndRetakeBtn').addEventListener('click', function() {
-    closeOverlay();
-    answers = {};
-
-    var radios = document.querySelectorAll('#nd-root input[type="radio"]');
-    for (var r = 0; r < radios.length; r++) radios[r].checked = false;
-
-    // Clear all selected label highlights
-    var allLabels = document.querySelectorAll('#nd-root .nd-likert label');
-    for (var l = 0; l < allLabels.length; l++) {
-      allLabels[l].className = allLabels[l].className.replace(' nd-selected', '').replace('nd-selected', '').trim();
-    }
-
-    var cards = document.querySelectorAll('#nd-root .nd-question-card');
-    for (var q = 0; q < cards.length; q++) cards[q].className = 'nd-question-card';
-
+  document.getElementById('ndRetakeBtn').addEventListener('click', function () {
+    closeOverlay(); answers = {};
+    var rs = document.querySelectorAll('#nd-root input[type="radio"]');
+    for (var r=0; r<rs.length; r++) rs[r].checked=false;
+    var ls = document.querySelectorAll('#nd-root .nd-likert label');
+    for (var l=0; l<ls.length; l++) ls[l].className=ls[l].className.replace(/\s*nd-selected/g,'').trim();
+    var cs = document.querySelectorAll('#nd-root .nd-question-card');
+    for (var q=0; q<cs.length; q++) cs[q].className='nd-question-card';
     updateProgress();
   });
 
