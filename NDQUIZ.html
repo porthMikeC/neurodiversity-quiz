@@ -467,7 +467,6 @@ function getBand(score, isNT) {
 var STEPS = [];
 SECTIONS.forEach(function(section, si) {
   var nextStart = si < SECTIONS.length - 1 ? SECTIONS[si+1].start : ITEMS.length;
-  STEPS.push({ type:'section', title:section.title, count:nextStart - section.start, sectionIndex:si });
   for (var i = section.start; i < nextStart; i++) {
     STEPS.push({ type:'question', itemIndex:i, sectionIndex:si });
   }
@@ -485,17 +484,13 @@ function renderStep() {
   saveSession();
   updateSkippedPill();
 
-  if (step.type === 'section') {
-    area.innerHTML = '<div class="section-card active"><h2>' + step.title + '</h2><div class="section-count">' + step.count + ' questions</div><button class="section-continue-btn" onclick="goForward()">Continue</button></div>';
-  } else {
-    var qi = step.itemIndex;
-    var opts = '';
-    LABELS.forEach(function(label, v) {
-      opts += '<button class="q-opt-btn' + (responses[qi] === v+1 ? ' selected' : '') + '" onclick="answerQuestion(' + qi + ',' + (v+1) + ')">' + label + '</button>';
-    });
-    var savedComment = comments[qi] || '';
-    area.innerHTML = '<div class="q-card active"><div class="q-number">Question ' + (qi+1) + ' of ' + ITEMS.length + '</div><div class="q-text">' + ITEMS[qi].q + '</div><div class="q-options">' + opts + '</div><div class="key-hint" style="margin-top:20px;">Press <kbd>1</kbd><kbd>2</kbd><kbd>3</kbd><kbd>4</kbd><kbd>5</kbd> to answer, <kbd>\u2190</kbd><kbd>\u2192</kbd> to navigate</div><div class="q-comment-wrap"><label class="q-comment-label">Optional — how did you interpret this question, or what made it difficult to answer?</label><textarea class="q-comment" id="commentField" placeholder="Leave blank if nothing to add..." onchange="saveComment(' + qi + ')" onblur="saveComment(' + qi + ')">' + savedComment.replace(/</g,'&lt;') + '</textarea></div></div>';
-  }
+  var qi = step.itemIndex;
+  var opts = '';
+  LABELS.forEach(function(label, v) {
+    opts += '<button class="q-opt-btn' + (responses[qi] === v+1 ? ' selected' : '') + '" onclick="answerQuestion(' + qi + ',' + (v+1) + ')">' + label + '</button>';
+  });
+  var savedComment = comments[qi] || '';
+  area.innerHTML = '<div class="q-card active"><div class="q-number">Question ' + (qi+1) + ' of ' + ITEMS.length + '</div><div class="q-text">' + ITEMS[qi].q + '</div><div class="q-options">' + opts + '</div><div class="key-hint" style="margin-top:20px;">Press <kbd>1</kbd><kbd>2</kbd><kbd>3</kbd><kbd>4</kbd><kbd>5</kbd> to answer, <kbd>\u2190</kbd><kbd>\u2192</kbd> to navigate</div><div class="q-comment-wrap"><label class="q-comment-label">Optional — how did you interpret this question, or what made it difficult to answer?</label><textarea class="q-comment" id="commentField" placeholder="Leave blank if nothing to add..." onchange="saveComment(' + qi + ')" onblur="saveComment(' + qi + ')">' + savedComment.replace(/</g,'&lt;') + '</textarea></div></div>';
 }
 
 function answerQuestion(qi, val) {
@@ -843,11 +838,7 @@ function startAssessment() {
 document.addEventListener('keydown', function(e) {
   if (!document.getElementById('questionScreen').classList.contains('active')) return;
   var step = STEPS[currentIndex];
-  if (!step || step.type !== 'question') {
-    if (e.key === 'Enter' || e.key === 'ArrowRight') { goForward(); e.preventDefault(); }
-    if (e.key === 'ArrowLeft') { goBack(); e.preventDefault(); }
-    return;
-  }
+  if (!step) return;
   var qi = step.itemIndex;
   if (e.key >= '1' && e.key <= '5') { answerQuestion(qi, parseInt(e.key)); e.preventDefault(); return; }
   if (e.key === 'ArrowLeft') { goBack(); e.preventDefault(); }
