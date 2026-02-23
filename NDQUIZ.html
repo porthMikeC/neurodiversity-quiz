@@ -52,6 +52,9 @@
   .nav-btn:disabled:hover { border-color: var(--border); color: var(--text-dim); }
   .skip-btn { background: transparent; border: none; color: var(--text-dimmer); font-family: 'DM Sans', sans-serif; font-size: 0.78rem; cursor: pointer; padding: 7px 10px; transition: color 0.15s; }
   .skip-btn:hover { color: var(--text-dim); }
+  .skipped-pill { display: none; background: transparent; border: 1px solid rgba(240,160,112,0.5); color: var(--accent-o); font-family: 'DM Sans', sans-serif; font-size: 0.75rem; font-weight: 500; padding: 5px 12px; border-radius: 20px; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+  .skipped-pill:hover { background: rgba(240,160,112,0.1); border-color: var(--accent-o); }
+  .skipped-pill.visible { display: inline-block; }
   .question-area { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 48px 28px 60px; max-width: 680px; margin: 0 auto; width: 100%; min-height: calc(100vh - 60px); }
   .section-card { display: none; text-align: center; }
   .section-card.active { display: block; }
@@ -70,6 +73,11 @@
   .q-opt-btn.selected { background: var(--selected); border-color: var(--selected-border); color: var(--text); font-weight: 500; }
   .key-hint { color: var(--text-dimmer); font-size: 0.78rem; margin-top: 32px; text-align: center; }
   .key-hint kbd { display: inline-block; background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 2px 7px; font-family: 'DM Sans', sans-serif; font-size: 0.72rem; margin: 0 2px; }
+  .q-comment-wrap { margin-top: 28px; width: 100%; }
+  .q-comment-label { color: var(--text-dimmer); font-size: 0.78rem; margin-bottom: 8px; display: block; }
+  .q-comment { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; color: var(--text-dim); font-family: 'DM Sans', sans-serif; font-size: 0.88rem; font-weight: 300; padding: 12px 16px; resize: vertical; min-height: 72px; transition: border-color 0.15s; }
+  .q-comment:focus { outline: none; border-color: var(--text-dimmer); color: var(--text); }
+  .q-comment::placeholder { color: var(--text-dimmer); }
 
   /* REVIEW */
   #reviewScreen { display: none; min-height: 100vh; flex-direction: column; justify-content: center; padding: 48px 28px; max-width: 680px; margin: 0 auto; }
@@ -184,6 +192,7 @@
       <div class="nav-info"><span id="navCounter"></span><span class="section-name" id="navSection"></span></div>
       <div class="nav-buttons">
         <button class="nav-btn" id="prevBtn" onclick="goBack()">Back</button>
+        <button class="skipped-pill" id="skippedPill" onclick="jumpToNextSkipped()"></button>
         <button class="skip-btn" onclick="skipQuestion()">Skip</button>
         <button class="nav-btn" id="nextBtn" onclick="goForward()">Next</button>
       </div>
@@ -242,10 +251,10 @@
     </div>
 
     <div class="export-section">
-      <h3>Export your results</h3>
-      <p>Download a CSV file to open in Excel or any spreadsheet application. Each row contains the date, all four scores, and every individual item score for detailed comparison.</p>
+      <h3>Share your results</h3>
+      <p>Share or download a CSV file containing your scores and any comments you left. Open it in Excel or any spreadsheet application, or send it directly to someone for analysis. Comments travel with the file automatically.</p>
       <div class="btn-row">
-        <button class="btn btn-primary" onclick="downloadCSV()">Download CSV</button>
+        <button class="btn btn-primary" onclick="shareResults()">Share / Download CSV</button>
         <button class="btn btn-secondary" onclick="resetAssessment()">Start again</button>
       </div>
     </div>
@@ -352,6 +361,7 @@ var ITEMS = [
 // ─── CORE DATA ───────────────────────────────────────────────────────────────
 var LABELS = ["Almost never", "Rarely", "Sometimes", "Often", "Almost always"];
 var responses = new Array(ITEMS.length).fill(null);
+var comments = new Array(ITEMS.length).fill('');
 var currentIndex = 0;
 var PIE_COLORS = {
   A: '#5b8ff9',
@@ -363,7 +373,7 @@ var PIE_COLORS = {
 // ─── LOCALSTORAGE ─────────────────────────────────────────────────────────────
 function saveSession() {
   try {
-    var data = { responses: responses, currentIndex: currentIndex, savedAt: Date.now() };
+    var data = { responses: responses, comments: comments, currentIndex: currentIndex, savedAt: Date.now() };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   } catch(e) {}
 }
@@ -384,6 +394,7 @@ function resumeSession() {
   var data = loadSession();
   if (!data) { startAssessment(); return; }
   responses = data.responses;
+  comments = data.comments || new Array(ITEMS.length).fill('');
   currentIndex = data.currentIndex;
   document.getElementById('resumeScreen').classList.remove('active');
   document.getElementById('questionScreen').classList.add('active');
@@ -393,6 +404,7 @@ function resumeSession() {
 function clearAndStart() {
   clearSession();
   responses = new Array(ITEMS.length).fill(null);
+  comments = new Array(ITEMS.length).fill('');
   currentIndex = 0;
   document.getElementById('resumeScreen').classList.remove('active');
   document.getElementById('introScreen').style.display = '';
@@ -461,6 +473,7 @@ function renderStep() {
   document.getElementById('navSection').textContent = SECTIONS[step.sectionIndex].title;
   document.getElementById('prevBtn').disabled = currentIndex === 0;
   saveSession();
+  updateSkippedPill();
 
   if (step.type === 'section') {
     area.innerHTML = '<div class="section-card active"><h2>' + step.title + '</h2><div class="section-count">' + step.count + ' questions</div><button class="section-continue-btn" onclick="goForward()">Continue</button></div>';
@@ -470,7 +483,8 @@ function renderStep() {
     LABELS.forEach(function(label, v) {
       opts += '<button class="q-opt-btn' + (responses[qi] === v+1 ? ' selected' : '') + '" onclick="answerQuestion(' + qi + ',' + (v+1) + ')">' + label + '</button>';
     });
-    area.innerHTML = '<div class="q-card active"><div class="q-number">Question ' + (qi+1) + ' of ' + ITEMS.length + '</div><div class="q-text">' + ITEMS[qi].q + '</div><div class="q-options">' + opts + '</div><div class="key-hint">Press <kbd>1</kbd><kbd>2</kbd><kbd>3</kbd><kbd>4</kbd><kbd>5</kbd> to answer, <kbd>\u2190</kbd><kbd>\u2192</kbd> to navigate</div></div>';
+    var savedComment = comments[qi] || '';
+    area.innerHTML = '<div class="q-card active"><div class="q-number">Question ' + (qi+1) + ' of ' + ITEMS.length + '</div><div class="q-text">' + ITEMS[qi].q + '</div><div class="q-options">' + opts + '</div><div class="key-hint" style="margin-top:20px;">Press <kbd>1</kbd><kbd>2</kbd><kbd>3</kbd><kbd>4</kbd><kbd>5</kbd> to answer, <kbd>\u2190</kbd><kbd>\u2192</kbd> to navigate</div><div class="q-comment-wrap"><label class="q-comment-label">Optional — how did you interpret this question, or what made it difficult to answer?</label><textarea class="q-comment" id="commentField" placeholder="Leave blank if nothing to add..." onchange="saveComment(' + qi + ')" onblur="saveComment(' + qi + ')">' + savedComment.replace(/</g,'&lt;') + '</textarea></div></div>';
   }
 }
 
@@ -482,11 +496,56 @@ function answerQuestion(qi, val) {
   setTimeout(goForward, 200);
 }
 
+function saveComment(qi) {
+  var field = document.getElementById('commentField');
+  if (field) {
+    comments[qi] = field.value;
+    saveSession();
+  }
+}
+
+function updateSkippedPill() {
+  var skipped = responses.filter(function(r) { return r === null; }).length;
+  var pill = document.getElementById('skippedPill');
+  if (!pill) return;
+  if (skipped > 0) {
+    pill.textContent = skipped + ' unanswered';
+    pill.classList.add('visible');
+  } else {
+    pill.classList.remove('visible');
+  }
+}
+
+function jumpToNextSkipped() {
+  var currentStep = STEPS[currentIndex];
+  var currentQi = currentStep && currentStep.type === 'question' ? currentStep.itemIndex : -1;
+  var idx = -1;
+  for (var i = currentQi + 1; i < ITEMS.length; i++) {
+    if (responses[i] === null) { idx = i; break; }
+  }
+  if (idx === -1) {
+    for (var j = 0; j < currentQi; j++) {
+      if (responses[j] === null) { idx = j; break; }
+    }
+  }
+  if (idx !== -1) jumpToQuestion(idx);
+}
+
 function goForward() {
+  var step = STEPS[currentIndex];
+  if (step && step.type === 'question') {
+    var field = document.getElementById('commentField');
+    if (field) { comments[step.itemIndex] = field.value; saveSession(); }
+  }
   if (currentIndex < STEPS.length - 1) { currentIndex++; renderStep(); }
   else showReview();
 }
 function goBack() {
+  var step = STEPS[currentIndex];
+  if (step && step.type === 'question') {
+    var field = document.getElementById('commentField');
+    if (field) { comments[step.itemIndex] = field.value; saveSession(); }
+  }
   if (currentIndex > 0) { currentIndex--; renderStep(); }
 }
 function skipQuestion() { goForward(); }
@@ -666,19 +725,46 @@ function generateInterpretation(scores) {
   return [p1, p2, p3].filter(Boolean).map(function(p) { return '<p style="margin-bottom:14px;">' + p + '</p>'; }).join('');
 }
 
-// ─── CSV EXPORT ───────────────────────────────────────────────────────────────
-function downloadCSV() {
+// ─── CSV BUILD ────────────────────────────────────────────────────────────────
+function buildCSV() {
   var scores = calcScores();
   var date = new Date().toLocaleDateString('en-GB');
-  var headers = ['Date','A_score','U_score','O_score','N_score'].concat(ITEMS.map(function(_,i) { return 'Q'+(i+1); }));
-  var ts = ITEMS.map(function(item, i) { return responses[i] !== null ? transform(responses[i], item.type) : ''; });
-  var row = [date, scores.A, scores.U, scores.O, scores.N].concat(ts);
-  var csv = headers.join(',') + '\n' + row.join(',');
+  var headers = ['Date','A_score','U_score','O_score','N_score'];
+  ITEMS.forEach(function(_, i) {
+    headers.push('Q' + (i+1) + '_score');
+    headers.push('Q' + (i+1) + '_comment');
+  });
+  var row = [date, scores.A, scores.U, scores.O, scores.N];
+  ITEMS.forEach(function(item, i) {
+    var score = responses[i] !== null ? transform(responses[i], item.type) : '';
+    var comment = (comments[i] || '').replace(/"/g, '""');
+    row.push(score);
+    row.push('"' + comment + '"');
+  });
+  return headers.join(',') + '\n' + row.join(',');
+}
+
+function shareResults() {
+  var csv = buildCSV();
+  var date = new Date().toLocaleDateString('en-GB').replace(/\//g,'-');
+  var filename = 'nsa-results-' + date + '.csv';
+  var blob = new Blob([csv], { type: 'text/csv' });
+  var file = new File([blob], filename, { type: 'text/csv' });
+  if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+    navigator.share({ files: [file], title: 'Neurodivergent Self-Assessment Results', text: 'My NSA results — ' + date }).catch(function() { fallbackDownload(csv, filename); });
+  } else if (navigator.share) {
+    navigator.share({ title: 'Neurodivergent Self-Assessment Results', text: csv }).catch(function() { fallbackDownload(csv, filename); });
+  } else {
+    fallbackDownload(csv, filename);
+  }
+}
+
+function fallbackDownload(csv, filename) {
   var blob = new Blob([csv], { type: 'text/csv' });
   var url = URL.createObjectURL(blob);
   var a = document.createElement('a');
   a.href = url;
-  a.download = 'nsa-results-' + date.replace(/\//g,'-') + '.csv';
+  a.download = filename;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -689,6 +775,7 @@ function downloadCSV() {
 function resetAssessment() {
   clearSession();
   responses = new Array(ITEMS.length).fill(null);
+  comments = new Array(ITEMS.length).fill('');
   currentIndex = 0;
   document.getElementById('resultsScreen').classList.remove('active');
   document.getElementById('reviewScreen').classList.remove('active');
