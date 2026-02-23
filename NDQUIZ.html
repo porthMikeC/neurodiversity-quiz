@@ -179,9 +179,18 @@
 <div id="introScreen">
   <h1>Neurodivergent Self-Assessment</h1>
   <p>Answer each question honestly based on your general experience across your life, not just recently. Choose the response that reflects how you actually experience things, not how you have learned to appear — this is especially important if you tend to mask or compensate, whether consciously or not. There are no right or wrong answers.</p>
-  <p>50 questions, presented one at a time. Your scores are calculated privately in your browser — nothing is sent anywhere. Your progress is saved automatically so you can return if interrupted.</p>
+  <p>49 questions, presented one at a time. Your scores are calculated privately in your browser — nothing is sent anywhere. Your progress is saved automatically so you can return if interrupted.</p>
   <p class="caveat">This is an exploratory self-reflection tool, not a validated clinical instrument. It is designed to help you notice patterns and find language for your experience — not to provide a diagnosis. If you have developed strong strategies for managing or masking difficulties — something particularly common in women, people socialised as female, and anyone diagnosed late or not at all — your scores may underestimate the presence of underlying traits. A low score does not mean these patterns are absent from your experience. If completing this questionnaire brings up intense distress or feels overwhelming, please step away and speak to someone you trust or contact a mental health support line before continuing.</p>
-  <button class="start-btn" onclick="startAssessment()">Begin</button>
+  <button class="start-btn" onclick="showCommentBriefing()">Begin</button>
+</div>
+
+<!-- COMMENT BRIEFING SCREEN -->
+<div id="briefingScreen" style="display:none; min-height:100vh; flex-direction:column; justify-content:center; padding:48px 28px; max-width:680px; margin:0 auto;">
+  <h1 style="font-family:'DM Serif Display',serif; font-size:clamp(1.6rem,4vw,2.2rem); font-weight:400; margin-bottom:24px;">One thing before you start</h1>
+  <p style="color:var(--text-dim); font-size:1rem; line-height:1.75; margin-bottom:16px;">Each question has an optional comment box beneath it. You don't need to use it — most people won't.</p>
+  <p style="color:var(--text-dim); font-size:1rem; line-height:1.75; margin-bottom:16px;">But if a question confuses you, feels impossible to answer honestly, or seems like it could be worded more clearly — a brief note in the comment box is genuinely useful. This questionnaire is still being refined, and your observations help improve it for everyone.</p>
+  <p style="color:var(--text-dim); font-size:1rem; line-height:1.75; margin-bottom:32px;">When you reach your results, you'll have the option to share your comments with the developer — separately from your scores if you prefer, so you stay in control of what you share.</p>
+  <button class="start-btn" onclick="startAssessment()">Got it, let's go</button>
 </div>
 
 <!-- QUESTION SCREEN -->
@@ -253,8 +262,10 @@
     <div class="export-section">
       <h3>Share your results</h3>
       <p>Share or download a CSV file containing your scores and any comments you left. Open it in Excel or any spreadsheet application, or send it directly to someone for analysis. Comments travel with the file automatically.</p>
+      <p style="font-size:0.8rem; color:var(--text-dimmer); margin-top:-12px; margin-bottom:20px;">If you'd prefer to share only your comments to help improve the questionnaire — without sharing your scores — use the second button.</p>
       <div class="btn-row">
-        <button class="btn btn-primary" onclick="shareResults()">Share / Download CSV</button>
+        <button class="btn btn-primary" onclick="shareResults()">Share / Download full results</button>
+        <button class="btn btn-secondary" onclick="shareCommentsOnly()">Share comments only</button>
         <button class="btn btn-secondary" onclick="resetAssessment()">Start again</button>
       </div>
     </div>
@@ -276,8 +287,8 @@ var SECTIONS = [
   { title: "Repetitive & Restricted Patterns", start: 28 },
   { title: "Sensory Processing", start: 32 },
   { title: "Cognitive Style", start: 36 },
-  { title: "Anxiety & Fear", start: 41 },
-  { title: "Developmental Course & Coping", start: 46 },
+  { title: "Anxiety & Fear", start: 40 },
+  { title: "Developmental Course & Coping", start: 45 },
 ];
 
 // ─── ITEMS (50 questions) ────────────────────────────────────────────────────
@@ -336,9 +347,8 @@ var ITEMS = [
   { q: "How often do specific textures, fabrics, or food consistencies produce a physical discomfort strong enough to influence your choices?", tags:["U"], type:"regular", short:"Textures causing discomfort influencing choices" },
   { q: "How often does a particular sensory experience reliably trigger a feeling of unease or heightened anxiety?", tags:["U","O"], type:"peak", short:"Sensory experience triggering unease" },
 
-  // COGNITIVE STYLE (36-40)
+  // COGNITIVE STYLE (36-39)
   { q: "How often does your thinking jump rapidly between different ideas or connections within a short space of time?", tags:["A"], type:"regular", short:"Thinking jumping between ideas rapidly" },
-  { q: "How often do you notice small inconsistencies or patterns in information that other people around you appear to have overlooked?", tags:["U","O"], type:"regular", short:"Noticing inconsistencies others overlook" },
   { q: "How often, when considering a future situation, does your mind move towards imagining the worst likely outcome?", tags:["O"], type:"regular", short:"Mind moving to worst-case outcomes" },
   { q: "How often does your mind return to a past event or conversation, even when you would prefer to move on from it?", tags:["O","A"], type:"regular", short:"Mind returning to past events" },
   { q: "How often do you notice underlying structures, patterns, or connections in things that others around you don't appear to be seeing?", tags:["U"], type:"regular", short:"Noticing patterns others don't see" },
@@ -759,6 +769,34 @@ function shareResults() {
   }
 }
 
+function shareCommentsOnly() {
+  var hasComments = comments.some(function(c) { return c && c.trim().length > 0; });
+  if (!hasComments) {
+    alert('You haven\'t left any comments yet.');
+    return;
+  }
+  var date = new Date().toLocaleDateString('en-GB');
+  var headers = ['Q_number', 'Question', 'Comment'];
+  var rows = [headers.join(',')];
+  ITEMS.forEach(function(item, i) {
+    var comment = (comments[i] || '').trim();
+    if (comment.length > 0) {
+      var q = '"' + item.short.replace(/"/g, '""') + '"';
+      var c = '"' + comment.replace(/"/g, '""') + '"';
+      rows.push(['Q' + (i+1), q, c].join(','));
+    }
+  });
+  var csv = rows.join('\n');
+  var filename = 'nsa-comments-' + date.replace(/\//g,'-') + '.csv';
+  var blob = new Blob([csv], { type: 'text/csv' });
+  var file = new File([blob], filename, { type: 'text/csv' });
+  if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+    navigator.share({ files: [file], title: 'NSA Question Comments', text: 'Comments on the Neurodivergent Self-Assessment questions' }).catch(function() { fallbackDownload(csv, filename); });
+  } else {
+    fallbackDownload(csv, filename);
+  }
+}
+
 function fallbackDownload(csv, filename) {
   var blob = new Blob([csv], { type: 'text/csv' });
   var url = URL.createObjectURL(blob);
@@ -780,14 +818,22 @@ function resetAssessment() {
   document.getElementById('resultsScreen').classList.remove('active');
   document.getElementById('reviewScreen').classList.remove('active');
   document.getElementById('questionScreen').classList.remove('active');
+  document.getElementById('briefingScreen').style.display = 'none';
   document.getElementById('introScreen').style.display = '';
   document.getElementById('interpretationBox').style.display = 'none';
   document.getElementById('interpretationText').innerHTML = '';
   window.scrollTo({ top: 0 });
 }
 
+function showCommentBriefing() {
+  document.getElementById('introScreen').style.display = 'none';
+  var b = document.getElementById('briefingScreen');
+  b.style.display = 'flex';
+}
+
 function startAssessment() {
   document.getElementById('introScreen').style.display = 'none';
+  document.getElementById('briefingScreen').style.display = 'none';
   document.getElementById('questionScreen').classList.add('active');
   currentIndex = 0;
   renderStep();
